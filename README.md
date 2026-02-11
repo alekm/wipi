@@ -291,7 +291,3 @@ MIT License - see [LICENSE](LICENSE) file for details
 - Built for testing **CommScope Ruckus** MDU 360 and Ruckus One
 - Uses **DPSK** (Dynamic Pre-Shared Key) authentication
 - Inspired by real-world MDU Wi-Fi deployment challenges
-
----
-
-**Built with ❤️ for Wi-Fi testing and network engineering**
