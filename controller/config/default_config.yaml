@@ -1,0 +1,20 @@
+# WiPi Controller Configuration
+
+# Database connection URL
+# SQLite: sqlite:///path/to/database.db
+# PostgreSQL: postgresql://user:password@host:port/database
+database_url: "sqlite:///./data/wipi.db"
+
+# Scenario directory (where YAML scenario files are stored)
+scenario_dir: "./scenarios"
+
+# Monitoring poll interval in seconds
+# How often to poll each Pi for status
+poll_interval_seconds: 10
+
+# Pi timeout in seconds
+# Consider a Pi offline if not seen within this time
+pi_timeout_seconds: 30
+
+# Optional Redis configuration (for future caching/WebSocket support)
+# redis_url: "redis://localhost:6379"

@@ -1,0 +1,22 @@
+# WiPi Agent Requirements
+
+# Web Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+
+# HTTP Client
+aiohttp==3.11.11
+
+# System Monitoring
+psutil==6.1.1
+
+# YAML Support
+pyyaml==6.0.2
+
+# Standard library (no install needed but listed for reference)
+# - socket
+# - subprocess
+# - signal
+# - os
+# - logging

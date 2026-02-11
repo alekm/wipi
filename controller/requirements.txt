@@ -1,0 +1,29 @@
+# WiPi Controller Requirements
+
+# Web Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+
+# Database
+sqlalchemy==2.0.36
+alembic==1.14.0
+
+# HTTP Client
+aiohttp==3.11.11
+requests==2.32.3
+
+# YAML Support
+pyyaml==6.0.2
+
+# Form parsing for file uploads
+python-multipart==0.0.9
+
+# Optional Redis support
+# redis==5.0.1
+
+# Standard library (no install needed but listed for reference)
+# - os
+# - logging
+# - uuid
+# - json

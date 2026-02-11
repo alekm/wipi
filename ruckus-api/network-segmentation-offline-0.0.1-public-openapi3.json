@@ -1,0 +1,550 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Network Segmentation Service API & Model Documentation",
+    "termsOfService" : "http://termsUrl/TBD",
+    "license" : {
+      "name" : "RUCKUS Cloud Privacy Policy",
+      "url" : "http://licenseUrl/TBD"
+    },
+    "version" : "V1.0.0"
+  },
+  "externalDocs" : {
+    "description" : "Ruckus Network Technical Documents",
+    "url" : "https://support.ruckuswireless.com/documents"
+  },
+  "servers" : [ {
+    "url" : "http://localhost",
+    "description" : "Generated server url"
+  } ],
+  "tags" : [ {
+    "name" : "Manage Network Segmentation Groups",
+    "description" : "Manage Network Segmentation Groups APIs."
+  } ],
+  "paths" : {
+    "/networkSegmentationGroups/{groupId}" : {
+      "get" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Get Network Segmentation Group",
+        "description" : "Get network segmentation group by id.",
+        "operationId" : "getNetworkSegmentationGroup",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NetworkSegmentationGroupsDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Update Network Segmentation Group",
+        "description" : "Update network segmentation group by id.",
+        "operationId" : "updateNetworkSegmentationGroup",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSegmentationGroupsDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Delete Network Segmentation Group",
+        "description" : "Delete network segmentation group by id.",
+        "operationId" : "deleteNetworkSegmentationGroup",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Partial Update Network Segmentation Group",
+        "description" : "Partial update network segmentation group by id.",
+        "operationId" : "updateNetworkSegmentationGroup_1",
+        "parameters" : [ {
+          "name" : "groupId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSegmentationGroupsDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/networkSegmentationGroups" : {
+      "get" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Get Network Segmentation Groups",
+        "description" : "Get network segmentation group for the list.",
+        "operationId" : "getNetworkSegmentationGroups",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "description" : "Page index",
+          "required" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 1
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The size of the page to be returned",
+          "required" : false,
+          "schema" : {
+            "minimum" : 20,
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseNetworkSegmentationGroupsDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Manage Network Segmentation Groups" ],
+        "summary" : "Create Network Segmentation Group",
+        "description" : "Create network segmentation group.",
+        "operationId" : "createNetworkSegmentationGroup",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkSegmentationGroupsDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseObject"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad/malformed request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Requested resource or related-entity not found"
+          },
+          "422" : {
+            "description" : "Validation error"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "AccessSwitchInfo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "distributionSwitchId" : {
+            "type" : "string"
+          },
+          "templateId" : {
+            "type" : "string"
+          },
+          "webAuthPageType" : {
+            "type" : "string"
+          },
+          "vlanId" : {
+            "type" : "string"
+          },
+          "uplinkInfo" : {
+            "$ref" : "#/components/schemas/UplinkInfo"
+          },
+          "webAuthPasswordLabel" : {
+            "type" : "string"
+          },
+          "webAuthCustomTitle" : {
+            "type" : "string"
+          },
+          "webAuthCustomTop" : {
+            "type" : "string"
+          },
+          "webAuthCustomLoginButton" : {
+            "type" : "string"
+          },
+          "webAuthCustomBottom" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Access Switch Resource."
+      },
+      "DistributionSwitchInfo" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "siteName" : {
+            "type" : "string"
+          },
+          "loopbackInterfaceId" : {
+            "type" : "string"
+          },
+          "loopbackInterfaceIp" : {
+            "type" : "string"
+          },
+          "loopbackInterfaceSubnetMask" : {
+            "type" : "string"
+          },
+          "vlans" : {
+            "type" : "string"
+          },
+          "siteKeepAlive" : {
+            "type" : "string"
+          },
+          "siteRetry" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Distribution Switch Resource."
+      },
+      "EdgeInfo" : {
+        "required" : [ "devices", "dhcpInfoId", "dhcpPoolId", "edgeId", "segments" ],
+        "type" : "object",
+        "properties" : {
+          "edgeId" : {
+            "type" : "string"
+          },
+          "segments" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "devices" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "dhcpInfoId" : {
+            "type" : "string"
+          },
+          "dhcpPoolId" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Edge Information Resource."
+      },
+      "NetworkSegmentationGroupsDto" : {
+        "required" : [ "edgeInfos", "name", "venueInfos" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "readOnly" : true
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "vxlanTunnelProfileId" : {
+            "type" : "string"
+          },
+          "venueInfos" : {
+            "maxItems" : 1,
+            "minItems" : 1,
+            "type" : "array",
+            "description" : "Only one record is supported.",
+            "items" : {
+              "$ref" : "#/components/schemas/VenueInfo"
+            }
+          },
+          "edgeInfos" : {
+            "maxItems" : 1,
+            "minItems" : 1,
+            "type" : "array",
+            "description" : "Only one record is supported.",
+            "items" : {
+              "$ref" : "#/components/schemas/EdgeInfo"
+            }
+          },
+          "networkIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "distributionSwitchInfos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DistributionSwitchInfo"
+            }
+          },
+          "accessSwitchInfos" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AccessSwitchInfo"
+            }
+          },
+          "forceOverwriteReboot" : {
+            "type" : "boolean"
+          }
+        },
+        "description" : "Network Segmentation Groups Resource."
+      },
+      "UplinkInfo" : {
+        "type" : "object",
+        "properties" : {
+          "uplinkType" : {
+            "type" : "string"
+          },
+          "uplinkId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "VenueInfo" : {
+        "required" : [ "personaGroupId", "venueId" ],
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string"
+          },
+          "personaGroupId" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Venue Information Resource."
+      },
+      "OperationResponseObject" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "object"
+          }
+        }
+      },
+      "PageResponseNetworkSegmentationGroupsDto" : {
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NetworkSegmentationGroupsDto"
+            }
+          },
+          "paging" : {
+            "$ref" : "#/components/schemas/Paging"
+          }
+        }
+      },
+      "Paging" : {
+        "type" : "object",
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      }
+    }
+  }
+}

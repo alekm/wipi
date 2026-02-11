@@ -1,0 +1,109 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Events Report Export Schedule API",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "https://api.ruckus.cloud",
+    "description" : "North America API Server"
+  }, {
+    "url" : "https://asia.api.ruckus.cloud",
+    "description" : "APAC API Server"
+  }, {
+    "url" : "https://eu.api.ruckus.cloud",
+    "description" : "EU API Server"
+  } ],
+  "paths" : {
+    "/reports/exportSchedules" : {
+      "post" : {
+        "tags" : [ "Export Scheduler" ],
+        "summary" : "Schedule a Export Report",
+        "description" : "Schedule a report generation as background process.",
+        "operationId" : "exportSchedules",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ExportRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExportRequest"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid payload supplied",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "not implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ExportRequest" : {
+        "required" : [ "period", "timeZone", "type" ],
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string"
+          },
+          "timeZone" : {
+            "type" : "string"
+          },
+          "period" : {
+            "$ref" : "#/components/schemas/Period"
+          },
+          "context" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "Period" : {
+        "required" : [ "from", "to" ],
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "type" : "string"
+          },
+          "to" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1517 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Ruckus Wan Gateway",
+    "description" : "Service API & Model Documentation",
+    "version" : "0.0.1"
+  },
+  "externalDocs" : {
+    "description" : "Ruckus Network Technical Documents",
+    "url" : "https://support.ruckuswireless.com/documents"
+  },
+  "servers" : [ {
+    "url" : "https://api.ruckus.cloud"
+  } ],
+  "tags" : [ {
+    "name" : "Wan Gateway",
+    "description" : "Manage Ruckus Wan Gateway"
+  }, {
+    "name" : "Dashboard",
+    "description" : "Manage Ruckus Wan Gateway Dashboard"
+  } ],
+  "paths" : {
+    "/venues/{venueId}/rwgs/{rwgId}/floorPositions" : {
+      "put" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Replace Floor Plan Positions",
+        "description" : "Update device's location in a floor plan.",
+        "operationId" : "floorPlanPositions",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FloorPlanPosition"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseRwgDeviceViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs" : {
+      "post" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Replace or Insert Device",
+        "description" : "Update a device with existing ID or create a new device with ID empty.",
+        "operationId" : "UpdateOrInsertRwgDevice",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RwgDeviceConfigModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseRwgDeviceViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/alarms/query" : {
+      "post" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Query Alarms",
+        "description" : "Return alarm list by query criteria.",
+        "operationId" : "QueryAlarms",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AlarmPageQuery"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponsePageListAlarm"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/query" : {
+      "post" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Query Devices",
+        "description" : "Return devices by query criteria.",
+        "operationId" : "QueryRwgDevicesByVenueId",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RwgPageQuery"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponsePageListRwgDeviceViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rwgs/query" : {
+      "post" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Query Devices",
+        "description" : "Return devices by query criteria.",
+        "operationId" : "QueryRwgDevicesByTenantId",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RwgPageQuery"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponsePageListRwgDeviceViewModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}" : {
+      "get" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Access Device",
+        "description" : "Return device.",
+        "operationId" : "GetRwgDevice",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseRwgDeviceViewModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Revoke Device",
+        "description" : "Delete a device with a ID.",
+        "operationId" : "DeleteRwgDevice",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseVoid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Wan Gateway" ],
+        "summary" : "Refresh Device Status",
+        "description" : "Trigger a request to synchronize data with a device.",
+        "operationId" : "SyncRwgDevice",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseVoid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/topprocess" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Top System Processes",
+        "description" : "Return top system processes.",
+        "operationId" : "GetTopSystemProcesses",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListTopSystemProcesses"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/topprocess/nodes/{clusterNodeId}" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Top System Processes",
+        "description" : "Return top system processes per cluster node.",
+        "operationId" : "GetNodeTopSystemProcesses",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "clusterNodeId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListTopSystemProcesses"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/filesystems" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access File System Utilization",
+        "description" : "Return disk file system utilization.",
+        "operationId" : "GetDiskFilesystemUtilization",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListDiskFilesystemUtilization"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/filesystems/nodes/{clusterNodeId}" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access File System Utilization",
+        "description" : "Return disk file system utilization per cluster node.",
+        "operationId" : "GetNodeDiskFilesystemUtilization",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "clusterNodeId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListDiskFilesystemUtilization"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/details" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Dashboard Details",
+        "description" : "Return dashboard details.",
+        "operationId" : "GetDetails",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListGatewayDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/details/nodes/{clusterNodeId}" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Dashboard Details",
+        "description" : "Return dashboard details per cluster node.",
+        "operationId" : "GetNodeDetails",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "clusterNodeId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseGatewayDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/dashboards" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Dashboard",
+        "description" : "Return dashboard information.",
+        "operationId" : "GetDashboard",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseListDashboard"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/rwgs/{rwgId}/dashboards/nodes/{clusterNodeId}" : {
+      "get" : {
+        "tags" : [ "Dashboard" ],
+        "summary" : "Access Dashboard",
+        "description" : "Return dashboard information per cluster node.",
+        "operationId" : "GetNodeDashboard",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "rwgId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "clusterNodeId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponseDashboard"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "FloorPlanPosition" : {
+        "type" : "object",
+        "properties" : {
+          "x" : {
+            "type" : "number",
+            "description" : "X position",
+            "format" : "double"
+          },
+          "y" : {
+            "type" : "number",
+            "description" : "Y position",
+            "format" : "double"
+          },
+          "floorplanId" : {
+            "type" : "string",
+            "description" : "Floor plan identifier"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "description" : "X percent",
+            "format" : "double"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "description" : "Y percent",
+            "format" : "double"
+          }
+        }
+      },
+      "ClusterNode" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          },
+          "ip" : {
+            "type" : "string",
+            "description" : "Cluster node IP"
+          }
+        },
+        "description" : "Cluster nodes"
+      },
+      "OperationResponseRwgDeviceViewModel" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "$ref" : "#/components/schemas/RwgDeviceViewModel"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "RwgDeviceViewModel" : {
+        "type" : "object",
+        "properties" : {
+          "rwgId" : {
+            "type" : "string",
+            "description" : "Device identifier"
+          },
+          "venueId" : {
+            "type" : "string",
+            "description" : "Venue identifier"
+          },
+          "venueName" : {
+            "type" : "string",
+            "description" : "Venue name"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Device name"
+          },
+          "hostname" : {
+            "type" : "string",
+            "description" : "Host name"
+          },
+          "apiKey" : {
+            "type" : "string",
+            "description" : "Api key"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Device status"
+          },
+          "isCluster" : {
+            "type" : "boolean",
+            "description" : "Cluster state"
+          },
+          "clusterNodes" : {
+            "type" : "array",
+            "description" : "Cluster nodes",
+            "items" : {
+              "$ref" : "#/components/schemas/ClusterNode"
+            }
+          },
+          "x" : {
+            "type" : "number",
+            "description" : "X position",
+            "format" : "double"
+          },
+          "y" : {
+            "type" : "number",
+            "description" : "Y position",
+            "format" : "double"
+          },
+          "floorplanId" : {
+            "type" : "string",
+            "description" : "Floor plan identifier"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "description" : "X percent",
+            "format" : "double"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "description" : "Y percent",
+            "format" : "double"
+          }
+        }
+      },
+      "RwgDeviceConfigModel" : {
+        "required" : [ "apiKey", "hostname", "name" ],
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string",
+            "description" : "Venue identifier"
+          },
+          "rwgId" : {
+            "type" : "string",
+            "description" : "Device identifier"
+          },
+          "name" : {
+            "maxLength" : 32,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "hostname" : {
+            "type" : "string",
+            "description" : "Device FQDN/IP"
+          },
+          "apiKey" : {
+            "maxLength" : 80,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Device api key"
+          }
+        }
+      },
+      "AlarmPageQuery" : {
+        "type" : "object",
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "description" : "Page number which start with 1.",
+            "format" : "int32"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "How many items within a page.",
+            "format" : "int32"
+          },
+          "sortField" : {
+            "type" : "string",
+            "enum" : [ "name", "updatedAt" ]
+          },
+          "sortOrder" : {
+            "type" : "string",
+            "enum" : [ "ASC", "DESC" ]
+          },
+          "filterBy" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/KeyValuePairAlarmFilterByEnumString"
+            }
+          }
+        }
+      },
+      "KeyValuePairAlarmFilterByEnumString" : {
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string",
+            "enum" : [ "CLUSTER_NODE_ID_IS", "CLUSTER_NODE_ID_NOT" ]
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Alarm" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Name"
+          },
+          "shortMessage" : {
+            "type" : "string",
+            "description" : "Short message"
+          },
+          "curedShortMessage" : {
+            "type" : "string",
+            "description" : "Short message"
+          },
+          "severity" : {
+            "type" : "string",
+            "description" : "Severity"
+          },
+          "curedAt" : {
+            "type" : "string",
+            "description" : "Recover time"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "description" : "Create time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "description" : "Update time"
+          },
+          "clusterNodeId" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "clusterNodeName" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          }
+        }
+      },
+      "OperationResponsePageListAlarm" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "$ref" : "#/components/schemas/PageListAlarm"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "PageListAlarm" : {
+        "type" : "object",
+        "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Alarm"
+            }
+          }
+        }
+      },
+      "RwgPageQuery" : {
+        "type" : "object",
+        "properties" : {
+          "page" : {
+            "type" : "integer",
+            "description" : "Page number which start with 1.",
+            "format" : "int32"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "How many items within a page.",
+            "format" : "int32"
+          },
+          "sortField" : {
+            "type" : "string",
+            "enum" : [ "name", "hostname" ]
+          },
+          "sortOrder" : {
+            "type" : "string",
+            "enum" : [ "ASC", "DESC" ]
+          },
+          "searchString" : {
+            "type" : "string",
+            "description" : "Search string"
+          },
+          "searchTargetFields" : {
+            "type" : "array",
+            "description" : "Search target fields",
+            "items" : {
+              "type" : "string",
+              "description" : "Search target fields",
+              "enum" : [ "name", "venueId", "venueName", "status" ]
+            }
+          },
+          "filters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "Filter multiple target fields",
+              "example" : "{\"name\":[...], \"venueId\":[...], \"venueName\":[...], \"status\":[...]}",
+              "items" : {
+                "type" : "string",
+                "description" : "Filter multiple target fields",
+                "example" : "{\"name\":[...], \"venueId\":[...], \"venueName\":[...], \"status\":[...]}"
+              }
+            },
+            "description" : "Filter multiple target fields",
+            "example" : "{\"name\":[...], \"venueId\":[...], \"venueName\":[...], \"status\":[...]}"
+          }
+        }
+      },
+      "OperationResponsePageListRwgDeviceViewModel" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "$ref" : "#/components/schemas/PageListRwgDeviceViewModel"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "PageListRwgDeviceViewModel" : {
+        "type" : "object",
+        "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/RwgDeviceViewModel"
+            }
+          }
+        }
+      },
+      "OperationResponseVoid" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "object"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "OperationResponseListTopSystemProcesses" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/TopSystemProcesses"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "TopSystemProcesses" : {
+        "type" : "object",
+        "properties" : {
+          "processName" : {
+            "type" : "string"
+          },
+          "cpu" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "memory" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "time" : {
+            "type" : "string"
+          },
+          "clusterNodeId" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "clusterNodeName" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          }
+        }
+      },
+      "DiskFilesystemUtilization" : {
+        "type" : "object",
+        "properties" : {
+          "partition" : {
+            "type" : "string",
+            "description" : "Partition"
+          },
+          "size" : {
+            "type" : "integer",
+            "description" : "Size",
+            "format" : "int64"
+          },
+          "used" : {
+            "type" : "integer",
+            "description" : "Used space",
+            "format" : "int64"
+          },
+          "free" : {
+            "type" : "integer",
+            "description" : "Free space",
+            "format" : "int64"
+          },
+          "capacity" : {
+            "type" : "string",
+            "description" : "Capacity"
+          },
+          "clusterNodeId" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "clusterNodeName" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          }
+        }
+      },
+      "OperationResponseListDiskFilesystemUtilization" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DiskFilesystemUtilization"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "GatewayDetails" : {
+        "type" : "object",
+        "properties" : {
+          "gatewayDetailsGeneral" : {
+            "$ref" : "#/components/schemas/GatewayDetailsGeneral"
+          },
+          "gatewayDetailsHardware" : {
+            "$ref" : "#/components/schemas/GatewayDetailsHardware"
+          },
+          "gatewayDetailsOs" : {
+            "$ref" : "#/components/schemas/GatewayDetailsOs"
+          },
+          "gatewayDetailsDiskMemory" : {
+            "$ref" : "#/components/schemas/GatewayDetailsDiskMemory"
+          }
+        }
+      },
+      "GatewayDetailsDiskMemory" : {
+        "type" : "object",
+        "properties" : {
+          "diskDevice" : {
+            "type" : "string",
+            "description" : "Disk device"
+          },
+          "diskTotalSpaceInGb" : {
+            "type" : "integer",
+            "description" : "Total disk space in gigabytes.",
+            "format" : "int32"
+          },
+          "memoryTotalSpaceInMb" : {
+            "type" : "integer",
+            "description" : "Total memory space in megabytes.",
+            "format" : "int32"
+          },
+          "memoryUsedSpaceInMb" : {
+            "type" : "integer",
+            "description" : "Total used memory in megabytes.",
+            "format" : "int32"
+          },
+          "memoryFreeSpaceInMb" : {
+            "type" : "integer",
+            "description" : "Total free memory in megabytes.",
+            "format" : "int32"
+          },
+          "processorCount" : {
+            "type" : "integer",
+            "description" : "Total cores",
+            "format" : "int32"
+          }
+        }
+      },
+      "GatewayDetailsGeneral" : {
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string",
+            "description" : "Venue identifier"
+          },
+          "venueName" : {
+            "type" : "string",
+            "description" : "Venue name"
+          },
+          "hostname" : {
+            "type" : "string",
+            "description" : "Host name"
+          },
+          "apiKey" : {
+            "type" : "string",
+            "description" : "Api key"
+          },
+          "uptimeInSeconds" : {
+            "type" : "integer",
+            "description" : "Up time in seconds",
+            "format" : "int32"
+          },
+          "bootedAt" : {
+            "type" : "string",
+            "description" : "Booted time"
+          },
+          "temperature" : {
+            "type" : "string",
+            "description" : "Temperature"
+          },
+          "created" : {
+            "type" : "string",
+            "description" : "Create name"
+          },
+          "updated" : {
+            "type" : "string",
+            "description" : "Update name"
+          },
+          "clusterNodeId" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "clusterNodeName" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          }
+        }
+      },
+      "GatewayDetailsHardware" : {
+        "type" : "object",
+        "properties" : {
+          "baseboardManufacturer" : {
+            "type" : "string",
+            "description" : "Baseboard manufacturer"
+          },
+          "baseboardProductName" : {
+            "type" : "string",
+            "description" : "Baseboard product name"
+          },
+          "baseboardSerialNumber" : {
+            "type" : "string",
+            "description" : "Baseboard serial number"
+          },
+          "baseboardVersion" : {
+            "type" : "string",
+            "description" : "Baseboard version"
+          },
+          "biosVendor" : {
+            "type" : "string",
+            "description" : "Bios vendor"
+          },
+          "biosVersion" : {
+            "type" : "string",
+            "description" : "Bios version"
+          },
+          "biosReleaseDate" : {
+            "type" : "string",
+            "description" : "Bios release date"
+          },
+          "chassisManufacturer" : {
+            "type" : "string",
+            "description" : "Chassis manufacturer"
+          },
+          "chassisSerialNumber" : {
+            "type" : "string",
+            "description" : "Chassis serial number"
+          },
+          "chassisType" : {
+            "type" : "string",
+            "description" : "Chassis type"
+          },
+          "chassisVersion" : {
+            "type" : "string",
+            "description" : "Chassis version"
+          },
+          "processorFamily" : {
+            "type" : "string",
+            "description" : "Processor family"
+          },
+          "processorFrequency" : {
+            "type" : "string",
+            "description" : "Processor frequency"
+          },
+          "systemManufacturer" : {
+            "type" : "string",
+            "description" : "System manufacturer"
+          },
+          "systemProductName" : {
+            "type" : "string",
+            "description" : "System product name"
+          },
+          "systemSerialNumber" : {
+            "type" : "string",
+            "description" : "System serial number"
+          },
+          "systemUuid" : {
+            "type" : "string",
+            "description" : "System UUID"
+          },
+          "systemVersion" : {
+            "type" : "string",
+            "description" : "System version"
+          },
+          "systemFamily" : {
+            "type" : "string",
+            "description" : "System family"
+          }
+        }
+      },
+      "GatewayDetailsOs" : {
+        "type" : "object",
+        "properties" : {
+          "architecture" : {
+            "type" : "string",
+            "description" : "Architecture"
+          },
+          "branch" : {
+            "type" : "string",
+            "description" : "Branch"
+          },
+          "kernel" : {
+            "type" : "string",
+            "description" : "Kernel"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Name"
+          },
+          "release" : {
+            "type" : "string",
+            "description" : "Release"
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "Version"
+          }
+        }
+      },
+      "OperationResponseListGatewayDetails" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GatewayDetails"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "OperationResponseGatewayDetails" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "$ref" : "#/components/schemas/GatewayDetails"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "Dashboard" : {
+        "type" : "object",
+        "properties" : {
+          "cpuPercentage" : {
+            "$ref" : "#/components/schemas/GaugeFloat"
+          },
+          "memoryInMb" : {
+            "$ref" : "#/components/schemas/GaugeInteger"
+          },
+          "temperatureInCelsius" : {
+            "$ref" : "#/components/schemas/GaugeString"
+          },
+          "storageInGb" : {
+            "$ref" : "#/components/schemas/GaugeDouble"
+          },
+          "clusterNodeId" : {
+            "type" : "string",
+            "description" : "Cluster node identifier"
+          },
+          "clusterNodeName" : {
+            "type" : "string",
+            "description" : "Cluster node name"
+          }
+        }
+      },
+      "GaugeDouble" : {
+        "type" : "object",
+        "properties" : {
+          "max" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "min" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        },
+        "description" : "Storage in gb"
+      },
+      "GaugeFloat" : {
+        "type" : "object",
+        "properties" : {
+          "max" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "value" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "min" : {
+            "type" : "number",
+            "format" : "float"
+          }
+        },
+        "description" : "Cpu percentage"
+      },
+      "GaugeInteger" : {
+        "type" : "object",
+        "properties" : {
+          "max" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "value" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "min" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "description" : "Memory in mb"
+      },
+      "GaugeString" : {
+        "type" : "object",
+        "properties" : {
+          "max" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          },
+          "min" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Temperature in celsius"
+      },
+      "OperationResponseListDashboard" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Dashboard"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "OperationResponseDashboard" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "$ref" : "#/components/schemas/Dashboard"
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "errorStatusCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      }
+    }
+  }
+}

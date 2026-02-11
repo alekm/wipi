@@ -1,0 +1,64 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Guest API and Model Documentation",
+    "description" : "# Overview\n\n## Rate Limit\n For the ApOps REST API the following will be true: \n - Limits are applied to each tenant.\n - A maximum of 200 calls can be made per second.\n - Each second 100 calls will be returned to be used.",
+    "license" : {
+      "name" : "RUCKUS Cloud Privacy Policy",
+      "url" : "https://support.ruckuswireless.com/ruckus-cloud-privacy-policy"
+    },
+    "version" : "1.7.0"
+  },
+  "externalDocs" : {
+    "url" : "https://support.ruckuswireless.com/ruckus-cloud-wifi-legal-terms-and-conditions"
+  },
+  "servers" : [ {
+    "url" : "https://api.asia.ruckus.cloud",
+    "description" : "Asian region"
+  }, {
+    "url" : "https://api.eu.ruckus.cloud",
+    "description" : "European region"
+  }, {
+    "url" : "https://api.ruckus.cloud",
+    "description" : "North American region"
+  } ],
+  "paths" : { },
+  "components" : {
+    "schemas" : {
+      "ErrorResponse" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "errors" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WifiError"
+            }
+          },
+          "downloadUrl" : {
+            "type" : "string"
+          }
+        }
+      },
+      "WifiError" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "suggestion" : {
+            "type" : "string"
+          },
+          "reason" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}

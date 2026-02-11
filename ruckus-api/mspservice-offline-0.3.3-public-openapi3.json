@@ -1,0 +1,5555 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "MSP Service API",
+    "description" : "Documentation for Dashboard API",
+    "contact" : {
+      "name" : "Support Team",
+      "url" : "http://support.ruckuswireless.com",
+      "email" : "support@ruckuswireless.com"
+    },
+    "license" : {
+      "name" : "Apache-2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "V0.3.3"
+  },
+  "externalDocs" : {
+    "description" : "Ruckus Network Technical Documents",
+    "url" : "https://support.ruckuswireless.com/documents"
+  },
+  "servers" : [ {
+    "url" : "https://api.ruckus.cloud",
+    "description" : "server address"
+  } ],
+  "tags" : [ {
+    "name" : "Query Inventory Information",
+    "description" : "Retrieves inventory information. These endpoints are specifically designed for viewing operational data and do not facilitate configuration management."
+  }, {
+    "name" : "Query Delegation Information",
+    "description" : "Retrieves delegation information. These endpoints are specifically designed for viewing operational data and do not facilitate configuration management."
+  }, {
+    "name" : "Query MSP Customer Information",
+    "description" : "Retrieves customer information. These endpoints are specifically designed for viewing operational data and do not facilitate configuration management."
+  } ],
+  "paths" : {
+    "/mspLabels" : {
+      "get" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Get MSP Data",
+        "description" : "Get MSP data for account.",
+        "operationId" : "getMspLabel",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MspView"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "put" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Update MSP Data",
+        "description" : "Update MSP data for account.",
+        "operationId" : "updateMspLabel",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateMspRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "post" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Add Label",
+        "description" : "Add MSP label to facilitate MSP-EC login.",
+        "operationId" : "addMspLabel",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateMspRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Get Account Details",
+        "description" : "Get MSP-EC account details.",
+        "operationId" : "getMspEcAccount",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant Id of the MSP EC account to be retrieved.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MspEcAccountView"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Un Authorized",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "put" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Update Tenant Account",
+        "description" : "Update MSP-EC account.",
+        "operationId" : "updateMspEcAccount",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the MSP-EC account to be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateMspEcRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "delete" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Delete Tenant Account",
+        "description" : "Delete MSP-EC account.",
+        "operationId" : "deleteMspEcAccount",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the MSP-EC account to be deleted.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "patch" : {
+        "tags" : [ "Managed-Tenant Activations and De-Activations", "Managed-Tenant Operations" ],
+        "summary" : "Partial Update of the MSP-EC",
+        "description" : "Patches the MSP-EC account. Only supports a change of status to deactivate the account and release its license or to reactive the account. \n - vnd.ruckus.v1+json will be deprecated 4/15/2024.",
+        "operationId" : "patchMspEcAccount_1",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant Id of the MSP-EC account to be patched.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MspEcPatchRequest"
+              }
+            },
+            "application/vnd.ruckus.v2+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MspEcPatchRequest"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JsonNode"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/OperationResponseObject"
+                  }, {
+                    "$ref" : "#/components/schemas/OperationResponse"
+                  } ]
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OperationResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/OperationResponseObject"
+                  }, {
+                    "$ref" : "#/components/schemas/RestErrorResponse"
+                  } ]
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/OperationResponseObject"
+                  }, {
+                    "$ref" : "#/components/schemas/RestErrorResponse"
+                  } ]
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/mspadmins" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Get Delegated Administrators",
+        "description" : "Get the list of MSP administrators authorized to manage this MSP-EC.",
+        "operationId" : "getMspDelegatedAdmins",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP-EC Tenant ID",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MspAdminRole"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "put" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Update Administrators",
+        "description" : "Update the list of MSP administrators authorized to manage this MSP-EC.",
+        "operationId" : "updateMspDelegatedAdmins",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP EC Tenant Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/MspAdminRole"
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/delegatorAdmins" : {
+      "put" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Update Installer/Integrator Admins",
+        "description" : "Update installer/integrator admins to a customer.",
+        "operationId" : "updateDelegatorAdmins",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP EC Tenant Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AssignedMspAdminsRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseBo"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/admins/{adminId}" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Get Administrator Data",
+        "description" : "Get MSP-EC administrator data.",
+        "operationId" : "getMspEcAdmin",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the MSP-EC administrator to be retrieved.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "adminId",
+          "in" : "path",
+          "description" : "Admin Id of the MSP EC administrator to be retrieved.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MspEcAdminView"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "put" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Update Administrator Data",
+        "description" : "Update MSP-EC administrator data.",
+        "operationId" : "updateMspEcAdmin",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant Id of the MSP EC administrator to be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "adminId",
+          "in" : "path",
+          "description" : "Admin Id of the MSP EC administrator to be updated.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateMspEcAdminRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "delete" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Delete Administrator",
+        "description" : "Delete MSP-EC administrator.",
+        "operationId" : "deleteMspEcAdmin",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the MSP-EC administrator to be deleted.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "adminId",
+          "in" : "path",
+          "description" : "Admin Id of the MSP-EC administrator to be deleted.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/tenants/query" : {
+      "post" : {
+        "tags" : [ "Query MSP Customer Information" ],
+        "summary" : "Query Customer Or Tech Partner Data",
+        "description" : "Retrieves customer or tech partner data with pagination, sorting, and filtering support.",
+        "operationId" : "queryCustomerOrTechPartnerData_1_1",
+        "parameters" : [ {
+          "name" : "delegation",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "includeDelegations",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "Content-Type",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            },
+            "application/vnd.ruckus.v2+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid tenant_id supplied",
+            "content" : {
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspEcDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "tenant_id not found",
+            "content" : {
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspEcDto"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspEcDto"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "not implemented",
+            "content" : {
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspEcDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/inventories/query" : {
+      "post" : {
+        "tags" : [ "Query Inventory Information" ],
+        "summary" : "Query Customer Device Inventory Data",
+        "description" : "Retrieves customer device inventory data.",
+        "operationId" : "queryDeviceInventoryData",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid tenant_id supplied",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "tenant_id not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "not implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseMspInventoryDeviceDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/inventories/query/csv" : {
+      "post" : {
+        "tags" : [ "Query Inventory Information" ],
+        "summary" : "Export Customer Device Inventory Data",
+        "description" : "Exports customer device inventory data in CSV format.",
+        "operationId" : "exportCustomerDeviceInventoryData",
+        "parameters" : [ {
+          "name" : "payload",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid tenant_id supplied",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "tenant_id not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "not implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/StreamingResponseBody"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mspCustomers" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Get Tenant Accounts",
+        "description" : "Get MSP-EC account list.",
+        "operationId" : "getMspEcAccountList",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MspEcAccountView"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "post" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Create Tenant Account",
+        "description" : "Create MSP-EC account.",
+        "operationId" : "createMspEcAccountV3_1_1",
+        "requestBody" : {
+          "content" : {
+            "application/vnd.ruckus.v3+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddMspEcRequestV1_3"
+              }
+            },
+            "application/vnd.ruckus.v2+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddMspEcRequestV1_2"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddMspEcRequestV1"
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddMspEcRequestV1_3"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/vnd.ruckus.v3+json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/vnd.ruckus.v3+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/vnd.ruckus.v3+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/vnd.ruckus.v2+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/invitations" : {
+      "post" : {
+        "tags" : [ "Managed-Tenant Operations" ],
+        "summary" : "Send Email Invitation",
+        "description" : "Send email invitation to MSP-EC admin.",
+        "operationId" : "sendInvitationEmail",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant Id of the MSP EC account",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EmailInvitation"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "content" : {
+              "application/json" : { }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/delegations" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Get RUCKUS Support Status",
+        "description" : "Get the status of Ruckus support delegation for the specific MSP-EC account.",
+        "operationId" : "getRuckusSupportStatus",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP-EC Tenant Id ",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "post" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Enable RUCKUS Support",
+        "description" : "Set the status of Ruckus support delegation to enabled.",
+        "operationId" : "enableRuckusSupport",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP-EC Tenant Id ",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "delete" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Disable RUCKUS Support",
+        "description" : "Set the status of Ruckus support delegation to disabled.",
+        "operationId" : "disableRuckusSupport",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP-EC Tenant Id ",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/firmwareUpgradeSchedules" : {
+      "post" : {
+        "tags" : [ "Firmware Upgrade Schedules" ],
+        "summary" : "Firmware Upgrade Schedules",
+        "description" : "Creates a firmware upgrade schedule for the MSP customers specified.",
+        "operationId" : "mspFirmwareUpgrade",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/FirmwareUpgradeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/delegations/query" : {
+      "post" : {
+        "tags" : [ "Query Delegation Information" ],
+        "summary" : "Query Customer Delegation Data",
+        "description" : "Retrieves customer delegation data with pagination, sorting, and filtering support.",
+        "operationId" : "queryCustomerDelegationData",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DynamicQueryPayloadDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid tenant_id supplied",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "tenant_id not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              }
+            }
+          },
+          "501" : {
+            "description" : "not implemented",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QueryResponseDelegationData"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DelegationData"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DelegationData"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mspIntegrators/{integratorId}" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Get Assigned Customers",
+        "description" : "Add MSP ECs to integrator or installer.",
+        "operationId" : "getMspEcListToIntegrator",
+        "parameters" : [ {
+          "name" : "integratorId",
+          "in" : "path",
+          "description" : "MspEc Delegated Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "delegationType",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MspEcDelegationResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "patch" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Update Integrator/Installer",
+        "description" : "Add MSP ECs to integrator or installer.",
+        "operationId" : "assignMspEcListToDelegated",
+        "parameters" : [ {
+          "name" : "integratorId",
+          "in" : "path",
+          "description" : "MSP EC delegated id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AssignMspEcListRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/mspAdmins/associations" : {
+      "patch" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Customer MSP Admin Associations",
+        "description" : "Associate multiple MSP admins to multiple customers.",
+        "operationId" : "mspAdminAssociation",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MspAdminRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/delegations" : {
+      "patch" : {
+        "tags" : [ "Managed-Tenant Delegations" ],
+        "summary" : "Update Integrator/Installer",
+        "description" : "Add MSP EC to multiple integrator or installer.",
+        "operationId" : "assignMspEcToMultipleTechPartner",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AssignMspEcToMultipleTechPartners"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspLabels/{mspLabel}" : {
+      "get" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Check MSP Label",
+        "description" : "Check if the MSP label is used or not.",
+        "operationId" : "checkMspLabel",
+        "parameters" : [ {
+          "name" : "mspLabel",
+          "in" : "path",
+          "description" : "MSP Label",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspLabels/baseUrls" : {
+      "get" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Get Base URL",
+        "description" : "Get base URL for MSP.",
+        "operationId" : "getMspBaseURL",
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/logoUrls" : {
+      "get" : {
+        "tags" : [ "Brand Operations" ],
+        "summary" : "Get Customized Logo URL",
+        "description" : "Get the customized logo URL by MSP-EC account ID for the dashboard page.",
+        "operationId" : "getMspEcLogoURL",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "MSP EC Tenant Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/admins" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Admin Delegations" ],
+        "summary" : "Get Administrators",
+        "description" : "Get MSP-EC administrators along with their data.",
+        "operationId" : "getMspEcAdminList",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the MSP-EC administrator list to be retrieved.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/mspCustomers/{customerId}/activationStatus" : {
+      "get" : {
+        "tags" : [ "Managed-Tenant Activations and De-Activations" ],
+        "summary" : "Get Activation Status",
+        "description" : "Get the activation status of MSP-EC.",
+        "operationId" : "getMspEcActivationStatus",
+        "parameters" : [ {
+          "name" : "customerId",
+          "in" : "path",
+          "description" : "Tenant ID of the tenant to get MSP data.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MspEc"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RestErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "MspLogoFileData" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedDate" : {
+            "type" : "string",
+            "format" : "date-time",
+            "readOnly" : true
+          },
+          "parentId" : {
+            "type" : "string",
+            "readOnly" : true
+          },
+          "logo_fileuuid" : {
+            "type" : "string"
+          },
+          "logo_file_name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PreferredWisprProvider" : {
+        "required" : [ "providerName" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedDate" : {
+            "type" : "string",
+            "format" : "date-time",
+            "readOnly" : true
+          },
+          "providerName" : {
+            "type" : "string"
+          },
+          "apiKey" : {
+            "type" : "string"
+          },
+          "apiSecret" : {
+            "type" : "string"
+          },
+          "customExternalProvider" : {
+            "type" : "boolean"
+          },
+          "auth" : {
+            "$ref" : "#/components/schemas/Radius"
+          },
+          "acct" : {
+            "$ref" : "#/components/schemas/Radius"
+          },
+          "parentId" : {
+            "type" : "string",
+            "readOnly" : true
+          }
+        }
+      },
+      "Radius" : {
+        "type" : "object",
+        "properties" : {
+          "primary" : {
+            "$ref" : "#/components/schemas/RadiusServer"
+          },
+          "secondary" : {
+            "$ref" : "#/components/schemas/RadiusServer"
+          }
+        }
+      },
+      "RadiusServer" : {
+        "required" : [ "ip", "sharedSecret" ],
+        "type" : "object",
+        "properties" : {
+          "ip" : {
+            "type" : "string"
+          },
+          "port" : {
+            "maximum" : 65535,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sharedSecret" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpdateMspRequest" : {
+        "required" : [ "msp_label" ],
+        "type" : "object",
+        "properties" : {
+          "msp_label" : {
+            "pattern" : "[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]",
+            "type" : "string",
+            "description" : "The MSP label.",
+            "example" : "msp-label"
+          },
+          "logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "alarm_notification_logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of alarm notification logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "ping_notification_logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of ping notification logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "mlisa_logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of Ruckus Analytics logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "ping_login_logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of ping login logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "default_logo_uuid" : {
+            "pattern" : "^$|[a-zA-Z0-9~\\.+_-]+",
+            "type" : "string",
+            "description" : "The ID of default logo file.",
+            "nullable" : true,
+            "example" : "b183ae56e08111e98a342a2ae2dbcce4-001.png"
+          },
+          "msp_fqdn" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+",
+            "type" : "string",
+            "description" : "The FQDN of MSP portal.",
+            "nullable" : true,
+            "example" : "wifi.sampledomain.com"
+          },
+          "contact_support_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|(http|https)://[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+(:[1-9][0-9]{1,4})?((/?)|(/([a-zA-Z0-9~_.-]|(%[0-9]{2}))*)*)((\\?|#).*)?",
+            "type" : "string",
+            "description" : "The URL at which to obtain customer support from your MSP.",
+            "nullable" : true,
+            "example" : "https://support.sampledomain.com/"
+          },
+          "contact_support_behavior" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The contact support behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "open_case_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|(http|https)://[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+(:[1-9][0-9]{1,4})?((/?)|(/([a-zA-Z0-9~_.-]|(%[0-9]{2}))*)*)((\\?|#).*)?",
+            "type" : "string",
+            "description" : "The URL at which to open a customer support case with your MSP.",
+            "nullable" : true,
+            "example" : "http://support.sampledomain.com/opencase"
+          },
+          "open_case_behavior" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The open case behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "my_open_case_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|(http|https)://[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+(:[1-9][0-9]{1,4})?((/?)|(/([a-zA-Z0-9~_.-]|(%[0-9]{2}))*)*)((\\?|#).*)?",
+            "type" : "string",
+            "description" : "The URL to view your open customer support cases.",
+            "nullable" : true,
+            "example" : "http://support.sampledomain.com/myopencase"
+          },
+          "my_open_case_behavior" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The my open case behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "change_password_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|(http|https)://[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+(:[1-9][0-9]{1,4})?((/?)|(/([a-zA-Z0-9~_.-]|(%[0-9]{2}))*)*)((\\?|#).*)?",
+            "type" : "string",
+            "description" : "The change password URL of MSP tenant.",
+            "nullable" : true,
+            "example" : "http://wifi.sampledomain.com/password"
+          },
+          "msp_phone" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Your MSP's customer-support phone number.",
+            "nullable" : true,
+            "example" : "408-123-5678"
+          },
+          "msp_email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Your MSP's customer-support email address.",
+            "nullable" : true,
+            "example" : "joho.wang@sampledomain.com"
+          },
+          "msp_website" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "pattern" : "^$|(http|https)://[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](\\.[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9])+(:[1-9][0-9]{1,4})?((/?)|(/([a-zA-Z0-9~_.-]|(%[0-9]{2}))*)*)((\\?|#).*)?",
+            "type" : "string",
+            "description" : "Your MSP's website.",
+            "nullable" : true,
+            "example" : "http://wifi.sampledomain.com/"
+          },
+          "mspLogoFileDataList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MspLogoFileData"
+            }
+          },
+          "preferredWisprProvider" : {
+            "$ref" : "#/components/schemas/PreferredWisprProvider"
+          }
+        }
+      },
+      "ResponseBo" : {
+        "required" : [ "requestId" ],
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RestErrorResponse" : {
+        "type" : "object",
+        "properties" : {
+          "errors" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          }
+        }
+      },
+      "AssignmentRequest" : {
+        "type" : "object",
+        "properties" : {
+          "assignmentId" : {
+            "type" : "integer",
+            "description" : "Entitlement assignment Id",
+            "format" : "int64",
+            "example" : 140352312
+          },
+          "quantity" : {
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "Quantity of devices permitted by this assignment.",
+            "format" : "int64",
+            "example" : 15
+          },
+          "isTrial" : {
+            "type" : "boolean",
+            "description" : "Trial (aka Temporary) MSP Entitlement to be used for this assignment (if this parameter is not supplied in the request, it defaults to false).",
+            "nullable" : true,
+            "example" : false
+          },
+          "deviceType" : {
+            "type" : "string",
+            "description" : "Entitlement for device type.",
+            "example" : "MSP_WIFI"
+          },
+          "deviceSubType" : {
+            "type" : "string",
+            "description" : "Entitlement for device sub type.",
+            "example" : "ICX701",
+            "deprecated" : true
+          },
+          "action" : {
+            "type" : "string",
+            "description" : "Entitlement action",
+            "example" : "ADD"
+          },
+          "licenseType" : {
+            "type" : "string",
+            "description" : "License Type",
+            "example" : "MSP_APSW, MSP_SLTN_TOKEN"
+          }
+        },
+        "description" : "License Assignments"
+      },
+      "License" : {
+        "type" : "object",
+        "properties" : {
+          "trialAction" : {
+            "type" : "string",
+            "description" : "Activate/Deactivate Trial Licenses",
+            "example" : "ACTIVATE"
+          },
+          "assignments" : {
+            "type" : "array",
+            "description" : "License Assignments",
+            "items" : {
+              "$ref" : "#/components/schemas/AssignmentRequest"
+            }
+          },
+          "subscription_start_date" : {
+            "type" : "string",
+            "description" : "License subscription start date"
+          },
+          "subscription_end_date" : {
+            "type" : "string",
+            "description" : "License subscription end date"
+          }
+        },
+        "description" : "license information"
+      },
+      "PrivacyFeatureRequest" : {
+        "required" : [ "featureName", "status" ],
+        "type" : "object",
+        "properties" : {
+          "featureName" : {
+            "type" : "string",
+            "description" : "privacy feature"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "status"
+          }
+        },
+        "description" : "privacy features"
+      },
+      "UpdateMspEcRequest" : {
+        "required" : [ "name", "service_effective_date", "service_expiration_date" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The name of the MSP-EC account.",
+            "example" : "Acme Sales"
+          },
+          "street_address" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The street address of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "350 West Java st"
+          },
+          "state" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The state of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "CA"
+          },
+          "country" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The country of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "US"
+          },
+          "postal_code" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The postal code of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "95089"
+          },
+          "phone_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The phone number of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "650-123-4567"
+          },
+          "fax_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The fax number of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "650-123-9999"
+          },
+          "city" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The city of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "Sunnyvale"
+          },
+          "mapping_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The map URL of the MSP-EC account.",
+            "nullable" : true,
+            "example" : "https//map.gogle.com/zsdweews"
+          },
+          "service_effective_date" : {
+            "type" : "string",
+            "description" : "The effective date of the MSP-EC account.",
+            "example" : "2019-09-14 01:12:51.805Z"
+          },
+          "service_expiration_date" : {
+            "type" : "string",
+            "description" : "The expiration date of the MSP-EC account.",
+            "example" : "2020-09-14 01:12:51.805Z"
+          },
+          "licenses" : {
+            "$ref" : "#/components/schemas/License"
+          },
+          "tier" : {
+            "type" : "string",
+            "description" : "MSP-EC tier info",
+            "example" : "GOLD, PLATINUM"
+          },
+          "privacyFeatures" : {
+            "maxItems" : 1,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "privacy features",
+            "items" : {
+              "$ref" : "#/components/schemas/PrivacyFeatureRequest"
+            }
+          }
+        }
+      },
+      "MspAdminRole" : {
+        "required" : [ "msp_admin_id", "msp_admin_role" ],
+        "type" : "object",
+        "properties" : {
+          "msp_admin_id" : {
+            "type" : "string",
+            "description" : "The admin ID of MSP tenant.",
+            "example" : "4c2b196a205d11ea978f-2e728ce88125"
+          },
+          "msp_admin_role" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The admin role of the first MSP administrator.",
+            "example" : "PRIME_ADMIN"
+          }
+        }
+      },
+      "AssignedMspAdminsRequest" : {
+        "required" : [ "delegation_type" ],
+        "type" : "object",
+        "properties" : {
+          "mspec_list" : {
+            "type" : "array",
+            "description" : "List of MSP EC admins to be assigned.",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdminRole"
+            }
+          },
+          "delegation_type" : {
+            "type" : "string",
+            "description" : "The type of MSP EC delegated tenant.",
+            "example" : "delegationtype"
+          },
+          "privilege_group_ids" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "privilege groups to manage accounts.",
+            "items" : {
+              "type" : "string",
+              "description" : "privilege groups to manage accounts."
+            }
+          }
+        }
+      },
+      "UpdateMspEcAdminRequest" : {
+        "required" : [ "email", "first_name", "user_name" ],
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The email address of the MSP EC administrator.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "user_name" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The user name of the MSP EC administrator.",
+            "nullable" : true,
+            "example" : "JohnWang or john.wang@sampledomain.com"
+          },
+          "full_name" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The full name of the MSP EC administrator.",
+            "nullable" : true,
+            "example" : "John Wang"
+          },
+          "first_name" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The first name of the MSP EC administrator.",
+            "nullable" : true,
+            "example" : "John"
+          },
+          "last_name" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The last name of the MSP EC administrator.",
+            "nullable" : true,
+            "example" : "Wang"
+          }
+        }
+      },
+      "DynamicQueryPayloadDto" : {
+        "type" : "object",
+        "properties" : {
+          "multiSortFields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "matchFields" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MatchFieldDto"
+            }
+          },
+          "rangeFilter" : {
+            "$ref" : "#/components/schemas/RangeFilterDto"
+          },
+          "rangeDateFilter" : {
+            "$ref" : "#/components/schemas/RangeFilterDto"
+          },
+          "mustNotMatchField" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MustNotMatchFieldDto"
+            }
+          },
+          "sortField" : {
+            "type" : "string"
+          },
+          "sortOrder" : {
+            "type" : "string"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "pageByDate" : {
+            "type" : "object",
+            "properties" : {
+              "value" : {
+                "type" : "string"
+              },
+              "key" : {
+                "type" : "string"
+              }
+            }
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "fields" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "search_after" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "searchTargetFields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "searchString" : {
+            "type" : "string"
+          },
+          "filters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          },
+          "mustHaveFields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "mustNotHaveFields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "termField" : {
+            "$ref" : "#/components/schemas/TermFieldDto"
+          },
+          "terms" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          },
+          "exists" : {
+            "type" : "string"
+          },
+          "groupBy" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MatchFieldDto" : {
+        "type" : "object",
+        "properties" : {
+          "field" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MustNotMatchFieldDto" : {
+        "type" : "object",
+        "properties" : {
+          "field" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RangeFilterDto" : {
+        "type" : "object",
+        "properties" : {
+          "field" : {
+            "type" : "string"
+          },
+          "gte" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "lte" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "lt" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }
+      },
+      "TermFieldDto" : {
+        "type" : "object",
+        "properties" : {
+          "field" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EntitlementDto" : {
+        "type" : "object",
+        "properties" : {
+          "expirationDateTs" : {
+            "type" : "string"
+          },
+          "consumed" : {
+            "type" : "string"
+          },
+          "quantity" : {
+            "type" : "string"
+          },
+          "entitlementDeviceType" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "expirationDate" : {
+            "type" : "string"
+          },
+          "entitlementDeviceSubType" : {
+            "type" : "string"
+          },
+          "toBeRemovedQuantity" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "accountType" : {
+            "type" : "string"
+          },
+          "wifiDeviceCount" : {
+            "type" : "string"
+          },
+          "switchDeviceCount" : {
+            "type" : "string"
+          },
+          "edgeDeviceCount" : {
+            "type" : "string"
+          },
+          "virtualEdgeDeviceCount" : {
+            "type" : "string"
+          },
+          "rwgDeviceCount" : {
+            "type" : "string"
+          },
+          "iotCtrlDeviceCount" : {
+            "type" : "string"
+          },
+          "adaptivePolicyCount" : {
+            "type" : "string"
+          },
+          "piNetworkCount" : {
+            "type" : "string"
+          },
+          "outOfComplianceDevices" : {
+            "type" : "string"
+          },
+          "futureOutOfComplianceDevices" : {
+            "type" : "string"
+          },
+          "futureOfComplianceDate" : {
+            "type" : "string"
+          }
+        }
+      },
+      "HttpMethod" : {
+        "type" : "object"
+      },
+      "MspEcDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "streetAddress" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "postalCode" : {
+            "type" : "string"
+          },
+          "mspAdminCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mspEcAdminCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "entitlements" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntitlementDto"
+            }
+          },
+          "mspTenantId" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "accountType" : {
+            "type" : "string"
+          },
+          "creationDate" : {
+            "type" : "string"
+          },
+          "expirationDate" : {
+            "type" : "string"
+          },
+          "lastUpdTime" : {
+            "type" : "string",
+            "description" : "The entity's last modified timestamp in UTC milliseconds."
+          },
+          "mspAdmins" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "mspLabel" : {
+            "type" : "string"
+          },
+          "delegatedTo" : {
+            "type" : "string"
+          },
+          "delegationExpiryDate" : {
+            "type" : "integer",
+            "description" : "Delegation expiry date in UTC milliseconds.",
+            "format" : "int64"
+          },
+          "mspName" : {
+            "type" : "string"
+          },
+          "mspecName" : {
+            "type" : "string"
+          },
+          "mspecId" : {
+            "type" : "string"
+          },
+          "wifiLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "switchLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "edgeLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "virtualEdgeLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rwgLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "iotCtrlLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "apSwLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tenantType" : {
+            "type" : "string"
+          },
+          "integrator" : {
+            "type" : "string",
+            "deprecated" : true
+          },
+          "installer" : {
+            "type" : "string",
+            "deprecated" : true
+          },
+          "integrators" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "installers" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "assignedMspEcList" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "mspIntegratorAdminCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mspIntegratorAdmins" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "mspInstallerAdminCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mspInstallerAdmins" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "priorityIncidents" : {
+            "$ref" : "#/components/schemas/PriorityIncidents"
+          },
+          "installerCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "integratorCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "customerCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "accountTier" : {
+            "type" : "string"
+          },
+          "propertyCode" : {
+            "type" : "string"
+          },
+          "serviceMode" : {
+            "type" : "string"
+          },
+          "serviceEffectiveDate" : {
+            "type" : "string"
+          }
+        }
+      },
+      "PriorityIncidents" : {
+        "type" : "object",
+        "properties" : {
+          "p3" : {
+            "type" : "string"
+          },
+          "p4" : {
+            "type" : "string"
+          },
+          "p1" : {
+            "type" : "string"
+          },
+          "p2" : {
+            "type" : "string"
+          }
+        }
+      },
+      "QueryResponseMspEcDto" : {
+        "type" : "object",
+        "properties" : {
+          "fields" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "objectId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MspEcDto"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "subsequentQueries" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SubsequentQuery"
+            }
+          }
+        }
+      },
+      "SubsequentQuery" : {
+        "type" : "object",
+        "properties" : {
+          "fields" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "url" : {
+            "type" : "string",
+            "format" : "uri"
+          },
+          "httpMethod" : {
+            "$ref" : "#/components/schemas/HttpMethod"
+          },
+          "payload" : {
+            "type" : "object"
+          }
+        }
+      },
+      "APRadioDto" : {
+        "type" : "object",
+        "properties" : {
+          "txPower" : {
+            "type" : "string",
+            "description" : "The AP's transmitter power setting in dBm."
+          },
+          "channel" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "actualTxPower" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "calibrationTxPower" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "band" : {
+            "type" : "string"
+          },
+          "Rssi" : {
+            "type" : "integer",
+            "description" : "A relative indication of the received power level of a client device's wireless transmissions as measured at the AP.  RSSI is scored on a scale of 0 to 100 with 100 indicating a very high (good) received power level and 0 indicating an extremely low (poor) power level.",
+            "format" : "int32"
+          },
+          "operativeChannelBandwidth" : {
+            "type" : "string"
+          },
+          "radioId" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "APStatusDataDto" : {
+        "type" : "object",
+        "properties" : {
+          "APRadio" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/APRadioDto"
+            }
+          },
+          "APSystem" : {
+            "$ref" : "#/components/schemas/APSystemDto"
+          },
+          "cellularInfo" : {
+            "$ref" : "#/components/schemas/CellularInfoDto"
+          },
+          "afcInfo" : {
+            "$ref" : "#/components/schemas/AfcInfoDto"
+          },
+          "lanPortStatus" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LanPortStatusDto"
+            }
+          }
+        }
+      },
+      "APSystemDto" : {
+        "type" : "object",
+        "properties" : {
+          "uptime" : {
+            "type" : "integer",
+            "description" : "The elapsed time in seconds between the time of the AP's last reboot and now.",
+            "format" : "int64"
+          },
+          "ipType" : {
+            "type" : "string"
+          },
+          "netmask" : {
+            "type" : "string"
+          },
+          "gateway" : {
+            "type" : "string"
+          },
+          "primaryDnsServer" : {
+            "type" : "string"
+          },
+          "secondaryDnsServer" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AfcInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "minPowerDbm" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "maxPowerDbm" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "availableChannel" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "availableChannels" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "afcStatus" : {
+            "type" : "string"
+          },
+          "powerMode" : {
+            "type" : "string"
+          },
+          "geoLocation" : {
+            "$ref" : "#/components/schemas/GeoLocationDto"
+          }
+        }
+      },
+      "CellularInfoDto" : {
+        "type" : "object",
+        "properties" : {
+          "cellularActiveSim" : {
+            "type" : "string"
+          },
+          "cellularConnectionStatus" : {
+            "type" : "string"
+          },
+          "cellularWanInterface" : {
+            "type" : "string"
+          },
+          "cellularSignalStrength" : {
+            "type" : "string"
+          },
+          "cellularDefaultGateway" : {
+            "type" : "string"
+          },
+          "cellular3G4GChannel" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularCountry" : {
+            "type" : "string"
+          },
+          "cellularRoamingStatus" : {
+            "type" : "string"
+          },
+          "cellularRadioUptime" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularIMEI" : {
+            "type" : "string"
+          },
+          "cellularLTEFirmware" : {
+            "type" : "string"
+          },
+          "cellularIPaddress" : {
+            "type" : "string"
+          },
+          "cellularSubnetMask" : {
+            "type" : "string"
+          },
+          "cellularOperator" : {
+            "type" : "string"
+          },
+          "cellularBand" : {
+            "type" : "string"
+          },
+          "cellularUplinkBandwidth" : {
+            "type" : "string"
+          },
+          "cellularDownlinkBandwidth" : {
+            "type" : "string"
+          },
+          "cellularRSRP" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularRSRQ" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularSINR" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularECIO" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularRSCP" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "cellularIsSIM0Present" : {
+            "type" : "string"
+          },
+          "cellularIMSISIM0" : {
+            "type" : "string"
+          },
+          "cellularICCIDSIM0" : {
+            "type" : "string"
+          },
+          "cellularTxBytesSIM0" : {
+            "type" : "string"
+          },
+          "cellularRxBytesSIM0" : {
+            "type" : "string"
+          },
+          "cellularSwitchCountSIM0" : {
+            "type" : "string"
+          },
+          "cellularNWLostCountSIM0" : {
+            "type" : "string"
+          },
+          "cellularCardRemovalCountSIM0" : {
+            "type" : "string"
+          },
+          "cellularDHCPTimeoutCountSIM0" : {
+            "type" : "string"
+          },
+          "cellularIsSIM1Present" : {
+            "type" : "string"
+          },
+          "cellularIMSISIM1" : {
+            "type" : "string"
+          },
+          "cellularICCIDSIM1" : {
+            "type" : "string"
+          },
+          "cellularTxBytesSIM1" : {
+            "type" : "string"
+          },
+          "cellularRxBytesSIM1" : {
+            "type" : "string"
+          },
+          "cellularSwitchCountSIM1" : {
+            "type" : "string"
+          },
+          "cellularNWLostCountSIM1" : {
+            "type" : "string"
+          },
+          "cellularCardRemovalCountSIM1" : {
+            "type" : "string"
+          },
+          "cellularDHCPTimeoutCountSIM1" : {
+            "type" : "string"
+          }
+        }
+      },
+      "DeviceDto" : {
+        "type" : "object",
+        "properties" : {
+          "isMeshEnable" : {
+            "type" : "boolean"
+          },
+          "downLinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "crtTime" : {
+            "type" : "string",
+            "description" : "The UTC time in milliseconds at which the device was provisioned (created) into the cloud."
+          },
+          "lastUpdTime" : {
+            "type" : "string"
+          },
+          "lastSeenTime" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "fwVersion" : {
+            "type" : "string"
+          },
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string"
+          },
+          "apGroupId" : {
+            "type" : "string"
+          },
+          "apGroupName" : {
+            "type" : "string"
+          },
+          "wlanGroup24GId" : {
+            "type" : "string"
+          },
+          "wlanGroup5GId" : {
+            "type" : "string"
+          },
+          "wlanGroups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WlanGroupDto"
+            }
+          },
+          "configStatus" : {
+            "type" : "string"
+          },
+          "connectionStatus" : {
+            "type" : "string"
+          },
+          "deviceStatus" : {
+            "type" : "string"
+          },
+          "deviceStatusSeverity" : {
+            "type" : "string"
+          },
+          "IP" : {
+            "type" : "string"
+          },
+          "extIp" : {
+            "type" : "string"
+          },
+          "externalPort" : {
+            "type" : "string"
+          },
+          "apMac" : {
+            "type" : "string"
+          },
+          "apStatusData" : {
+            "$ref" : "#/components/schemas/APStatusDataDto"
+          },
+          "uplink" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpLinkDto"
+            }
+          },
+          "downlink.downMac" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "downlink.rssi" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "downlink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "uplink.upMac" : {
+            "type" : "string"
+          },
+          "uplink.rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "uplink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "meshRole" : {
+            "type" : "string"
+          },
+          "hops" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "deviceGroupId" : {
+            "type" : "string"
+          },
+          "floorplanId" : {
+            "type" : "string"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "clients" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "downlinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tags" : {
+            "type" : "string"
+          },
+          "deviceGroupName" : {
+            "type" : "string"
+          },
+          "deviceModelType" : {
+            "type" : "string"
+          },
+          "switchName" : {
+            "type" : "string"
+          },
+          "switchSerialNumber" : {
+            "type" : "string"
+          },
+          "switchId" : {
+            "type" : "string"
+          },
+          "switchPort" : {
+            "type" : "string"
+          },
+          "latitude" : {
+            "type" : "string"
+          },
+          "longitude" : {
+            "type" : "string"
+          },
+          "poePort" : {
+            "type" : "string"
+          },
+          "poePortStatus" : {
+            "type" : "string"
+          },
+          "rogueCategory" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "description" : "The total amount of rogue devices for each category.",
+              "format" : "int32"
+            },
+            "description" : "The total amount of rogue devices for each category."
+          },
+          "deviceSessionCacheWeight" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "healthStatus" : {
+            "type" : "string"
+          },
+          "downlinkChannel" : {
+            "type" : "string"
+          },
+          "uplinkChannel" : {
+            "type" : "string"
+          },
+          "geolocationSource" : {
+            "type" : "string"
+          },
+          "apRadioDeploy" : {
+            "type" : "string"
+          },
+          "reboot" : {
+            "type" : "boolean"
+          },
+          "apNeighborMacs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "apNeighborRssis" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "neighbors" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NeighborDto"
+            }
+          }
+        }
+      },
+      "DownLinkDto" : {
+        "type" : "object",
+        "properties" : {
+          "isMeshEnable" : {
+            "type" : "boolean"
+          },
+          "deviceDto" : {
+            "$ref" : "#/components/schemas/DeviceDto"
+          },
+          "downLinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "crtTime" : {
+            "type" : "string",
+            "description" : "The UTC time in milliseconds at which the device was provisioned (created) into the cloud."
+          },
+          "lastUpdTime" : {
+            "type" : "string"
+          },
+          "lastSeenTime" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "fwVersion" : {
+            "type" : "string"
+          },
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string"
+          },
+          "apGroupId" : {
+            "type" : "string"
+          },
+          "apGroupName" : {
+            "type" : "string"
+          },
+          "wlanGroup24GId" : {
+            "type" : "string"
+          },
+          "wlanGroup5GId" : {
+            "type" : "string"
+          },
+          "wlanGroups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WlanGroupDto"
+            }
+          },
+          "configStatus" : {
+            "type" : "string"
+          },
+          "connectionStatus" : {
+            "type" : "string"
+          },
+          "deviceStatus" : {
+            "type" : "string"
+          },
+          "deviceStatusSeverity" : {
+            "type" : "string"
+          },
+          "IP" : {
+            "type" : "string"
+          },
+          "extIp" : {
+            "type" : "string"
+          },
+          "externalPort" : {
+            "type" : "string"
+          },
+          "apMac" : {
+            "type" : "string"
+          },
+          "apStatusData" : {
+            "$ref" : "#/components/schemas/APStatusDataDto"
+          },
+          "uplink" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpLinkDto"
+            }
+          },
+          "downlink.downMac" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "downlink.rssi" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "downlink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "uplink.upMac" : {
+            "type" : "string"
+          },
+          "uplink.rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "uplink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "meshRole" : {
+            "type" : "string"
+          },
+          "hops" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "deviceGroupId" : {
+            "type" : "string"
+          },
+          "floorplanId" : {
+            "type" : "string"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "clients" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "downlinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tags" : {
+            "type" : "string"
+          },
+          "deviceGroupName" : {
+            "type" : "string"
+          },
+          "deviceModelType" : {
+            "type" : "string"
+          },
+          "switchName" : {
+            "type" : "string"
+          },
+          "switchSerialNumber" : {
+            "type" : "string"
+          },
+          "switchId" : {
+            "type" : "string"
+          },
+          "switchPort" : {
+            "type" : "string"
+          },
+          "latitude" : {
+            "type" : "string"
+          },
+          "longitude" : {
+            "type" : "string"
+          },
+          "poePort" : {
+            "type" : "string"
+          },
+          "poePortStatus" : {
+            "type" : "string"
+          },
+          "rogueCategory" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "description" : "The total amount of rogue devices for each category.",
+              "format" : "int32"
+            },
+            "description" : "The total amount of rogue devices for each category."
+          },
+          "deviceSessionCacheWeight" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "healthStatus" : {
+            "type" : "string"
+          },
+          "downlinkChannel" : {
+            "type" : "string"
+          },
+          "uplinkChannel" : {
+            "type" : "string"
+          },
+          "geolocationSource" : {
+            "type" : "string"
+          },
+          "apRadioDeploy" : {
+            "type" : "string"
+          },
+          "reboot" : {
+            "type" : "boolean"
+          },
+          "apNeighborMacs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "apNeighborRssis" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "neighbors" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NeighborDto"
+            }
+          },
+          "txFrames" : {
+            "type" : "string"
+          },
+          "rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rxBytes" : {
+            "type" : "string"
+          },
+          "txBytes" : {
+            "type" : "string"
+          },
+          "rxFrames" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "downMac" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GeoLocationDto" : {
+        "type" : "object",
+        "properties" : {
+          "verticalUncertainty" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "lateralUncertainty" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "latitude" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "longitude" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "height" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "source" : {
+            "type" : "string"
+          }
+        }
+      },
+      "LanPortStatusDto" : {
+        "type" : "object",
+        "properties" : {
+          "port" : {
+            "type" : "string"
+          },
+          "phyLink" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MspInventoryDeviceDto" : {
+        "type" : "object",
+        "properties" : {
+          "isMeshEnable" : {
+            "type" : "boolean"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "crtTime" : {
+            "type" : "string",
+            "description" : "The UTC time in milliseconds at which the device was provisioned (created) into the cloud."
+          },
+          "lastUpdTime" : {
+            "type" : "string"
+          },
+          "lastSeenTime" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "fwVersion" : {
+            "type" : "string"
+          },
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string"
+          },
+          "apGroupId" : {
+            "type" : "string"
+          },
+          "apGroupName" : {
+            "type" : "string"
+          },
+          "wlanGroup24GId" : {
+            "type" : "string"
+          },
+          "wlanGroup5GId" : {
+            "type" : "string"
+          },
+          "configStatus" : {
+            "type" : "string"
+          },
+          "connectionStatus" : {
+            "type" : "string"
+          },
+          "deviceStatus" : {
+            "type" : "string"
+          },
+          "deviceStatusSeverity" : {
+            "type" : "string"
+          },
+          "IP" : {
+            "type" : "string"
+          },
+          "extIp" : {
+            "type" : "string"
+          },
+          "externalPort" : {
+            "type" : "string"
+          },
+          "apMac" : {
+            "type" : "string"
+          },
+          "apStatusData" : {
+            "$ref" : "#/components/schemas/APStatusDataDto"
+          },
+          "downlink" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DownLinkDto"
+            }
+          },
+          "uplink" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpLinkDto"
+            }
+          },
+          "downlink.downMac" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "downlink.rssi" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "downlink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "uplink.upMac" : {
+            "type" : "string"
+          },
+          "uplink.rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "meshRole" : {
+            "type" : "string"
+          },
+          "hops" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "deviceGroupId" : {
+            "type" : "string"
+          },
+          "floorplanId" : {
+            "type" : "string"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "clients" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tags" : {
+            "type" : "string"
+          },
+          "deviceGroupName" : {
+            "type" : "string"
+          },
+          "deviceModelType" : {
+            "type" : "string"
+          },
+          "switchName" : {
+            "type" : "string"
+          },
+          "switchSerialNumber" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "deviceType" : {
+            "type" : "string"
+          },
+          "switchMac" : {
+            "type" : "string"
+          },
+          "customerName" : {
+            "type" : "string"
+          },
+          "managedAs" : {
+            "type" : "string"
+          },
+          "rogueCategory" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "description" : "The total amount of rogue devices for each category.",
+              "format" : "int32"
+            },
+            "description" : "The total amount of rogue devices for each category."
+          }
+        }
+      },
+      "NeighborDto" : {
+        "type" : "object",
+        "properties" : {
+          "rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "mac" : {
+            "type" : "string"
+          },
+          "apName" : {
+            "type" : "string"
+          }
+        }
+      },
+      "QueryResponseMspInventoryDeviceDto" : {
+        "type" : "object",
+        "properties" : {
+          "fields" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "objectId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MspInventoryDeviceDto"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "subsequentQueries" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SubsequentQuery"
+            }
+          }
+        }
+      },
+      "UpLinkDto" : {
+        "type" : "object",
+        "properties" : {
+          "isMeshEnable" : {
+            "type" : "boolean"
+          },
+          "deviceDto" : {
+            "$ref" : "#/components/schemas/DeviceDto"
+          },
+          "downLinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "serialNumber" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "crtTime" : {
+            "type" : "string",
+            "description" : "The UTC time in milliseconds at which the device was provisioned (created) into the cloud."
+          },
+          "lastUpdTime" : {
+            "type" : "string"
+          },
+          "lastSeenTime" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "model" : {
+            "type" : "string"
+          },
+          "fwVersion" : {
+            "type" : "string"
+          },
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string"
+          },
+          "apGroupId" : {
+            "type" : "string"
+          },
+          "apGroupName" : {
+            "type" : "string"
+          },
+          "wlanGroup24GId" : {
+            "type" : "string"
+          },
+          "wlanGroup5GId" : {
+            "type" : "string"
+          },
+          "wlanGroups" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/WlanGroupDto"
+            }
+          },
+          "configStatus" : {
+            "type" : "string"
+          },
+          "connectionStatus" : {
+            "type" : "string"
+          },
+          "deviceStatus" : {
+            "type" : "string"
+          },
+          "deviceStatusSeverity" : {
+            "type" : "string"
+          },
+          "IP" : {
+            "type" : "string"
+          },
+          "extIp" : {
+            "type" : "string"
+          },
+          "externalPort" : {
+            "type" : "string"
+          },
+          "apMac" : {
+            "type" : "string"
+          },
+          "apStatusData" : {
+            "$ref" : "#/components/schemas/APStatusDataDto"
+          },
+          "downlink.downMac" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "downlink.rssi" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "downlink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "uplink.upMac" : {
+            "type" : "string"
+          },
+          "uplink.rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "uplink.type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "meshRole" : {
+            "type" : "string"
+          },
+          "hops" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "deviceGroupId" : {
+            "type" : "string"
+          },
+          "floorplanId" : {
+            "type" : "string"
+          },
+          "xPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "yPercent" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "clients" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "downlinkCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tags" : {
+            "type" : "string"
+          },
+          "deviceGroupName" : {
+            "type" : "string"
+          },
+          "deviceModelType" : {
+            "type" : "string"
+          },
+          "switchName" : {
+            "type" : "string"
+          },
+          "switchSerialNumber" : {
+            "type" : "string"
+          },
+          "switchId" : {
+            "type" : "string"
+          },
+          "switchPort" : {
+            "type" : "string"
+          },
+          "latitude" : {
+            "type" : "string"
+          },
+          "longitude" : {
+            "type" : "string"
+          },
+          "poePort" : {
+            "type" : "string"
+          },
+          "poePortStatus" : {
+            "type" : "string"
+          },
+          "rogueCategory" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "description" : "The total amount of rogue devices for each category.",
+              "format" : "int32"
+            },
+            "description" : "The total amount of rogue devices for each category."
+          },
+          "deviceSessionCacheWeight" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "healthStatus" : {
+            "type" : "string"
+          },
+          "downlinkChannel" : {
+            "type" : "string"
+          },
+          "uplinkChannel" : {
+            "type" : "string"
+          },
+          "geolocationSource" : {
+            "type" : "string"
+          },
+          "apRadioDeploy" : {
+            "type" : "string"
+          },
+          "reboot" : {
+            "type" : "boolean"
+          },
+          "apNeighborMacs" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "apNeighborRssis" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "neighbors" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/NeighborDto"
+            }
+          },
+          "txFrames" : {
+            "type" : "string"
+          },
+          "rssi" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "rxBytes" : {
+            "type" : "string"
+          },
+          "txBytes" : {
+            "type" : "string"
+          },
+          "rxFrames" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "upMac" : {
+            "type" : "string"
+          }
+        }
+      },
+      "WlanGroupDto" : {
+        "type" : "object",
+        "properties" : {
+          "wlanGroupId" : {
+            "type" : "string"
+          },
+          "wlanGroupName" : {
+            "type" : "string"
+          },
+          "radioId" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "StreamingResponseBody" : {
+        "type" : "object"
+      },
+      "AddMspEcRequestV1_3" : {
+        "type" : "object",
+        "properties" : {
+          "account_id" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string",
+            "description" : "The name of MSP-EC account.",
+            "example" : "Acme Sales"
+          },
+          "street_address" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' street name and number.",
+            "nullable" : true,
+            "example" : "350 West Java st"
+          },
+          "state" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' geographical state.",
+            "nullable" : true,
+            "example" : "CA"
+          },
+          "country" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' country.",
+            "nullable" : true,
+            "example" : "US"
+          },
+          "postal_code" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' postal code.",
+            "nullable" : true,
+            "example" : "95089"
+          },
+          "phone_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's phone number.",
+            "nullable" : true,
+            "example" : "650-123-4567"
+          },
+          "fax_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's fax number.",
+            "nullable" : true,
+            "example" : "650-123-9999"
+          },
+          "city" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' city.",
+            "nullable" : true,
+            "example" : "Sunnyvale"
+          },
+          "mapping_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The map URL corresponding to the MSP-EC's mailing address.",
+            "nullable" : true,
+            "example" : "https//map.gogle.com/zsdweews"
+          },
+          "service_effective_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service started.",
+            "example" : "2019-09-14 01:12:51Z"
+          },
+          "service_expiration_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service terminates/terminated.",
+            "example" : "2020-09-14 01:12:51Z"
+          },
+          "admin_email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The email address of the first MSP-EC administrator added to the account by the MSP.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "admin_firstname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The first name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "John"
+          },
+          "admin_lastname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The last name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "Wang"
+          },
+          "admin_role" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The admin role of the first MSP-EC administrator.",
+            "example" : "PRIME_ADMIN,ADMIN,READ_ONLY"
+          },
+          "tenant_type" : {
+            "maxLength" : 25,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The tenant type of the MSP EC administrator.",
+            "example" : "MSP, MSP_INTEGRATOR, MSP_INSTALLER"
+          },
+          "licenses" : {
+            "$ref" : "#/components/schemas/License"
+          },
+          "delegations" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "delegations to support manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/EcDelegation"
+            }
+          },
+          "admin_delegations" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "admins to manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdminRole"
+            }
+          },
+          "tier" : {
+            "type" : "string",
+            "description" : "MSP-EC tier info",
+            "example" : "GOLD, PLATINUM"
+          }
+        }
+      },
+      "EcDelegation" : {
+        "required" : [ "delegation_type" ],
+        "type" : "object",
+        "properties" : {
+          "mspec_list" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "List of MSP EC to be assigned.",
+            "items" : {
+              "type" : "string",
+              "description" : "List of MSP EC to be assigned."
+            }
+          },
+          "delegation_type" : {
+            "type" : "string",
+            "description" : "The type of MSP EC delegated tenant.",
+            "example" : "MSP_INTEGRATOR"
+          },
+          "delegation_id" : {
+            "type" : "string",
+            "description" : "Delegated to tenant.",
+            "example" : "delegationtenantid"
+          },
+          "number_of_days" : {
+            "type" : "string",
+            "description" : "Expiry days for MSP EC to delegated tenant.",
+            "example" : "1-60"
+          }
+        },
+        "description" : "delegations to support manage account"
+      },
+      "AddMspEcRequestV1_2" : {
+        "required" : [ "name", "service_effective_date", "service_expiration_date", "tenant_type" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string",
+            "description" : "The name of MSP-EC account.",
+            "example" : "Acme Sales"
+          },
+          "street_address" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' street name and number.",
+            "nullable" : true,
+            "example" : "350 West Java st"
+          },
+          "state" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' geographical state.",
+            "nullable" : true,
+            "example" : "CA"
+          },
+          "country" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' country.",
+            "nullable" : true,
+            "example" : "US"
+          },
+          "postal_code" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' postal code.",
+            "nullable" : true,
+            "example" : "95089"
+          },
+          "phone_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's phone number.",
+            "nullable" : true,
+            "example" : "650-123-4567"
+          },
+          "fax_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's fax number.",
+            "nullable" : true,
+            "example" : "650-123-9999"
+          },
+          "city" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' city.",
+            "nullable" : true,
+            "example" : "Sunnyvale"
+          },
+          "mapping_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The map URL corresponding to the MSP-EC's mailing address.",
+            "nullable" : true,
+            "example" : "https//map.gogle.com/zsdweews"
+          },
+          "service_effective_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service started.",
+            "example" : "2019-09-14 01:12:51Z"
+          },
+          "service_expiration_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service terminates/terminated.",
+            "example" : "2020-09-14 01:12:51Z"
+          },
+          "admin_email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The email address of the first MSP-EC administrator added to the account by the MSP.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "admin_firstname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The first name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "John"
+          },
+          "admin_lastname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The last name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "Wang"
+          },
+          "admin_role" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The admin role of the first MSP-EC administrator.",
+            "example" : "PRIME_ADMIN,ADMIN,READ_ONLY"
+          },
+          "tenant_type" : {
+            "maxLength" : 25,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The tenant type of the MSP EC administrator.",
+            "example" : "MSP, MSP_INTEGRATOR, MSP_INSTALLER"
+          },
+          "licenses" : {
+            "$ref" : "#/components/schemas/License"
+          },
+          "delegations" : {
+            "maxItems" : 2,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "delegations to support manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/EcDelegation"
+            }
+          },
+          "admin_delegations" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "admins to manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdminRole"
+            }
+          }
+        }
+      },
+      "AddMspEcRequestV1" : {
+        "required" : [ "admin_email", "admin_role", "name", "service_effective_date", "service_expiration_date", "tenant_type" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "maxLength" : 255,
+            "minLength" : 2,
+            "type" : "string",
+            "description" : "The name of MSP-EC account.",
+            "example" : "Acme Sales"
+          },
+          "street_address" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' street name and number.",
+            "nullable" : true,
+            "example" : "350 West Java st"
+          },
+          "state" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' geographical state.",
+            "nullable" : true,
+            "example" : "CA"
+          },
+          "country" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' country.",
+            "nullable" : true,
+            "example" : "US"
+          },
+          "postal_code" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' postal code.",
+            "nullable" : true,
+            "example" : "95089"
+          },
+          "phone_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's phone number.",
+            "nullable" : true,
+            "example" : "650-123-4567"
+          },
+          "fax_number" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC's fax number.",
+            "nullable" : true,
+            "example" : "650-123-9999"
+          },
+          "city" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The MSP-EC mailing address' city.",
+            "nullable" : true,
+            "example" : "Sunnyvale"
+          },
+          "mapping_url" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The map URL corresponding to the MSP-EC's mailing address.",
+            "nullable" : true,
+            "example" : "https//map.gogle.com/zsdweews"
+          },
+          "service_effective_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service started.",
+            "example" : "2019-09-14 01:12:51Z"
+          },
+          "service_expiration_date" : {
+            "type" : "string",
+            "description" : "The date when the MSP-EC's service terminates/terminated.",
+            "example" : "2020-09-14 01:12:51Z"
+          },
+          "admin_email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The email address of the first MSP-EC administrator added to the account by the MSP.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "admin_firstname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The first name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "John"
+          },
+          "admin_lastname" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The last name of the first MSP-EC administrator added to the account by the MSP.",
+            "nullable" : true,
+            "example" : "Wang"
+          },
+          "admin_role" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The admin role of the first MSP-EC administrator.",
+            "example" : "PRIME_ADMIN,ADMIN,READ_ONLY"
+          },
+          "tenant_type" : {
+            "maxLength" : 25,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The tenant type of the MSP EC administrator.",
+            "example" : "MSP, MSP_INTEGRATOR, MSP_INSTALLER"
+          },
+          "licenses" : {
+            "$ref" : "#/components/schemas/License"
+          },
+          "delegations" : {
+            "maxItems" : 2,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "delegations to support manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/EcDelegation"
+            }
+          },
+          "admin_delegations" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "admins to manage account",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdminRole"
+            }
+          }
+        }
+      },
+      "EmailInvitation" : {
+        "required" : [ "admin_email" ],
+        "type" : "object",
+        "properties" : {
+          "admin_email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The email of the MSP-EC administrator.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "resend" : {
+            "type" : "boolean",
+            "description" : "Indicate if this is to resend in case of email got lost.",
+            "example" : false
+          }
+        }
+      },
+      "AutoSchedule" : {
+        "required" : [ "days", "timeSlots" ],
+        "type" : "object",
+        "properties" : {
+          "days" : {
+            "type" : "array",
+            "description" : "List of days to schedule firmware upgrade.",
+            "example" : "['Monday','Friday']",
+            "items" : {
+              "type" : "string",
+              "description" : "List of days to schedule firmware upgrade.",
+              "example" : "['Monday','Friday']"
+            }
+          },
+          "timeSlots" : {
+            "type" : "array",
+            "description" : "List of time slots to schedule firmware upgrade.",
+            "example" : "['00:00-02:00','00:00-04:00']",
+            "items" : {
+              "type" : "string",
+              "description" : "List of time slots to schedule firmware upgrade.",
+              "example" : "['00:00-02:00','00:00-04:00']"
+            }
+          }
+        },
+        "description" : "Scheduling firmware upgrade based on days and time slots (Timezone is defined by the venue)."
+      },
+      "DataRequest" : {
+        "type" : "object",
+        "properties" : {
+          "mspEcList" : {
+            "maxItems" : 100,
+            "minItems" : 1,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "List of MSP-EC to schedule firmware upgrade.",
+            "items" : {
+              "type" : "string",
+              "description" : "List of MSP-EC to schedule firmware upgrade."
+            }
+          },
+          "autoSchedule" : {
+            "$ref" : "#/components/schemas/AutoSchedule"
+          },
+          "manualSchedule" : {
+            "$ref" : "#/components/schemas/ManualSchedule"
+          }
+        },
+        "description" : "The bulk operation data."
+      },
+      "FirmwareUpgradeRequest" : {
+        "required" : [ "operation" ],
+        "type" : "object",
+        "properties" : {
+          "operation" : {
+            "maxLength" : 255,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The bulk operation type.",
+            "example" : "AP_FIRMWARE_UPGRADE"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/DataRequest"
+          }
+        }
+      },
+      "ManualSchedule" : {
+        "required" : [ "timeSlot" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "pattern" : "\\d{4}-\\d{2}-\\d{2}",
+            "type" : "string",
+            "description" : "Date to schedule firmware upgrade.",
+            "example" : "2023-09-30"
+          },
+          "timeSlot" : {
+            "type" : "string",
+            "description" : "Time slot to schedule firmware upgrade.",
+            "example" : "00:00-02:00"
+          }
+        },
+        "description" : "Scheduling manual firmware upgrade based on date and time slot (Timezone is defined by the venue)."
+      },
+      "DelegationData" : {
+        "type" : "object",
+        "properties" : {
+          "priorityIncidents" : {
+            "$ref" : "#/components/schemas/PriorityIncidents"
+          },
+          "wifiLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "switchLicenses" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "earlyExpirationDate" : {
+            "type" : "string"
+          },
+          "alarmCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "tenantEmail" : {
+            "type" : "string"
+          },
+          "delegatedToEmail" : {
+            "type" : "string"
+          },
+          "delegationType" : {
+            "type" : "string"
+          },
+          "tenantName" : {
+            "type" : "string"
+          },
+          "tenantId" : {
+            "type" : "string"
+          },
+          "crtTime" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "delegatedToId" : {
+            "type" : "string",
+            "description" : "Ruckus cloud unique delegated admin ID."
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "delegatedToName" : {
+            "type" : "string"
+          },
+          "lastUpdTime" : {
+            "type" : "string",
+            "description" : "The entity's last modified timestamp in UTC milliseconds."
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "entitlements" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntitlementDto"
+            }
+          }
+        }
+      },
+      "QueryResponseDelegationData" : {
+        "type" : "object",
+        "properties" : {
+          "fields" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "objectId" : {
+            "type" : "string"
+          },
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/DelegationData"
+            }
+          },
+          "errorMessage" : {
+            "type" : "string"
+          },
+          "subsequentQueries" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/SubsequentQuery"
+            }
+          }
+        }
+      },
+      "AssignMspEcListRequest" : {
+        "required" : [ "delegation_type" ],
+        "type" : "object",
+        "properties" : {
+          "mspec_list" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "List of MSP EC to be assigned.",
+            "items" : {
+              "type" : "string",
+              "description" : "List of MSP EC to be assigned."
+            }
+          },
+          "delegation_type" : {
+            "type" : "string",
+            "description" : "The type of MSP EC delegated tenant.",
+            "example" : "delegationtype"
+          },
+          "number_of_days" : {
+            "type" : "string",
+            "description" : "Expiry days for MSP EC to delegated tenant.",
+            "example" : "1-60"
+          },
+          "isManageAllEcs" : {
+            "type" : "boolean",
+            "description" : "flag to admins to manage account"
+          }
+        }
+      },
+      "MspEcPatchRequest" : {
+        "required" : [ "operation" ],
+        "type" : "object",
+        "properties" : {
+          "operation" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The requested state change.",
+            "example" : "reactivate/deactivate"
+          }
+        }
+      },
+      "OperationResponse" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "object"
+          }
+        }
+      },
+      "JsonNode" : {
+        "type" : "object"
+      },
+      "OperationResponseObject" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "response" : {
+            "type" : "object"
+          }
+        }
+      },
+      "MspAdmin" : {
+        "required" : [ "mspEcId" ],
+        "type" : "object",
+        "properties" : {
+          "operation" : {
+            "type" : "string"
+          },
+          "mspEcId" : {
+            "type" : "string",
+            "description" : "The MSP-EC tenant id."
+          },
+          "mspAdminRoles" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "The List of MSP admin id and respective role.",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdminRole"
+            }
+          },
+          "privilege_group_ids" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "privilege groups to manage accounts.",
+            "items" : {
+              "type" : "string",
+              "description" : "privilege groups to manage accounts."
+            }
+          }
+        }
+      },
+      "MspAdminRequest" : {
+        "type" : "object",
+        "properties" : {
+          "associations" : {
+            "maxItems" : 200,
+            "minItems" : 1,
+            "uniqueItems" : true,
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MspAdmin"
+            }
+          }
+        }
+      },
+      "AssignDelegatedRequest" : {
+        "required" : [ "delegation_type", "mspec_id" ],
+        "type" : "object",
+        "properties" : {
+          "delegation_id" : {
+            "type" : "string",
+            "description" : "The id of MSP EC delegated tenant.",
+            "example" : "delegationId"
+          },
+          "delegation_type" : {
+            "type" : "string",
+            "description" : "The type of MSP EC delegated tenant.",
+            "example" : "delegationtype"
+          },
+          "mspec_id" : {
+            "type" : "string",
+            "description" : "MSP EC to be assigned."
+          },
+          "number_of_days" : {
+            "type" : "string",
+            "description" : "Expiry days for MSP EC to delegated tenant.",
+            "example" : "1-60"
+          }
+        },
+        "description" : "List of tech partner details"
+      },
+      "AssignMspEcToMultipleTechPartners" : {
+        "type" : "object",
+        "properties" : {
+          "AssignDelegatedRequest" : {
+            "type" : "array",
+            "description" : "List of tech partner details",
+            "items" : {
+              "$ref" : "#/components/schemas/AssignDelegatedRequest"
+            }
+          }
+        }
+      },
+      "MspView" : {
+        "type" : "object",
+        "properties" : {
+          "msp_label" : {
+            "type" : "string",
+            "description" : "The MSP label.",
+            "example" : "msp-label"
+          },
+          "logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "alarm_notification_logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of alarm notification logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "ping_notification_logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of ping notification logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "mlisa_logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of Ruckus Analytics logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "ping_login_logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of ping login logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "default_logo_uuid" : {
+            "type" : "string",
+            "description" : "The UUID of default logo file.",
+            "nullable" : true,
+            "example" : "b183ae56-e081-11e9-8a34-2a2ae2dbcce4.jpg"
+          },
+          "msp_fqdn" : {
+            "type" : "string",
+            "description" : "The FQDN of MSP portal.",
+            "nullable" : true,
+            "example" : "wifi.sampledomain.com"
+          },
+          "contact_support_url" : {
+            "type" : "string",
+            "description" : "The URL at which to obtain customer support from your MSP.",
+            "nullable" : true,
+            "example" : "http://support.sampledomain.com/"
+          },
+          "contact_support_behavior" : {
+            "type" : "string",
+            "description" : "The contact support behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "open_case_url" : {
+            "type" : "string",
+            "description" : "The URL at which to open a customer support case with your MSP.",
+            "nullable" : true,
+            "example" : "http://support.sampledomain.com/opencase"
+          },
+          "open_case_behavior" : {
+            "type" : "string",
+            "description" : "The open case behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "my_open_case_url" : {
+            "type" : "string",
+            "description" : "The URL to view your open customer support cases.",
+            "nullable" : true,
+            "example" : "http://support.sampledomain.com/myopencase"
+          },
+          "my_open_case_behavior" : {
+            "type" : "string",
+            "description" : "The my open case behavior of MSP tenant.",
+            "nullable" : true,
+            "example" : "redirect"
+          },
+          "change_password_url" : {
+            "type" : "string",
+            "description" : "The change password URL of MSP tenant.",
+            "nullable" : true,
+            "example" : "http://wifi.sampledomain.com/password"
+          },
+          "msp_phone" : {
+            "type" : "string",
+            "description" : "Your MSP's customer-support phone number.",
+            "nullable" : true,
+            "example" : "+6501234567"
+          },
+          "msp_email" : {
+            "type" : "string",
+            "description" : "Your MSP's customer-support email address.",
+            "nullable" : true,
+            "example" : "support@msp.com"
+          },
+          "msp_website" : {
+            "type" : "string",
+            "description" : "Your MSP's website.",
+            "nullable" : true,
+            "example" : "http://wifi.sampledomain.com"
+          },
+          "msp_external_id" : {
+            "type" : "string",
+            "description" : "The MSP external account ID.",
+            "nullable" : true,
+            "example" : "0015B000015bJEfQAM"
+          },
+          "msp_tenant_name" : {
+            "type" : "string",
+            "description" : "Your MSP's name.",
+            "nullable" : true,
+            "example" : "sampledomain Inc."
+          },
+          "mspLogoFileDataList" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MspLogoFileData"
+            }
+          },
+          "preferredWisprProvider" : {
+            "$ref" : "#/components/schemas/PreferredWisprProvider"
+          },
+          "domain_suffix" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MspEcDelegationResponse" : {
+        "type" : "object",
+        "properties" : {
+          "mspec_list" : {
+            "type" : "array",
+            "description" : "List of MSP EC delegated.",
+            "items" : {
+              "type" : "string",
+              "description" : "List of MSP EC delegated."
+            }
+          },
+          "delegation_type" : {
+            "type" : "string",
+            "description" : "The type of MSP EC delegation.",
+            "example" : "delegationtype"
+          },
+          "delegated_to" : {
+            "type" : "string",
+            "description" : "Delegated to tenant.",
+            "example" : "delegationtenantid"
+          },
+          "expiry_date" : {
+            "type" : "string",
+            "description" : "Expiry date for delegation."
+          }
+        }
+      },
+      "MspEcAccountView" : {
+        "type" : "object",
+        "properties" : {
+          "msp_label" : {
+            "type" : "string",
+            "description" : "The MSP label.",
+            "example" : "msp-label"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of MSP-EC account.",
+            "example" : "Acme Sales"
+          },
+          "street_address" : {
+            "type" : "string",
+            "description" : "The street address of MSP-EC account.",
+            "nullable" : true,
+            "example" : "350 West Java st"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "The state of MSP-EC account.",
+            "nullable" : true,
+            "example" : "CA"
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "The country of MSP-EC account.",
+            "nullable" : true,
+            "example" : "US"
+          },
+          "postal_code" : {
+            "type" : "string",
+            "description" : "The postal code of MSP-EC account.",
+            "nullable" : true,
+            "example" : "95089"
+          },
+          "phone_number" : {
+            "type" : "string",
+            "description" : "The phone number of MSP-EC account.",
+            "nullable" : true,
+            "example" : "650-123-4567"
+          },
+          "fax_number" : {
+            "type" : "string",
+            "description" : "The fax number of MSP-EC account.",
+            "nullable" : true,
+            "example" : "650-123-9999"
+          },
+          "city" : {
+            "type" : "string",
+            "description" : "The city of MSP-EC account.",
+            "nullable" : true,
+            "example" : "Sunnyvale"
+          },
+          "mapping_url" : {
+            "type" : "string",
+            "description" : "The map URL of MSP-EC account.",
+            "nullable" : true,
+            "example" : "https//map.gogle.com/zsdweews"
+          },
+          "service_effective_date" : {
+            "type" : "string",
+            "description" : "The effective date of MSP-EC account.",
+            "example" : "2019-09-14 01:12:51Z"
+          },
+          "service_expiration_date" : {
+            "type" : "string",
+            "description" : "The expiration date of MSP-EC account.",
+            "example" : "2020-09-14 01:12:51Z"
+          },
+          "is_active" : {
+            "type" : "string",
+            "description" : "Active state of MSP-EC account.",
+            "nullable" : true,
+            "example" : "true"
+          },
+          "tenant_id" : {
+            "type" : "string",
+            "description" : "Tenant ID.",
+            "example" : "6173ca160495421c95be47b42b349067"
+          },
+          "parent_tenant_id" : {
+            "type" : "string",
+            "description" : "Parent tenant ID.",
+            "example" : "6173ca160495421c95be47b42b349067"
+          },
+          "tenant_type" : {
+            "type" : "string",
+            "description" : "The tenant type of the MSP EC administrator.",
+            "example" : "MSP, MSP_INTEGRATOR, MSP_INSTALLER"
+          },
+          "account_id" : {
+            "type" : "string",
+            "description" : "Account ID.",
+            "example" : "_53997fe0-dffb-4bac-bcc1-e21c689a320f_kodzLWdS"
+          },
+          "tier" : {
+            "type" : "string",
+            "description" : "Account ID.",
+            "example" : "_53997fe0-dffb-4bac-bcc1-e21c689a320f_kodzLWdS"
+          },
+          "logo_url" : {
+            "type" : "string"
+          },
+          "privacyFeatures" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "privacy features",
+            "items" : {
+              "$ref" : "#/components/schemas/PrivacyFeatureResponse"
+            }
+          }
+        }
+      },
+      "PrivacyFeatureResponse" : {
+        "type" : "object",
+        "properties" : {
+          "featureName" : {
+            "type" : "string",
+            "description" : "privacy feature"
+          },
+          "isEnabled" : {
+            "type" : "boolean",
+            "description" : "isEnabled"
+          }
+        },
+        "description" : "privacy features"
+      },
+      "MspEcAdminView" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "description" : "The email address of MSP EC administrator.",
+            "example" : "john.wang@sampledomain.com"
+          },
+          "user_name" : {
+            "type" : "string",
+            "description" : "The user name of MSP EC administrator.",
+            "nullable" : true,
+            "example" : "JohnWang or john.wang@sampledomain.com"
+          },
+          "full_name" : {
+            "type" : "string",
+            "description" : "The full name of MSP EC administrator.",
+            "nullable" : true,
+            "example" : "John Wang"
+          },
+          "first_name" : {
+            "type" : "string",
+            "description" : "The first name of MSP EC administrator.",
+            "nullable" : true,
+            "example" : "John"
+          },
+          "last_name" : {
+            "type" : "string",
+            "description" : "The last name of MSP EC administrator.",
+            "nullable" : true,
+            "example" : "Wang"
+          }
+        }
+      },
+      "MspEc" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "createdDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedDate" : {
+            "type" : "string",
+            "format" : "date-time",
+            "readOnly" : true
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
+          },
+          "switchActivated" : {
+            "type" : "boolean"
+          },
+          "wifiActivated" : {
+            "type" : "boolean"
+          },
+          "tenantActivated" : {
+            "type" : "boolean"
+          },
+          "parentId" : {
+            "type" : "string",
+            "readOnly" : true
+          }
+        }
+      }
+    }
+  }
+}

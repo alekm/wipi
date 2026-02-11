@@ -1,0 +1,12 @@
+# WiPi Pi List File
+# Format: <ip-address> <hostname>
+# Lines starting with # are ignored
+
+# Your Raspberry Pis (one per line)
+172.16.254.147 wipi-01
+# 172.16.254.148 wipi-02
+# 172.16.254.149 wipi-03
+
+# You can also just list IP addresses (hostnames will be auto-generated):
+# 172.16.254.150
+# 172.16.254.151

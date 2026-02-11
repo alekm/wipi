@@ -1,0 +1,30 @@
+[Unit]
+Description=WiPi Agent - Wi-Fi Client Farm Agent
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/wipi-agent
+Environment="PYTHONPATH=/opt/wipi-agent"
+Environment="AGENT_ID=%H"
+Environment="CONTROLLER_URL=http://192.168.1.10:8000"
+Environment="API_PORT=8080"
+Environment="BASE_INTERFACE=wlan0"
+Environment="DHCP_CLIENT=dhclient"
+Environment="MOCK_MODE=false"
+ExecStart=/opt/wipi-agent/venv/bin/python -m uvicorn agent.src.main:app --host 0.0.0.0 --port 8080
+Restart=always
+RestartSec=10
+# If agent is in the middle of apply (dhclient/wait_for_connection), it may not exit on SIGTERM
+# until those finish. Cap wait so restart doesn't hang for 90s.
+TimeoutStopSec=20
+
+# Security settings
+NoNewPrivileges=false
+# Agent needs root for interface management
+# PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

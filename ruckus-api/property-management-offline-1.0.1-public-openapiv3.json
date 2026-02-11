@@ -1,0 +1,3246 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Property Management REST API",
+    "description" : "# Overview\n   These APIs facilitate managing property configurations and units management for a venue.\n",
+    "license" : {
+      "name" : "RUCKUS Cloud Privacy Policy",
+      "url" : "https://support.ruckuswireless.com/ruckus-cloud-privacy-policy"
+    },
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080",
+    "description" : "Generated server url"
+  } ],
+  "tags" : [ {
+    "name" : "Units Identity API",
+    "description" : "Manages linked identities for a unit."
+  }, {
+    "name" : "Property Configuration",
+    "description" : "Manages property configuration for venue"
+  }, {
+    "name" : "Units API",
+    "description" : "Manages units for a venue"
+  }, {
+    "name" : "Resident Portals",
+    "description" : "Manages, create and get configuration of resident portals for a tenant"
+  }, {
+    "name" : "Property Configuration",
+    "description" : "Retrieves property configuration for a tenant"
+  }, {
+    "name" : "QoS Profile Assignment API",
+    "description" : "Manages QoS profile assignments"
+  } ],
+  "paths" : {
+    "/venues/{venueId}/units/{unitId}/identities/{identityId}" : {
+      "put" : {
+        "tags" : [ "Units Identity API" ],
+        "summary" : "Associate Identity to Unit",
+        "description" : "Allows the user to associate identities on the specified unit.",
+        "operationId" : "associateIdentity",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unitId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "identityId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "headers" : {
+              "Location" : {
+                "description" : "Url for the added unit",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict-The unit trying to add already exists",
+            "headers" : {
+              "Location" : {
+                "description" : "Url of the existing unit",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Persona"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Units Identity API" ],
+        "summary" : "Delete Unit Identity ",
+        "description" : "Allows the user to delete associated identity of the unit.",
+        "operationId" : "deleteIdentity",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unitId",
+          "in" : "path",
+          "description" : "Unit Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "identityId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/units/qosProfileAssignments/{qosProfileId}" : {
+      "put" : {
+        "tags" : [ "QoS Profile Assignment API" ],
+        "summary" : "Update QoS Profile Assignment",
+        "description" : "Allows the user to update QoS profile assignments.",
+        "operationId" : "qosProfileAssignments",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "qosProfileId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "QoS profile assignment to assign",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QoSProfileAssignment"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QoSProfileAssignment"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "Location" : {
+                "description" : "Url for the activity status",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/propertyConfigs" : {
+      "get" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Get Property Configuration",
+        "description" : "Gets property configuration for the requested venue Id.",
+        "operationId" : "getProperty",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelPropertyDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelPropertyDto"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Update Property Configuration",
+        "description" : "Allows the user to enable or disable property management configuration on the specified venue.",
+        "operationId" : "enableProperty",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Property configuration to enable",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PropertyDto"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PropertyDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "Location" : {
+                "description" : "Url for the enabled property configuration",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Property configuration not found for the given venue id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Selectively Update Property Configuration",
+        "description" : "Allows the user to selectively update property management configuration on the specified venue.",
+        "operationId" : "enablePropertySelectively",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Property configuration to enable",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PropertyDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Property configuration not found for the given venue id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/propertyConfigs/residentPortalAssignments/{residentPortalId}" : {
+      "put" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Update Resident Portal Assignment",
+        "description" : "Allows the user to assign resident portal for the specified venue.",
+        "operationId" : "assignResidentPortal",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "residentPortalId",
+          "in" : "path",
+          "description" : "Resident PortalId Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PropertyResidentPortalAssignment"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PropertyResidentPortalAssignment"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Property configuration not found for the given venue id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/units" : {
+      "get" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Gets Units for Venue",
+        "description" : "Gets the list of units paged.",
+        "operationId" : "getAllUnits",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Page size",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "The page to retrieve (starts at one).",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "The field name to sort, comma seperated from the sort order (asc or desc).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Units for venue.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input supplied.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Adds Unit to Venue",
+        "description" : "Allows the user to add a unit on the specified venue.",
+        "operationId" : "addUnit",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Unit to add",
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "unitImports" ],
+                "type" : "object",
+                "properties" : {
+                  "unitImports" : {
+                    "type" : "string",
+                    "format" : "binary"
+                  }
+                }
+              }
+            },
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Unit"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Unit"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "422" : {
+            "description" : "Unable to process the file",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          },
+          "202" : {
+            "description" : "Accepted",
+            "headers" : {
+              "Location" : {
+                "description" : "Url for the added unit",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "multipart/form-data" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict-The unit trying to add already exists",
+            "headers" : {
+              "Location" : {
+                "description" : "Url of the existing unit",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Delete Units for Venue",
+        "description" : "Allows the user to delete units with the given ids.",
+        "operationId" : "deleteUnits",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Unit ids to delete",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                }
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/venues/{venueId}/units/query" : {
+      "post" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Query Units for Venue",
+        "description" : "Gets the list of units using the specified query.",
+        "operationId" : "queryUnits",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "excludeContent",
+          "in" : "query",
+          "description" : "Indicates that the content should be excluded from the query and only count and size data returned.",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Data for the requested query ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Units for venue.",
+            "content" : {
+              "text/csv" : { },
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelUnit"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelUnit"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid query data supplied.",
+            "content" : {
+              "text/csv" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/hal+json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/PageEntityModelUnit"
+                  }, {
+                    "$ref" : "#/components/schemas/ErrorResource"
+                  } ]
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "oneOf" : [ {
+                    "$ref" : "#/components/schemas/PageEntityModelUnit"
+                  }, {
+                    "$ref" : "#/components/schemas/ErrorResource"
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/units/notifications" : {
+      "post" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Gets Notifications for Units",
+        "description" : "Allows the user to resend notifications for units with the given ids.",
+        "operationId" : "resendNotifications",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Unit ids (maximum of 100) to send notifications",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "maxItems" : 100,
+                "minItems" : 1,
+                "type" : "array",
+                "items" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                }
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "maxItems" : 100,
+                "minItems" : 1,
+                "type" : "array",
+                "items" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad request"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/units/identities/query" : {
+      "post" : {
+        "tags" : [ "Units Identity API" ],
+        "summary" : "Query Associated Identities for a Unit",
+        "description" : "Gets the list of identities using the specified query.",
+        "operationId" : "queryIdentities",
+        "parameters" : [ {
+          "name" : "excludeContent",
+          "in" : "query",
+          "description" : "Indicates that the content should be excluded from the query and only count and size data returned.",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "venueId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Data for the requested query ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Identities for venue.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelPersona"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelPersona"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid query data supplied.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/propertyConfigs/query" : {
+      "post" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Query Property Configurations",
+        "description" : "Gets the list of property configurations using the specified query.",
+        "operationId" : "queryPropertyConfigs",
+        "parameters" : [ {
+          "name" : "excludeContent",
+          "in" : "query",
+          "description" : "Indicates that the content should be excluded from the query and only count and size data returned.",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Data for the requested query ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Collection of property configurations.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Page"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid query data supplied.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/residentPortals" : {
+      "get" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Get Resident Portals",
+        "description" : "Gets the list of resident portals paged.",
+        "operationId" : "getAllPortals",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Page size",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "The page to retrieve (starts at one).",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "The field name to sort, comma seperated from the sort order (asc or desc).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Resident portal details.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelResidentPortal"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelResidentPortal"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input supplied.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      },
+      "post" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Adds Resident Portal",
+        "description" : "Allows the user to add a resident portal.",
+        "operationId" : "addResidentPortal",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "portal" ],
+                "type" : "object",
+                "properties" : {
+                  "portal" : {
+                    "$ref" : "#/components/schemas/ResidentPortal"
+                  },
+                  "logo" : {
+                    "type" : "string",
+                    "description" : "Portal logo image",
+                    "format" : "binary"
+                  },
+                  "favIcon" : {
+                    "type" : "string",
+                    "description" : "Portal fav icon image",
+                    "format" : "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "headers" : {
+              "Location" : {
+                "description" : "Url for the added resident portal",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "Conflict-The resident portal trying to add already exists",
+            "headers" : {
+              "Location" : {
+                "description" : "Url of the existing resident portal",
+                "style" : "simple",
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Delete Resident Portals",
+        "description" : "Allows the user to delete resident portals with the given ids.",
+        "operationId" : "deleteResidentPortals",
+        "requestBody" : {
+          "description" : "Resident portal ids to delete",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                }
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/residentPortals/query" : {
+      "post" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Query Resident Portals",
+        "description" : "Gets the list of resident portals using the specified query.",
+        "operationId" : "queryResidentPortals",
+        "parameters" : [ {
+          "name" : "excludeContent",
+          "in" : "query",
+          "description" : "Indicates that the content should be excluded from the query and only count and size data returned.",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Data for the requested query ",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QueryData"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Resident portal details.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelResidentPortal"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelResidentPortal"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid query data supplied.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/{venueId}/units/{unitId}" : {
+      "get" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Gets Unit for Venue",
+        "description" : "Allows the user to get a unit with the given id.",
+        "operationId" : "fetchUnit",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unitId",
+          "in" : "path",
+          "description" : "Unit Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelUnit"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelUnit"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Delete Unit for Venue",
+        "description" : "Allows the user to delete a unit with the given id.",
+        "operationId" : "deleteUnit",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unitId",
+          "in" : "path",
+          "description" : "Unit Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AcceptedResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Units API" ],
+        "summary" : "Selectively Updates Unit Configurations",
+        "description" : "Allows the user to selectively update unit configurations on the specified venue.",
+        "operationId" : "editUnit",
+        "parameters" : [ {
+          "name" : "venueId",
+          "in" : "path",
+          "description" : "Venue Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unitId",
+          "in" : "path",
+          "description" : "Unit Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Unit to edit",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Unit"
+              }
+            },
+            "application/vnd.ruckus.v1+json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Unit"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Unit configuration updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Unit configuration not found for the given venue id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Missing or invalid request body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "202" : {
+            "description" : "Accepted",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelAcceptedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/residentPortals/{portalId}" : {
+      "get" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Gets Resident Portal",
+        "description" : "Allows the user to get a resident portal with the given id.",
+        "operationId" : "fetchResidentPortal",
+        "parameters" : [ {
+          "name" : "portalId",
+          "in" : "path",
+          "description" : "Resident Portal Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelResidentPortal"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelResidentPortal"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Delete Resident Portal",
+        "description" : "Allows the user to delete a resident portal with the given id.",
+        "operationId" : "deleteResidentPortal",
+        "parameters" : [ {
+          "name" : "portalId",
+          "in" : "path",
+          "description" : "Resident Portal Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Updates Resident Portal Configurations",
+        "description" : "Allows the user to selectively update resident portal configurations.",
+        "operationId" : "editResidentPortal",
+        "parameters" : [ {
+          "name" : "portalId",
+          "in" : "path",
+          "description" : "Resident Portal Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "changes" : {
+                    "$ref" : "#/components/schemas/ResidentPortal"
+                  },
+                  "logo" : {
+                    "type" : "string",
+                    "description" : "Portal logo image",
+                    "format" : "binary"
+                  },
+                  "favIcon" : {
+                    "type" : "string",
+                    "description" : "Portal fav icon image",
+                    "format" : "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Resident portal configuration updated",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelResidentPortal"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityModelResidentPortal"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Resident portal configuration not found for the given id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Missing or invalid request body",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/venues/propertyConfigs" : {
+      "get" : {
+        "tags" : [ "Property Configuration" ],
+        "summary" : "Gets Property Configurations",
+        "description" : "Gets the list of property configurations paged.",
+        "operationId" : "getAllPropertyConfigs",
+        "parameters" : [ {
+          "name" : "size",
+          "in" : "query",
+          "description" : "Page size",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "description" : "The page to retrieve (starts at one).",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "The field name to sort, comma seperated from the sort order (asc or desc).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Property configurations.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelPropertyDto"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageEntityModelPropertyDto"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input supplied.",
+            "content" : {
+              "application/hal+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : true
+      }
+    },
+    "/residentPortals/{portalId}/files/{type}" : {
+      "get" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Gets Resident Portal File",
+        "description" : "Allows the user to get a resident portal file with the given id.",
+        "operationId" : "downloadPortalFile",
+        "parameters" : [ {
+          "name" : "portalId",
+          "in" : "path",
+          "description" : "Resident Portal Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "type",
+          "in" : "path",
+          "description" : "Resident Portal file type",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "logo", "favIcon" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "byte"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resident Portals" ],
+        "summary" : "Deletes Resident Portal File",
+        "description" : "Allows the user to delete a resident portal file with the given id.",
+        "operationId" : "deletePortalFile",
+        "parameters" : [ {
+          "name" : "portalId",
+          "in" : "path",
+          "description" : "Resident Portal Id",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }, {
+          "name" : "type",
+          "in" : "path",
+          "description" : "Resident Portal file type",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "logo", "favIcon" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          },
+          "400" : {
+            "description" : "Bad request",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              },
+              "application/vnd.ruckus.v1+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Persona" : {
+        "required" : [ "personaId", "personaType", "unitId" ],
+        "type" : "object",
+        "properties" : {
+          "unitId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "personaType" : {
+            "type" : "string",
+            "enum" : [ "UNIT", "GUEST", "LINKED" ]
+          },
+          "personaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "ErrorResource" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "enum" : [ "100 CONTINUE", "101 SWITCHING_PROTOCOLS", "102 PROCESSING", "103 EARLY_HINTS", "103 CHECKPOINT", "200 OK", "201 CREATED", "202 ACCEPTED", "203 NON_AUTHORITATIVE_INFORMATION", "204 NO_CONTENT", "205 RESET_CONTENT", "206 PARTIAL_CONTENT", "207 MULTI_STATUS", "208 ALREADY_REPORTED", "226 IM_USED", "300 MULTIPLE_CHOICES", "301 MOVED_PERMANENTLY", "302 FOUND", "302 MOVED_TEMPORARILY", "303 SEE_OTHER", "304 NOT_MODIFIED", "305 USE_PROXY", "307 TEMPORARY_REDIRECT", "308 PERMANENT_REDIRECT", "400 BAD_REQUEST", "401 UNAUTHORIZED", "402 PAYMENT_REQUIRED", "403 FORBIDDEN", "404 NOT_FOUND", "405 METHOD_NOT_ALLOWED", "406 NOT_ACCEPTABLE", "407 PROXY_AUTHENTICATION_REQUIRED", "408 REQUEST_TIMEOUT", "409 CONFLICT", "410 GONE", "411 LENGTH_REQUIRED", "412 PRECONDITION_FAILED", "413 PAYLOAD_TOO_LARGE", "413 REQUEST_ENTITY_TOO_LARGE", "414 URI_TOO_LONG", "414 REQUEST_URI_TOO_LONG", "415 UNSUPPORTED_MEDIA_TYPE", "416 REQUESTED_RANGE_NOT_SATISFIABLE", "417 EXPECTATION_FAILED", "418 I_AM_A_TEAPOT", "419 INSUFFICIENT_SPACE_ON_RESOURCE", "420 METHOD_FAILURE", "421 DESTINATION_LOCKED", "422 UNPROCESSABLE_ENTITY", "423 LOCKED", "424 FAILED_DEPENDENCY", "425 TOO_EARLY", "426 UPGRADE_REQUIRED", "428 PRECONDITION_REQUIRED", "429 TOO_MANY_REQUESTS", "431 REQUEST_HEADER_FIELDS_TOO_LARGE", "451 UNAVAILABLE_FOR_LEGAL_REASONS", "500 INTERNAL_SERVER_ERROR", "501 NOT_IMPLEMENTED", "502 BAD_GATEWAY", "503 SERVICE_UNAVAILABLE", "504 GATEWAY_TIMEOUT", "505 HTTP_VERSION_NOT_SUPPORTED", "506 VARIANT_ALSO_NEGOTIATES", "507 INSUFFICIENT_STORAGE", "508 LOOP_DETECTED", "509 BANDWIDTH_LIMIT_EXCEEDED", "510 NOT_EXTENDED", "511 NETWORK_AUTHENTICATION_REQUIRED" ]
+          },
+          "timestamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "requestId" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "detailedMessage" : {
+            "type" : "string"
+          },
+          "validationErrors" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "QoSProfileAssignment" : {
+        "required" : [ "profileExpiry", "unitIds" ],
+        "type" : "object",
+        "properties" : {
+          "unitIds" : {
+            "type" : "array",
+            "description" : "The identifier of the metering profile.",
+            "items" : {
+              "type" : "string",
+              "description" : "The identifier of the metering profile.",
+              "format" : "uuid"
+            }
+          },
+          "profileExpiry" : {
+            "type" : "string",
+            "description" : "The expiration date for the metering profile.",
+            "format" : "date-time"
+          }
+        }
+      },
+      "AcceptedResponse" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Address" : {
+        "required" : [ "city", "country" ],
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : "string",
+            "description" : "Venue country."
+          },
+          "city" : {
+            "type" : "string",
+            "description" : "Venue city."
+          },
+          "addressLine" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Venue address."
+      },
+      "CommunicationConfigDto" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string"
+          },
+          "sendEmail" : {
+            "type" : "boolean",
+            "description" : "Enable email communication."
+          },
+          "sendSms" : {
+            "type" : "boolean",
+            "description" : "Enable SMS communication."
+          },
+          "unitAssignmentHtmlRegId" : {
+            "type" : "string",
+            "description" : "Unit assignment hyper text template."
+          },
+          "unitAssignmentTextRegId" : {
+            "type" : "string",
+            "description" : "Unit assignment text template."
+          },
+          "unitPassphraseChangeHtmlRegId" : {
+            "type" : "string",
+            "description" : "Unit passphrase change hyper text template."
+          },
+          "unitPassphraseChangeTextRegId" : {
+            "type" : "string",
+            "description" : "Unit passphrase change text template."
+          },
+          "guestPassphraseChangeHtmlRegId" : {
+            "type" : "string",
+            "description" : "Guest passphrase change hyper text template."
+          },
+          "guestPassphraseChangeTextRegId" : {
+            "type" : "string",
+            "description" : "Guest passphrase change text template."
+          },
+          "portalAccessResetHtmlRegId" : {
+            "type" : "string",
+            "description" : "Portal access reset hyper text template."
+          },
+          "portalAccessResetTextRegId" : {
+            "type" : "string",
+            "description" : "Portal access reset text template."
+          },
+          "portAssignmentHtmlRegId" : {
+            "type" : "string",
+            "description" : "Port assignment hyper text template."
+          },
+          "portAssignmentTextRegId" : {
+            "type" : "string",
+            "description" : "Port assignment text template."
+          }
+        },
+        "description" : "Configuration for communicating unit change events"
+      },
+      "PropertyDto" : {
+        "required" : [ "personaGroupId", "status", "venueName" ],
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string",
+            "description" : "Venue name."
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/Address"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "personaGroupId" : {
+            "type" : "string",
+            "description" : "Persona group identifier."
+          },
+          "residentPortalId" : {
+            "type" : "string",
+            "description" : "Resident portal identifier.",
+            "format" : "uuid",
+            "deprecated" : true
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Status of the property",
+            "default" : "DISABLED",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "unitConfig" : {
+            "$ref" : "#/components/schemas/UnitConfigDto"
+          },
+          "communicationConfig" : {
+            "$ref" : "#/components/schemas/CommunicationConfigDto"
+          }
+        }
+      },
+      "UnitConfigDto" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string"
+          },
+          "residentPortalAllowed" : {
+            "type" : "boolean",
+            "description" : "Allow resident portal."
+          },
+          "residentApiAllowed" : {
+            "type" : "boolean",
+            "description" : "Allow resident portal API."
+          },
+          "useMaxUnitCount" : {
+            "type" : "boolean",
+            "description" : "Restrict unit count."
+          },
+          "maxUnitCount" : {
+            "type" : "integer",
+            "description" : "Maximum allowed unit count.",
+            "format" : "int32"
+          },
+          "guestAllowed" : {
+            "type" : "boolean",
+            "description" : "Allow separate guest for the unit."
+          }
+        },
+        "description" : "Basic configuration on property units"
+      },
+      "EntityModelAcceptedResponse" : {
+        "type" : "object",
+        "properties" : {
+          "requestId" : {
+            "type" : "string"
+          },
+          "_links" : {
+            "$ref" : "#/components/schemas/Links"
+          }
+        }
+      },
+      "Links" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/Link"
+        }
+      },
+      "PropertyResidentPortalAssignment" : {
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string",
+            "description" : "Resident portal identifier."
+          },
+          "residentPortalId" : {
+            "type" : "string",
+            "description" : "Resident portal identifier.",
+            "format" : "uuid"
+          }
+        }
+      },
+      "DpskSettings" : {
+        "required" : [ "type" ],
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "UNIT", "GUEST", "LINKED" ]
+          },
+          "passphrase" : {
+            "maxLength" : 63,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Maximum length for passphrase is 63. Minimum passphrase length is configured for individual DPSK services."
+          },
+          "vlan" : {
+            "maximum" : 4094,
+            "minimum" : 1,
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "description" : "DPSK details."
+      },
+      "LanPort" : {
+        "required" : [ "macAddress", "portIndex" ],
+        "type" : "object",
+        "properties" : {
+          "macAddress" : {
+            "pattern" : "^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$|^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$|^([0-9A-Fa-f]{6})-([0-9A-Fa-f]{6})$|^([0-9A-Fa-f]{4}[.]){2}([0-9A-Fa-f]{4})$|^[0-9A-Fa-f]{12}$",
+            "type" : "string",
+            "description" : "The MAC address of the port."
+          },
+          "portIndex" : {
+            "type" : "integer",
+            "description" : "The index of the port.",
+            "format" : "int32"
+          }
+        },
+        "description" : "The list of selected ports."
+      },
+      "Resident" : {
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Resident name."
+          },
+          "email" : {
+            "maxLength" : 255,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Resident email."
+          },
+          "phoneNumber" : {
+            "maxLength" : 16,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "Resident phone number."
+          }
+        },
+        "description" : "Resident contact details."
+      },
+      "TrafficControl" : {
+        "required" : [ "meteringProfileId", "profileExpiry" ],
+        "type" : "object",
+        "properties" : {
+          "meteringProfileId" : {
+            "type" : "string",
+            "description" : "The identifier of the metering profile."
+          },
+          "profileExpiry" : {
+            "type" : "string",
+            "description" : "The expiration date for the metering profile.",
+            "format" : "date-time"
+          }
+        },
+        "description" : "Traffic control profile details."
+      },
+      "Unit" : {
+        "required" : [ "name", "resident" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Unit name."
+          },
+          "resident" : {
+            "$ref" : "#/components/schemas/Resident"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Unit status.",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "dpsks" : {
+            "maxItems" : 2,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "DPSK details.",
+            "items" : {
+              "$ref" : "#/components/schemas/DpskSettings"
+            }
+          },
+          "accessPoint" : {
+            "$ref" : "#/components/schemas/UnitAp"
+          },
+          "trafficControl" : {
+            "$ref" : "#/components/schemas/TrafficControl"
+          },
+          "personaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "guestPersonaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "identityCount" : {
+            "type" : "integer",
+            "description" : "Count of associated identities",
+            "format" : "int64",
+            "readOnly" : true
+          }
+        }
+      },
+      "UnitAp" : {
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string"
+          },
+          "selectedPorts" : {
+            "type" : "array",
+            "description" : "The list of selected ports.",
+            "items" : {
+              "$ref" : "#/components/schemas/LanPort"
+            }
+          }
+        },
+        "description" : "Access point details."
+      },
+      "QueryData" : {
+        "required" : [ "page", "pageSize", "sortOrder" ],
+        "type" : "object",
+        "properties" : {
+          "fields" : {
+            "type" : "array",
+            "description" : "Fields to select.",
+            "items" : {
+              "type" : "string",
+              "description" : "Fields to select."
+            }
+          },
+          "sortField" : {
+            "type" : "string",
+            "description" : "Sort field."
+          },
+          "sortOrder" : {
+            "type" : "string",
+            "description" : "Sorting direction.",
+            "enum" : [ "ASC", "DESC" ]
+          },
+          "page" : {
+            "type" : "integer",
+            "description" : "Page number.",
+            "format" : "int32"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "Number of pages.",
+            "format" : "int32"
+          },
+          "filters" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : "Filter names and its values as filter."
+            },
+            "description" : "Filter names and its values as filter."
+          }
+        }
+      },
+      "EntityModelUnit" : {
+        "required" : [ "name", "resident" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Unit name."
+          },
+          "resident" : {
+            "$ref" : "#/components/schemas/Resident"
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Unit status.",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "dpsks" : {
+            "maxItems" : 2,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "DPSK details.",
+            "items" : {
+              "$ref" : "#/components/schemas/DpskSettings"
+            }
+          },
+          "accessPoint" : {
+            "$ref" : "#/components/schemas/UnitAp"
+          },
+          "trafficControl" : {
+            "$ref" : "#/components/schemas/TrafficControl"
+          },
+          "personaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "guestPersonaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "identityCount" : {
+            "type" : "integer",
+            "description" : "Count of associated identities",
+            "format" : "int64",
+            "readOnly" : true
+          },
+          "_links" : {
+            "$ref" : "#/components/schemas/Links"
+          }
+        }
+      },
+      "PageEntityModelUnit" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityModelUnit"
+            }
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "last" : {
+            "type" : "boolean"
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "PageableObject" : {
+        "type" : "object",
+        "properties" : {
+          "offset" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "paged" : {
+            "type" : "boolean"
+          },
+          "pageNumber" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "unpaged" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "SortObject" : {
+        "type" : "object",
+        "properties" : {
+          "empty" : {
+            "type" : "boolean"
+          },
+          "sorted" : {
+            "type" : "boolean"
+          },
+          "unsorted" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "EntityModelPersona" : {
+        "required" : [ "personaId", "personaType", "unitId" ],
+        "type" : "object",
+        "properties" : {
+          "unitId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "personaType" : {
+            "type" : "string",
+            "enum" : [ "UNIT", "GUEST", "LINKED" ]
+          },
+          "personaId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "_links" : {
+            "$ref" : "#/components/schemas/Links"
+          }
+        }
+      },
+      "PageEntityModelPersona" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityModelPersona"
+            }
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "last" : {
+            "type" : "boolean"
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Page" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "last" : {
+            "type" : "boolean"
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "ResidentPortal" : {
+        "required" : [ "name", "uiConfiguration" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Resident portal name."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Resident portal description."
+          },
+          "portalStatus" : {
+            "type" : "string",
+            "description" : "Resident portal status.",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "venueCount" : {
+            "type" : "integer",
+            "description" : "Number of venues using this resident portal.",
+            "format" : "int64",
+            "readOnly" : true
+          },
+          "uiConfiguration" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ResidentPortalUiConfigs"
+            } ]
+          }
+        }
+      },
+      "ResidentPortalAccessConfig" : {
+        "type" : "object",
+        "properties" : {
+          "tenantSetDpsk" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "ResidentPortalColorConfig" : {
+        "type" : "object",
+        "properties" : {
+          "mainColor" : {
+            "pattern" : "^$|^#(?:[0-9a-fA-F]{3}){1,2}$|^(?:[0-9a-fA-F]{3}){1,2}$",
+            "type" : "string"
+          },
+          "accentColor" : {
+            "pattern" : "^$|^#(?:[0-9a-fA-F]{3}){1,2}$|^(?:[0-9a-fA-F]{3}){1,2}$",
+            "type" : "string"
+          },
+          "separatorColor" : {
+            "pattern" : "^$|^#(?:[0-9a-fA-F]{3}){1,2}$|^(?:[0-9a-fA-F]{3}){1,2}$",
+            "type" : "string"
+          },
+          "textColor" : {
+            "pattern" : "^$|^#(?:[0-9a-fA-F]{3}){1,2}$|^(?:[0-9a-fA-F]{3}){1,2}$",
+            "type" : "string"
+          }
+        }
+      },
+      "ResidentPortalConfig" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Resident portal configurations.",
+        "discriminator" : {
+          "propertyName" : "type"
+        }
+      },
+      "ResidentPortalFileConfig" : {
+        "type" : "object",
+        "properties" : {
+          "logoFileName" : {
+            "maxLength" : 52,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "favIconFileName" : {
+            "maxLength" : 52,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        }
+      },
+      "ResidentPortalTextConfig" : {
+        "type" : "object",
+        "properties" : {
+          "loginText" : {
+            "maxLength" : 52,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "title" : {
+            "maxLength" : 52,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "subTitle" : {
+            "maxLength" : 52,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "announcements" : {
+            "maxLength" : 5000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "helpText" : {
+            "maxLength" : 5000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        }
+      },
+      "ResidentPortalUiConfigs" : {
+        "type" : "object",
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/ResidentPortalConfig"
+        }, {
+          "type" : "object",
+          "properties" : {
+            "access" : {
+              "$ref" : "#/components/schemas/ResidentPortalAccessConfig"
+            },
+            "text" : {
+              "$ref" : "#/components/schemas/ResidentPortalTextConfig"
+            },
+            "color" : {
+              "$ref" : "#/components/schemas/ResidentPortalColorConfig"
+            },
+            "files" : {
+              "$ref" : "#/components/schemas/ResidentPortalFileConfig"
+            }
+          }
+        } ]
+      },
+      "EntityModelResidentPortal" : {
+        "required" : [ "name", "uiConfiguration" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Resident portal name."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Resident portal description."
+          },
+          "portalStatus" : {
+            "type" : "string",
+            "description" : "Resident portal status.",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "venueCount" : {
+            "type" : "integer",
+            "description" : "Number of venues using this resident portal.",
+            "format" : "int64",
+            "readOnly" : true
+          },
+          "uiConfiguration" : {
+            "oneOf" : [ {
+              "$ref" : "#/components/schemas/ResidentPortalUiConfigs"
+            } ]
+          },
+          "_links" : {
+            "$ref" : "#/components/schemas/Links"
+          }
+        }
+      },
+      "PageEntityModelResidentPortal" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityModelResidentPortal"
+            }
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "last" : {
+            "type" : "boolean"
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "EntityModelPropertyDto" : {
+        "required" : [ "personaGroupId", "status", "venueName" ],
+        "type" : "object",
+        "properties" : {
+          "venueId" : {
+            "type" : "string"
+          },
+          "venueName" : {
+            "type" : "string",
+            "description" : "Venue name."
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/Address"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "personaGroupId" : {
+            "type" : "string",
+            "description" : "Persona group identifier."
+          },
+          "residentPortalId" : {
+            "type" : "string",
+            "description" : "Resident portal identifier.",
+            "format" : "uuid",
+            "deprecated" : true
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "Status of the property",
+            "default" : "DISABLED",
+            "enum" : [ "DISABLED", "ENABLED" ]
+          },
+          "unitConfig" : {
+            "$ref" : "#/components/schemas/UnitConfigDto"
+          },
+          "communicationConfig" : {
+            "$ref" : "#/components/schemas/CommunicationConfigDto"
+          },
+          "_links" : {
+            "$ref" : "#/components/schemas/Links"
+          }
+        }
+      },
+      "PageEntityModelPropertyDto" : {
+        "type" : "object",
+        "properties" : {
+          "totalElements" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalPages" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "content" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityModelPropertyDto"
+            }
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "sort" : {
+            "$ref" : "#/components/schemas/SortObject"
+          },
+          "pageable" : {
+            "$ref" : "#/components/schemas/PageableObject"
+          },
+          "first" : {
+            "type" : "boolean"
+          },
+          "last" : {
+            "type" : "boolean"
+          },
+          "numberOfElements" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "empty" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "Link" : {
+        "type" : "object",
+        "properties" : {
+          "href" : {
+            "type" : "string"
+          },
+          "hreflang" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          },
+          "deprecation" : {
+            "type" : "string"
+          },
+          "profile" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "templated" : {
+            "type" : "boolean"
+          }
+        }
+      }
+    }
+  }
+}
