@@ -49,8 +49,8 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 git clone https://github.com/alekm/wipi.git
 cd wipi
 
-# Start controller and UI
-docker compose up -d
+# Build and start controller and UI
+docker compose up -d --build
 
 # Check status
 docker compose ps
@@ -119,9 +119,9 @@ The system will automatically distribute apartments across Pis, create virtual i
 # Generate new hash
 echo -n "YourNewPassword" | sha256sum
 
-# Set environment variable
+# Set environment variable and rebuild UI
 export WIPI_ADMIN_PASSWORD_HASH="your_hash_here"
-docker compose up -d
+docker compose up -d --build
 ```
 
 ### Agent API Key
@@ -134,7 +134,7 @@ openssl rand -hex 32
 
 # Update controller
 export AGENT_API_KEY="your_new_key_here"
-docker compose up -d
+docker compose up -d --build
 
 # Update all agents: Edit /etc/wipi/agent_config.yaml
 agent_api_key: "your_new_key_here"
