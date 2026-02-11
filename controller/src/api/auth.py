@@ -8,14 +8,19 @@ import hashlib
 import os
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Response, Cookie, Depends
+from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, Request
 from pydantic import BaseModel, Field
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from ..services.session_manager import get_session_manager, SessionManager
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+
+# Rate limiter instance
+limiter = Limiter(key_func=get_remote_address)
 
 # Admin password hash from environment variable
 ADMIN_PASSWORD_HASH = os.environ.get(
@@ -58,7 +63,9 @@ def validate_password(password: str) -> bool:
 
 
 @router.post("/login", response_model=LoginResponse)
+@limiter.limit("5/minute")
 async def login(
+    request: Request,
     body: LoginRequest,
     response: Response,
     session_manager: SessionManager = Depends(get_session_manager)
@@ -66,6 +73,7 @@ async def login(
     """
     Authenticate user and create session.
 
+    Rate limited to 5 attempts per minute per IP address.
     Validates password, creates session, and sets httpOnly cookie.
 
     Args:
@@ -105,13 +113,17 @@ async def login(
 
 
 @router.post("/logout")
+@limiter.limit("10/minute")
 async def logout(
+    request: Request,
     response: Response,
     session_id: Optional[str] = Cookie(None, alias="wipi_session"),
     session_manager: SessionManager = Depends(get_session_manager)
 ):
     """
     Logout user and destroy session.
+
+    Rate limited to 10 attempts per minute per IP address.
 
     Args:
         response: FastAPI response object for clearing cookie

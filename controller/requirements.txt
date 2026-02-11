@@ -19,7 +19,10 @@ pyyaml==6.0.2
 # Form parsing for file uploads
 python-multipart==0.0.9
 
-# Optional Redis support
+# Rate Limiting
+slowapi==0.1.9
+
+# Optional Redis support (for distributed rate limiting)
 # redis==5.0.1
 
 # Standard library (no install needed but listed for reference)

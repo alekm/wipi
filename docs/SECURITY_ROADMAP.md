@@ -2,27 +2,40 @@
 
 This document outlines a phased approach to hardening WiPi security beyond the current frontend-only authentication.
 
-## Current Security Posture (v1.0 - Implemented)
+## Current Security Posture (v1.1 - Phases 1, 2, and 3.3 Complete)
 
-**Authentication:**
-- ✅ Frontend password protection (SHA-256 hash)
-- ✅ Demo mode (default, read-only)
-- ✅ Admin mode (requires password: `Ruckus123!`)
+**Phase 1 - Quick Wins:** ✅ Complete
+- ✅ Security headers (CSP, X-Frame-Options, X-Content-Type-Options, etc.)
+- ✅ API response sanitization (secrets redacted in list endpoints)
+- ✅ Audit logging (structured JSON logs for all admin actions)
+
+**Phase 2 - Backend Authentication:** ✅ Complete
+- ✅ Session-based admin authentication with httpOnly cookies
+- ✅ Agent API key authentication (X-Agent-Api-Key header)
+- ✅ Protected write endpoints (POST/PUT/DELETE require authentication)
+- ✅ 24-hour session timeout with automatic cleanup
+
+**Phase 3 - Rate Limiting:** ✅ Complete
+- ✅ Login endpoint rate limiting (5 attempts per minute per IP)
+- ✅ Logout endpoint rate limiting (10 attempts per minute per IP)
+- ✅ HTTP 429 responses with proper error messages
 
 **Access Control:**
-- ✅ Conditional UI rendering (hide admin features in demo mode)
-- ✅ Route protection (redirect /simulation in demo mode)
+- ✅ Demo mode (default, read-only access)
+- ✅ Admin mode (requires password authentication)
+- ✅ Conditional UI rendering (admin features hidden in demo mode)
+- ✅ Route protection (simulation tab hidden in demo mode)
 
 **Infrastructure:**
-- ✅ Firewall/VPN assumed for network-level security
 - ✅ Docker isolation
+- ✅ In-memory rate limiting (upgradable to Redis for multi-instance)
 
-**Known Limitations:**
-- ⚠️ Password hash visible in JavaScript bundle
-- ⚠️ API responses expose sensitive data (Ruckus One creds, PSKs)
-- ⚠️ No backend authentication
-- ⚠️ No audit logging
-- ⚠️ No rate limiting
+**Remaining Enhancements (Optional):**
+- 🔄 RBAC (Role-Based Access Control) - Phase 3.1
+- 🔄 Multi-user support - Phase 3.2
+- 🔄 Secrets encryption in database - Phase 3.4
+- 🔄 HTTPS/TLS - Phase 4
+- 🔄 OAuth2/SSO - Phase 4
 
 ---
 
@@ -357,14 +370,14 @@ server {
 
 ## Implementation Priority Matrix
 
-| Feature | Impact | Effort | Priority | Phase |
-|---------|--------|--------|----------|-------|
-| API Response Sanitization | High | Low | 🔴 Critical | 1 |
-| Audit Logging | High | Low | 🔴 Critical | 1 |
-| Security Headers | Medium | Low | 🟡 High | 1 |
-| Backend Session Auth | High | Medium | 🟡 High | 2 |
-| Agent API Key | Medium | Low | 🟡 High | 2 |
-| Rate Limiting | Medium | Low | 🟢 Medium | 3 |
+| Feature | Impact | Effort | Priority | Phase | Status |
+|---------|--------|--------|----------|-------|--------|
+| API Response Sanitization | High | Low | 🔴 Critical | 1 | ✅ Complete |
+| Audit Logging | High | Low | 🔴 Critical | 1 | ✅ Complete |
+| Security Headers | Medium | Low | 🟡 High | 1 | ✅ Complete |
+| Backend Session Auth | High | Medium | 🟡 High | 2 | ✅ Complete |
+| Agent API Key | Medium | Low | 🟡 High | 2 | ✅ Complete |
+| Rate Limiting | Medium | Low | 🟢 Medium | 3 | ✅ Complete |
 | RBAC | Medium | High | 🟢 Medium | 3 |
 | Secrets Encryption | High | Medium | 🟢 Medium | 3 |
 | Multi-User Support | Low | High | 🔵 Low | 3 |
