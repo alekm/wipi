@@ -46,7 +46,7 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 ### 1. Clone and Start Controller
 
 ```bash
-git clone https://github.com/yourusername/wipi.git
+git clone https://github.com/alekm/wipi.git
 cd wipi
 
 # Start controller and UI
@@ -266,7 +266,7 @@ Contributions welcome!
 
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/wipi.git
+git clone https://github.com/alekm/wipi.git
 
 # Create feature branch
 git checkout -b feature/amazing-feature
