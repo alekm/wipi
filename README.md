@@ -23,7 +23,7 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 ### Management & Monitoring
 - 🖥️ **Web Dashboard** - React-based UI for complete system control
 - 📈 **Real-Time Status** - Monitor all interfaces, traffic, and Pi health
-- 🔍 **Ruckus One Integration** - Track device fingerprinting accuracy
+- 🔍 **RUCKUS One Integration** - Track device fingerprinting accuracy
 - 📝 **Audit Logging** - Complete trail of all administrative actions
 
 ### Security & Access Control
@@ -82,7 +82,7 @@ CONTROLLER_URL=http://192.168.1.50:8000 ./scripts/deploy-to-pi.sh 192.168.1.100 
 
 ### 3. Import DPSK/DPSK3 Passphrases
 
-1. Export DPSK/DPSK3 CSV from your Wi-Fi controller (e.g., Ruckus MDU 360)
+1. Export DPSK/DPSK3 CSV from your Wi-Fi controller (e.g., RUCKUS One)
 2. Navigate to **Resident Simulation** tab in UI
 3. Click **Import PSK CSV**
 4. Upload file and provide ID, Name, and SSID
@@ -288,6 +288,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🙏 Acknowledgments
 
-- Built for testing **Ruckus** MDU 360 and Ruckus One platforms
+- Built for testing **RUCKUS** MDU 360 and RUCKUS One platforms
 - Supports **DPSK** and **DPSK3** (Dynamic Pre-Shared Key) authentication
 - Inspired by real-world MDU Wi-Fi deployment challenges
