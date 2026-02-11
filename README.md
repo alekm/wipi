@@ -9,7 +9,7 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 ## ✨ Features
 
 ### Intelligent Resident Simulation
-- 🏘️ **Apartment-Based Model** - Simulate real apartment buildings with DPSK passphrases
+- 🏘️ **Apartment-Based Model** - Simulate real apartment buildings with DPSK/DPSK3 passphrases
 - 🔄 **Automatic Rotation** - Residents "move in" and "move out" on configurable schedules
 - 🕐 **Time-Aware Traffic** - Different usage patterns for morning, day, and evening
 - 📊 **Realistic Load** - Browser sessions, video streaming, file transfers matched to time of day
@@ -41,7 +41,7 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 - **Controller Host:** Any Linux machine with Docker and Docker Compose
 - **Agent Hosts:** Raspberry Pi 5 (or Pi 4B with limitations - see Hardware Compatibility)
 - **Network:** Controller and agents must be on the same network or routable
-- **Wi-Fi Infrastructure:** Access points with DPSK or PSK authentication
+- **Wi-Fi Infrastructure:** Access points with DPSK, DPSK3, or PSK authentication
 
 ### 1. Clone and Start Controller
 
@@ -80,9 +80,9 @@ CONTROLLER_URL=http://192.168.1.50:8000 ./scripts/deploy-to-pi.sh 192.168.1.100 
 192.168.1.102 wipi-03
 ```
 
-### 3. Import DPSK Passphrases
+### 3. Import DPSK/DPSK3 Passphrases
 
-1. Export DPSK CSV from your Wi-Fi controller (e.g., Ruckus MDU 360)
+1. Export DPSK/DPSK3 CSV from your Wi-Fi controller (e.g., Ruckus MDU 360)
 2. Navigate to **Resident Simulation** tab in UI
 3. Click **Import PSK CSV**
 4. Upload file and provide ID, Name, and SSID
@@ -288,6 +288,6 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🙏 Acknowledgments
 
-- Built for testing **CommScope Ruckus** MDU 360 and Ruckus One
-- Uses **DPSK** (Dynamic Pre-Shared Key) authentication
+- Built for testing **Ruckus** MDU 360 and Ruckus One platforms
+- Supports **DPSK** and **DPSK3** (Dynamic Pre-Shared Key) authentication
 - Inspired by real-world MDU Wi-Fi deployment challenges
