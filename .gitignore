@@ -140,7 +140,7 @@ data/*.db-shm
 !data/.gitkeep
 controller/scenarios/*.yaml
 !controller/scenarios/example_*.yaml
-!controller/scenarios/resident-sim.yaml
+# resident-sim.yaml is auto-generated with real PSKs - do not track
 *.pcap
 *.cap
 
