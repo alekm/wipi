@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import Column, Integer, String, DateTime, Text
 
 from ..db.database import Base
+from .encryption import get_encryption_service
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +24,45 @@ class PskSetModel(Base):
     name = Column(String, nullable=False)
     ssid = Column(String, nullable=False)
     description = Column(Text, default="")
-    psk_list = Column(Text, nullable=False)  # JSON-encoded list of PSKs
+    psk_list = Column(Text, nullable=True)  # Legacy plaintext JSON field (deprecated)
+    psk_list_encrypted = Column(Text, nullable=True)  # Encrypted JSON list of PSKs (preferred)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    def get_psk_list_json(self, encryption_service) -> str:
+        """
+        Get decrypted PSK list as JSON string.
+
+        Prefers encrypted field, falls back to plaintext for backward compatibility.
+
+        Args:
+            encryption_service: EncryptionService instance
+
+        Returns:
+            JSON string of PSK list
+        """
+        if self.psk_list_encrypted:
+            return encryption_service.try_decrypt(self.psk_list_encrypted)
+        else:
+            # Legacy plaintext field
+            return self.psk_list or "[]"
+
+    def set_psk_list_json(self, psk_list_json: str, encryption_service):
+        """
+        Set PSK list from JSON string with encryption.
+
+        Args:
+            psk_list_json: JSON string of PSK list
+            encryption_service: EncryptionService instance
+        """
+        if encryption_service.is_enabled():
+            # Encrypt and store in encrypted field
+            self.psk_list_encrypted = encryption_service.encrypt(psk_list_json)
+            self.psk_list = None  # Clear legacy field
+        else:
+            # Store in plaintext (encryption disabled)
+            self.psk_list = psk_list_json
+            self.psk_list_encrypted = None
 
 
 class PskSet:
@@ -65,24 +102,27 @@ class PskManager:
         description: str,
         psks: List[str],
     ) -> PskSet:
-        """Create a new PSK set."""
+        """Create a new PSK set (encrypts PSKs if encryption enabled)."""
         try:
             existing = db.query(PskSetModel).filter(PskSetModel.psk_set_id == psk_set_id).first()
             if existing:
                 raise ValueError(f"PSK set with ID {psk_set_id} already exists")
 
+            encryption_service = get_encryption_service()
             model = PskSetModel(
                 psk_set_id=psk_set_id,
                 name=name,
                 ssid=ssid,
                 description=description,
-                psk_list=json.dumps(psks),
             )
+            # Use encryption-aware setter
+            model.set_psk_list_json(json.dumps(psks), encryption_service)
+
             db.add(model)
             db.commit()
             db.refresh(model)
 
-            logger.info(f"Created PSK set {psk_set_id} ({name}) for SSID {ssid}")
+            logger.info(f"Created PSK set {psk_set_id} ({name}) for SSID {ssid} (encrypted: {encryption_service.is_enabled()})")
             return self._model_to_psk_set(model)
         except Exception as e:
             logger.error(f"Error creating PSK set {psk_set_id}: {e}")
@@ -97,7 +137,7 @@ class PskManager:
         description: Optional[str] = None,
         psks: Optional[List[str]] = None,
     ) -> Optional[PskSet]:
-        """Update an existing PSK set."""
+        """Update an existing PSK set (encrypts PSKs if encryption enabled)."""
         try:
             model = db.query(PskSetModel).filter(PskSetModel.psk_set_id == psk_set_id).first()
             if not model:
@@ -108,7 +148,8 @@ class PskManager:
             if description is not None:
                 model.description = description
             if psks is not None:
-                model.psk_list = json.dumps(psks)
+                encryption_service = get_encryption_service()
+                model.set_psk_list_json(json.dumps(psks), encryption_service)
 
             db.commit()
             db.refresh(model)
@@ -175,9 +216,11 @@ class PskManager:
             return None
 
     def _model_to_psk_set(self, model: PskSetModel) -> PskSet:
-        """Convert DB model to PskSet."""
+        """Convert DB model to PskSet (decrypts PSKs if encrypted)."""
         try:
-            psks = json.loads(model.psk_list) if model.psk_list else []
+            encryption_service = get_encryption_service()
+            psk_list_json = model.get_psk_list_json(encryption_service)
+            psks = json.loads(psk_list_json) if psk_list_json else []
         except json.JSONDecodeError:
             psks = []
 

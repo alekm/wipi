@@ -2,7 +2,7 @@
 
 This document outlines a phased approach to hardening WiPi security beyond the current frontend-only authentication.
 
-## Current Security Posture (v1.1 - Phases 1, 2, and 3.3 Complete)
+## Current Security Posture (v1.2 - Phases 1, 2, 3.3, and 3.4 Complete)
 
 **Phase 1 - Quick Wins:** ✅ Complete
 - ✅ Security headers (CSP, X-Frame-Options, X-Content-Type-Options, etc.)
@@ -15,10 +15,13 @@ This document outlines a phased approach to hardening WiPi security beyond the c
 - ✅ Protected write endpoints (POST/PUT/DELETE require authentication)
 - ✅ 24-hour session timeout with automatic cleanup
 
-**Phase 3 - Rate Limiting:** ✅ Complete
-- ✅ Login endpoint rate limiting (5 attempts per minute per IP)
-- ✅ Logout endpoint rate limiting (10 attempts per minute per IP)
-- ✅ HTTP 429 responses with proper error messages
+**Phase 3 - Enhanced Security:** ✅ Complete
+- ✅ Rate limiting (5/min login, 10/min logout) - Phase 3.3
+- ✅ Secrets encryption with Fernet (AES-128 CBC) - Phase 3.4
+  - ✅ Ruckus One credentials encrypted at rest
+  - ✅ PSK passphrases encrypted at rest
+  - ✅ Automatic migration from plaintext to encrypted storage
+  - ✅ Backward compatible (works with or without encryption key)
 
 **Access Control:**
 - ✅ Demo mode (default, read-only access)
@@ -29,11 +32,11 @@ This document outlines a phased approach to hardening WiPi security beyond the c
 **Infrastructure:**
 - ✅ Docker isolation
 - ✅ In-memory rate limiting (upgradable to Redis for multi-instance)
+- ✅ Encryption at rest (Fernet symmetric encryption)
 
 **Remaining Enhancements (Optional):**
 - 🔄 RBAC (Role-Based Access Control) - Phase 3.1
 - 🔄 Multi-user support - Phase 3.2
-- 🔄 Secrets encryption in database - Phase 3.4
 - 🔄 HTTPS/TLS - Phase 4
 - 🔄 OAuth2/SSO - Phase 4
 
@@ -261,21 +264,23 @@ async def login(credentials: LoginRequest):
 - `slowapi` for FastAPI rate limiting
 - Redis for distributed rate limit tracking (multi-instance)
 
-### 3.4 Secrets Management
+### 3.4 Secrets Management ✅ Complete
+
 **Problem:** Sensitive configs (Ruckus One creds, PSKs) stored in SQLite plaintext.
 
-**Solution:** Encrypt sensitive fields in database.
+**Solution:** Encrypt sensitive fields in database using Fernet encryption.
 
-**Options:**
-- **Fernet encryption** (Python `cryptography` library)
-- **HashiCorp Vault** (overkill for this scale)
-- **Age encryption** (simple file-based encryption)
+**Implementation Status:** ✅ **Implemented** (v1.2)
 
-**Implementation:**
+**What's Encrypted:**
+- Ruckus One `client_secret` (OAuth2 credentials)
+- PSK passphrases in PSK sets (DPSK lists)
+
+**How It Works:**
 ```python
 from cryptography.fernet import Fernet
 
-# Derive key from master password or env var
+# Encryption service with key from env var
 cipher = Fernet(ENCRYPTION_KEY)
 
 # Encrypt before storing:
@@ -286,10 +291,45 @@ db_model.client_secret_encrypted = encrypted
 decrypted = cipher.decrypt(db_model.client_secret_encrypted)
 ```
 
-**Files to modify:**
-- `controller/src/models/db_models.py` - Add encrypted fields
-- `controller/src/services/ruckus_one.py` - Encrypt/decrypt on read/write
-- `controller/src/services/psk_manager.py` - Encrypt PSK lists
+**Setup Instructions:**
+
+1. **Generate encryption key:**
+   ```bash
+   python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
+   ```
+
+2. **Set environment variable:**
+   ```bash
+   # In docker-compose.yml
+   environment:
+     - WIPI_ENCRYPTION_KEY=your-generated-key-here
+
+   # Or in .env file
+   WIPI_ENCRYPTION_KEY=your-generated-key-here
+   ```
+
+3. **Restart controller:**
+   ```bash
+   docker compose restart controller
+   ```
+
+4. **Verify encryption is enabled:**
+   Check controller logs for: `"Encryption enabled - secrets will be encrypted at rest"`
+
+**Backward Compatibility:**
+- ✅ Works without encryption key (plaintext mode for development)
+- ✅ Automatically migrates plaintext data to encrypted storage
+- ✅ Database columns added automatically on startup
+- ✅ Existing data readable with or without encryption
+
+**Files Modified:**
+- ✅ `controller/requirements.txt` - Added cryptography library
+- ✅ `controller/src/services/encryption.py` - New encryption service
+- ✅ `controller/src/models/db_models.py` - Added encrypted fields to RuckusOneConfigModel
+- ✅ `controller/src/services/psk_manager.py` - Added encrypted fields to PskSetModel
+- ✅ `controller/src/api/ruckus_one.py` - Encrypt/decrypt on read/write
+- ✅ `controller/src/db/database.py` - Automatic migration on startup
+- ✅ `docker-compose.yml` - Added WIPI_ENCRYPTION_KEY env var
 
 ---
 
@@ -377,13 +417,13 @@ server {
 | Security Headers | Medium | Low | 🟡 High | 1 | ✅ Complete |
 | Backend Session Auth | High | Medium | 🟡 High | 2 | ✅ Complete |
 | Agent API Key | Medium | Low | 🟡 High | 2 | ✅ Complete |
-| Rate Limiting | Medium | Low | 🟢 Medium | 3 | ✅ Complete |
-| RBAC | Medium | High | 🟢 Medium | 3 |
-| Secrets Encryption | High | Medium | 🟢 Medium | 3 |
-| Multi-User Support | Low | High | 🔵 Low | 3 |
-| HTTPS/TLS | Medium | Medium | 🔵 Low | 4 |
-| OAuth2/SSO | Low | High | 🔵 Low | 4 |
-| 2FA | Low | Medium | 🔵 Low | 4 |
+| Rate Limiting | Medium | Low | 🟢 Medium | 3.3 | ✅ Complete |
+| Secrets Encryption | High | Medium | 🟢 Medium | 3.4 | ✅ Complete |
+| RBAC | Medium | High | 🟢 Medium | 3.1 | - |
+| Multi-User Support | Low | High | 🔵 Low | 3.2 | - |
+| HTTPS/TLS | Medium | Medium | 🔵 Low | 4 | - |
+| OAuth2/SSO | Low | High | 🔵 Low | 4 | - |
+| 2FA | Low | Medium | 🔵 Low | 4 | - |
 
 ---
 

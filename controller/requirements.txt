@@ -22,6 +22,9 @@ python-multipart==0.0.9
 # Rate Limiting
 slowapi==0.1.9
 
+# Encryption
+cryptography==44.0.0
+
 # Optional Redis support (for distributed rate limiting)
 # redis==5.0.1
 

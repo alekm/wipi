@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from ..services.ruckus_one import RuckusOneClient, RuckusOneMonitor
 from ..services.monitoring import MonitoringService
 from ..services.audit_log import audit_log
+from ..services.encryption import get_encryption_service
 from ..db import get_db
 from ..models.db_models import RuckusOneConfigModel
 from ..middleware.auth import require_auth
@@ -26,20 +27,23 @@ _r1_config: Optional[dict] = None
 
 
 def _load_config_from_db(db: Session) -> Optional[dict]:
-    """Load R1 config from database"""
+    """Load R1 config from database (decrypts client_secret if encrypted)"""
     config = db.query(RuckusOneConfigModel).first()
     if config:
+        encryption_service = get_encryption_service()
         return {
             "tenant_id": config.tenant_id,
             "client_id": config.client_id,
-            "client_secret": config.client_secret,
+            "client_secret": config.get_client_secret(encryption_service),
             "enabled": config.enabled
         }
     return None
 
 
 def _save_config_to_db(db: Session, config_dict: dict):
-    """Save R1 config to database"""
+    """Save R1 config to database (encrypts client_secret if encryption enabled)"""
+    encryption_service = get_encryption_service()
+
     # Check if config exists
     existing = db.query(RuckusOneConfigModel).first()
 
@@ -47,16 +51,16 @@ def _save_config_to_db(db: Session, config_dict: dict):
         # Update existing
         existing.tenant_id = config_dict["tenant_id"]
         existing.client_id = config_dict["client_id"]
-        existing.client_secret = config_dict["client_secret"]
+        existing.set_client_secret(config_dict["client_secret"], encryption_service)
         existing.enabled = config_dict.get("enabled", True)
     else:
         # Create new
         new_config = RuckusOneConfigModel(
             tenant_id=config_dict["tenant_id"],
             client_id=config_dict["client_id"],
-            client_secret=config_dict["client_secret"],
             enabled=config_dict.get("enabled", True)
         )
+        new_config.set_client_secret(config_dict["client_secret"], encryption_service)
         db.add(new_config)
 
     db.commit()

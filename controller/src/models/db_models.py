@@ -60,10 +60,46 @@ class RuckusOneConfigModel(Base):
     id = Column(Integer, primary_key=True, index=True)
     tenant_id = Column(String, nullable=False)
     client_id = Column(String, nullable=False)
-    client_secret = Column(String, nullable=False)  # In production, should be encrypted
+    client_secret = Column(String, nullable=True)  # Legacy plaintext field (deprecated)
+    client_secret_encrypted = Column(String, nullable=True)  # Encrypted client secret (preferred)
     enabled = Column(Boolean, default=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    def get_client_secret(self, encryption_service) -> str:
+        """
+        Get decrypted client secret.
+
+        Prefers encrypted field, falls back to plaintext for backward compatibility.
+
+        Args:
+            encryption_service: EncryptionService instance
+
+        Returns:
+            Decrypted client secret
+        """
+        if self.client_secret_encrypted:
+            return encryption_service.try_decrypt(self.client_secret_encrypted)
+        else:
+            # Legacy plaintext field
+            return self.client_secret or ""
+
+    def set_client_secret(self, plaintext: str, encryption_service):
+        """
+        Set client secret with encryption.
+
+        Args:
+            plaintext: Plaintext client secret
+            encryption_service: EncryptionService instance
+        """
+        if encryption_service.is_enabled():
+            # Encrypt and store in encrypted field
+            self.client_secret_encrypted = encryption_service.encrypt(plaintext)
+            self.client_secret = None  # Clear legacy field
+        else:
+            # Store in plaintext (encryption disabled)
+            self.client_secret = plaintext
+            self.client_secret_encrypted = None
 
 
 class DesiredConfigurationModel(Base):

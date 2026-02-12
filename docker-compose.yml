@@ -16,6 +16,10 @@ services:
       # Agent API key for agent-to-controller authentication
       # Generate: openssl rand -hex 32
       - AGENT_API_KEY=${AGENT_API_KEY:-387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e}
+      # Encryption key for secrets at rest (Ruckus One credentials, PSK passphrases)
+      # Generate: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
+      # If not set, secrets will be stored in plaintext (backward compatible)
+      - WIPI_ENCRYPTION_KEY=${WIPI_ENCRYPTION_KEY:-}
     volumes:
       - ./data:/app/data
       - ./controller/scenarios:/app/scenarios
