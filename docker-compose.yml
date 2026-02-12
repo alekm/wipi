@@ -5,7 +5,7 @@ services:
       dockerfile: controller/Dockerfile
     container_name: wipi-controller
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
       - DATABASE_URL=sqlite:///./data/wipi.db
       - SCENARIO_DIR=/app/scenarios
@@ -20,6 +20,10 @@ services:
       # Generate: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
       # If not set, secrets will be stored in plaintext (backward compatible)
       - WIPI_ENCRYPTION_KEY=${WIPI_ENCRYPTION_KEY:-}
+      # Session cookie secure flag (true = HTTPS only, false = HTTP allowed)
+      # Set to true if behind HTTPS reverse proxy or using SSL/TLS
+      # Default: false (for internal HTTP deployments)
+      - SESSION_COOKIE_SECURE=${SESSION_COOKIE_SECURE:-false}
     volumes:
       - ./data:/app/data
       - ./controller/scenarios:/app/scenarios
@@ -28,7 +32,6 @@ services:
     restart: unless-stopped
     networks:
       - wipi-network
-
   ui:
     build:
       context: ./ui
@@ -45,10 +48,9 @@ services:
       # Match controller timezone for consistent logging
       - TZ=America/New_York
     ports:
-      - "8080:80"
+      - 8080:80
     networks:
       - wipi-network
-
   # Optional: Redis for caching/message queue
   # redis:
   #   image: redis:7-alpine
@@ -62,7 +64,6 @@ services:
 networks:
   wipi-network:
     driver: bridge
-
 volumes:
-  data:
-  scenarios:
+  data: null
+  scenarios: null

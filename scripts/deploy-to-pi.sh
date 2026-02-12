@@ -13,6 +13,7 @@ NC='\033[0m' # No Color
 # Configuration
 PI_USER="${PI_USER:-admin}"
 CONTROLLER_URL="${CONTROLLER_URL:-http://172.16.254.4:8000}"
+AGENT_API_KEY="${AGENT_API_KEY:-387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
@@ -26,6 +27,7 @@ if [ $# -lt 1 ]; then
     echo "Environment variables:"
     echo "  PI_USER         - SSH user (default: admin)"
     echo "  CONTROLLER_URL  - Controller URL (default: http://172.16.254.4:8000)"
+    echo "  AGENT_API_KEY   - Agent API key (default: 387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e)"
     exit 1
 fi
 
@@ -36,6 +38,7 @@ echo -e "${GREEN}=== WiPi Automated Deployment ===${NC}"
 echo "Target Pi: $PI_USER@$PI_IP"
 echo "Hostname: $PI_HOSTNAME"
 echo "Controller: $CONTROLLER_URL"
+echo "Agent API Key: ${AGENT_API_KEY:0:16}... (${#AGENT_API_KEY} chars)"
 echo ""
 
 # Test SSH connection
@@ -227,6 +230,7 @@ echo "Creating agent configuration..."
 cat > /etc/wipi/agent_config.yaml <<CONFIG_EOF
 agent_id: "$PI_HOSTNAME"
 controller_url: "$CONTROLLER_URL"
+agent_api_key: "$AGENT_API_KEY"
 api_port: 8080
 max_interfaces: 8
 default_base_interface: "wlan0"
@@ -254,6 +258,7 @@ WorkingDirectory=\$INSTALL_DIR
 Environment="PYTHONPATH=\$INSTALL_DIR"
 Environment="AGENT_ID=$PI_HOSTNAME"
 Environment="CONTROLLER_URL=$CONTROLLER_URL"
+Environment="AGENT_API_KEY=$AGENT_API_KEY"
 Environment="API_PORT=8080"
 Environment="BASE_INTERFACE=wlan0"
 Environment="DHCP_CLIENT=dhclient"

@@ -61,6 +61,7 @@ class Config:
 
     # Security configurations
     agent_api_key: str = os.environ.get("AGENT_API_KEY", "387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e")
+    session_cookie_secure: bool = os.environ.get("SESSION_COOKIE_SECURE", "false").lower() == "true"
 
     @classmethod
     def load_from_file(cls):

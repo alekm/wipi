@@ -92,12 +92,15 @@ async def login(
     # Create session
     session_id = session_manager.create_session(user="admin")
 
+    # Get secure cookie setting from config
+    from ..main import Config
+
     # Set httpOnly cookie (not accessible to JavaScript, more secure)
     response.set_cookie(
         key="wipi_session",
         value=session_id,
         httponly=True,
-        secure=False,  # Set to True when using HTTPS
+        secure=Config.session_cookie_secure,  # Configurable via SESSION_COOKIE_SECURE env var
         samesite="lax",
         max_age=86400,  # 24 hours in seconds
         path="/"
