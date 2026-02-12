@@ -24,9 +24,9 @@ class ResidentSimulationConfig:
   """In-memory configuration for resident simulation."""
   enabled: bool = False
   psk_set_id: Optional[str] = None
-  target_active_apartments: int = 11  # Updated for base-interfaces-only fleet
+  target_active_apartments: int = 64  # Default target for standard deployment
   rotation_hours: float = 6.0
-  max_interfaces_per_pi: int = 3  # Allow multiple base interfaces per Pi (VIFs disabled at agent level)
+  max_interfaces_per_pi: int = 8  # Pi 5 supports up to 8 interfaces (base + VIFs)
 
 
 @dataclass

@@ -59,6 +59,33 @@ class Orchestrator:
 
         logger.info("Orchestrator initialized")
 
+    def _get_agent_url(self, pi_info) -> str:
+        """
+        Get agent URL with port from capabilities.
+
+        Args:
+            pi_info: PiModel instance with capabilities
+
+        Returns:
+            str: Agent URL (e.g., "http://172.16.254.147:8080")
+        """
+        import json
+
+        # Default port fallback
+        port = 8080
+
+        # Try to get port from capabilities (stored by monitoring service)
+        if pi_info.capabilities:
+            try:
+                # Capabilities is stored as JSON string in database
+                caps = json.loads(pi_info.capabilities) if isinstance(pi_info.capabilities, str) else pi_info.capabilities
+                port = caps.get("api_port", 8080)
+            except (json.JSONDecodeError, AttributeError, TypeError):
+                # Fall back to default if parsing fails
+                logger.debug(f"Could not parse capabilities for {pi_info.pi_id}, using default port 8080")
+
+        return f"http://{pi_info.ip_address}:{port}"
+
     async def apply_scenario(self, db: Session, scenario_id: str) -> Optional[ScenarioStatus]:
         """
         Apply a scenario to the Pi fleet.
@@ -350,8 +377,8 @@ class Orchestrator:
             # Create agent configuration
             agent_config = AgentConfiguration(interfaces=interfaces)
 
-            # Send configuration to Pi
-            pi_url = f"http://{pi_info.ip_address}:8080"
+            # Send configuration to Pi (use port from capabilities)
+            pi_url = self._get_agent_url(pi_info)
 
             async with aiohttp.ClientSession() as session:
                 # Step 1: Send configuration
@@ -405,7 +432,7 @@ class Orchestrator:
 
             # Send empty configuration
             agent_config = AgentConfiguration(interfaces=[])
-            pi_url = f"http://{pi_info.ip_address}:8080"
+            pi_url = self._get_agent_url(pi_info)
 
             async with aiohttp.ClientSession() as session:
                 async with session.post(
@@ -450,7 +477,7 @@ class Orchestrator:
                     if not pi_info:
                         continue
 
-                    pi_url = f"http://{pi_info.ip_address}:8080"
+                    pi_url = self._get_agent_url(pi_info)
 
                     async with aiohttp.ClientSession() as session:
                         async with session.get(

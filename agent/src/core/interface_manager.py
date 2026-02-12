@@ -13,16 +13,18 @@ logger = logging.getLogger(__name__)
 class InterfaceManager:
     """Manages virtual Wi-Fi interfaces using iw command"""
 
-    def __init__(self, base_interface: str = "wlan0", mock_mode: bool = False):
+    def __init__(self, base_interface: str = "wlan0", mock_mode: bool = False, config=None):
         """
         Initialize interface manager.
 
         Args:
             base_interface: Base physical interface (e.g., 'wlan0')
             mock_mode: If True, simulate commands without executing them
+            config: Application config object (for enable_vif flag)
         """
         self.base_interface = base_interface
         self.mock_mode = mock_mode
+        self.config = config
         self.interfaces: Dict[str, Dict] = {}  # name -> {mac, state}
         self._vif_max_count_cache: Dict[str, int] = {}  # Cache max interface count per interface
 
@@ -30,18 +32,28 @@ class InterfaceManager:
 
     async def get_max_interfaces(self, interface: str) -> int:
         """
-        Get the maximum number of managed interfaces supported by this interface.
+        Get the maximum number of managed interfaces supported by a wireless adapter.
+
+        VIF (Virtual Interface) support can be enabled via ENABLE_VIF environment variable.
+        Disabled by default due to routing failures on Pi 4B hardware.
 
         Args:
-            interface: Base interface name (e.g., 'wlan0')
+            interface: Wireless interface name (e.g., "wlan0")
 
         Returns:
-            Maximum number of managed interfaces (1 = no VIF, >1 = VIF supported)
+            int: Maximum interfaces (1 if VIF disabled, hardware limit if enabled)
         """
-        # TEMPORARY: Disable VIF support entirely due to stability issues
-        # Always return 1 to use only base interfaces
-        self._vif_max_count_cache[interface] = 1
-        return 1
+        # Check if VIF support is enabled via config
+        enable_vif = False
+        if self.config:
+            enable_vif = getattr(self.config, 'enable_vif', False)
+
+        if not enable_vif:
+            # VIF disabled - use only base interfaces
+            self._vif_max_count_cache[interface] = 1
+            return 1
+
+        # VIF enabled - detect hardware limit
 
         # Check cache first
         if interface in self._vif_max_count_cache:

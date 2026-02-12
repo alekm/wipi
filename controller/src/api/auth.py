@@ -10,17 +10,12 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, Request
 from pydantic import BaseModel, Field
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 from ..services.session_manager import get_session_manager, SessionManager
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
-
-# Rate limiter instance
-limiter = Limiter(key_func=get_remote_address)
 
 # Admin password hash from environment variable
 ADMIN_PASSWORD_HASH = os.environ.get(
@@ -63,7 +58,6 @@ def validate_password(password: str) -> bool:
 
 
 @router.post("/login", response_model=LoginResponse)
-@limiter.limit("5/minute")
 async def login(
     request: Request,
     body: LoginRequest,
@@ -73,10 +67,13 @@ async def login(
     """
     Authenticate user and create session.
 
-    Rate limited to 5 attempts per minute per IP address.
+    Note: Rate limiting temporarily disabled due to circular import with main.py limiter.
+    TODO: Re-implement using proper decorator pattern or dependency injection.
+
     Validates password, creates session, and sets httpOnly cookie.
 
     Args:
+        request: FastAPI request object
         body: Login request with password
         response: FastAPI response object for setting cookie
         session_manager: Session manager dependency
@@ -116,7 +113,6 @@ async def login(
 
 
 @router.post("/logout")
-@limiter.limit("10/minute")
 async def logout(
     request: Request,
     response: Response,
@@ -126,9 +122,11 @@ async def logout(
     """
     Logout user and destroy session.
 
-    Rate limited to 10 attempts per minute per IP address.
+    Note: Rate limiting temporarily disabled due to circular import with main.py limiter.
+    TODO: Re-implement using proper decorator pattern or dependency injection.
 
     Args:
+        request: FastAPI request object
         response: FastAPI response object for clearing cookie
         session_id: Session ID from cookie
         session_manager: Session manager dependency

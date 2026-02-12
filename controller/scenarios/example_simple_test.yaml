@@ -1,0 +1,25 @@
+id: "simple-test-001"
+name: "Simple Test"
+description: "Minimal scenario with 2 clients for testing connectivity"
+
+pis:
+  - pi_id: "pi-001"
+    interfaces:
+      - name: "wlan0_1"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/html"
+            interval: 30
+            timeout: 10
+
+      - name: "wlan0_2"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "idle"
+          config:
+            keepalive_interval: 60

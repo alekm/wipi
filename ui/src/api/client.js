@@ -2,6 +2,35 @@
 
 const API_BASE = '/api';
 
+/**
+ * Parse error response from FastAPI.
+ * Handles both string errors and validation error arrays.
+ *
+ * @param {Object} error - Error object from API response
+ * @returns {string} - Human-readable error message
+ */
+function parseErrorResponse(error) {
+  if (error.detail) {
+    // FastAPI validation errors (array of objects)
+    if (Array.isArray(error.detail)) {
+      return error.detail.map(err => {
+        // Each validation error has: { loc: [...], msg: "...", type: "..." }
+        if (err.msg) return err.msg;
+        if (typeof err === 'string') return err;
+        return JSON.stringify(err);
+      }).join('; ');
+    }
+    // Simple string detail
+    return error.detail;
+  }
+
+  if (error.error) {
+    return error.error;
+  }
+
+  return 'Request failed';
+}
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const config = {
@@ -17,7 +46,7 @@ async function request(endpoint, options = {}) {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: response.statusText }));
-    throw new Error(error.error || error.detail || 'Request failed');
+    throw new Error(parseErrorResponse(error));
   }
 
   return response.json();
@@ -86,7 +115,7 @@ export const pskSetApi = {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: response.statusText }));
-      throw new Error(error.error || error.detail || 'Import failed');
+      throw new Error(parseErrorResponse(error));
     }
 
     return response.json();

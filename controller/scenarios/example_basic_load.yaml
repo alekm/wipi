@@ -1,0 +1,106 @@
+id: "basic-load-test-001"
+name: "Basic Load Test"
+description: "10 clients with mixed HTTP browsing traffic across 2 Pis"
+
+pis:
+  - pi_id: "pi-001"
+    interfaces:
+      - name: "wlan0_1"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/html"
+              - "http://httpbin.org/json"
+            interval: 30
+            timeout: 10
+
+      - name: "wlan0_2"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://example.com"
+            interval: 45
+
+      - name: "wlan0_3"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "idle"
+          config:
+            keepalive_interval: 60
+
+      - name: "wlan0_4"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/delay/2"
+            interval: 20
+
+      - name: "wlan0_5"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/status/200"
+            interval: 15
+
+  - pi_id: "pi-002"
+    interfaces:
+      - name: "wlan0_1"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/html"
+            interval: 25
+
+      - name: "wlan0_2"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/bytes/10240"
+            interval: 40
+
+      - name: "wlan0_3"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "idle"
+          config:
+            keepalive_interval: 90
+
+      - name: "wlan0_4"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/get"
+            interval: 35
+
+      - name: "wlan0_5"
+        ssid: "TestNetwork"
+        password: "password123"
+        traffic:
+          type: "http_browser"
+          config:
+            urls:
+              - "http://httpbin.org/user-agent"
+            interval: 50

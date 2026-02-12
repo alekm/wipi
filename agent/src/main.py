@@ -60,6 +60,10 @@ class Config:
     mock_mode: bool = os.environ.get("MOCK_MODE", "false").lower() == "true"
     config_file: str = os.environ.get("CONFIG_FILE", "/etc/wipi/agent_config.yaml")
 
+    # VIF support flag (disabled by default due to Pi 4B routing issues)
+    # Set to true for Pi 5 hardware or when VIF routing is fixed
+    enable_vif: bool = os.environ.get("ENABLE_VIF", "false").lower() == "true"
+
     # Timeout configurations (in seconds)
     wpa_connection_timeout: int = int(os.environ.get("WPA_CONNECTION_TIMEOUT", "30"))
     wpa_process_timeout: int = int(os.environ.get("WPA_PROCESS_TIMEOUT", "5"))
@@ -89,6 +93,7 @@ class Config:
                         cls.base_interface = config_data.get("default_base_interface", cls.base_interface)
                         cls.dhcp_client = config_data.get("dhcp_client", cls.dhcp_client)
                         cls.mock_mode = config_data.get("mock_mode", cls.mock_mode)
+                        cls.enable_vif = config_data.get("enable_vif", cls.enable_vif)
 
                         # Load timeout configurations
                         cls.wpa_connection_timeout = config_data.get("wpa_connection_timeout", cls.wpa_connection_timeout)
@@ -125,7 +130,8 @@ async def lifespan(app: FastAPI):
     # Initialize managers
     interface_manager = InterfaceManager(
         base_interface=Config.base_interface,
-        mock_mode=Config.mock_mode
+        mock_mode=Config.mock_mode,
+        config=Config
     )
     wpa_manager = WPAManager(mock_mode=Config.mock_mode, config=Config)
     dhcp_manager = DHCPManager(

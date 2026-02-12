@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { LoginModal } from '../components/LoginModal';
 
 // Mode constants
 export const MODE_ADMIN = 'admin';
@@ -84,6 +85,7 @@ async function checkSession() {
 export function AuthProvider({ children }) {
   const [mode, setModeState] = useState(MODE_DEMO);
   const [loading, setLoading] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Check session on mount
   useEffect(() => {
@@ -132,18 +134,17 @@ export function AuthProvider({ children }) {
   const toggleMode = async () => {
     // If switching from Demo to Admin, require password
     if (mode === MODE_DEMO) {
-      const password = prompt('Enter admin password:');
-      if (password !== null) {
-        // User clicked OK (not cancelled)
-        const result = await login(password);
-        if (!result.success) {
-          alert(result.error || 'Incorrect password');
-        }
-      }
+      setShowLoginModal(true); // Show modal instead of prompt()
     } else {
       // Admin to Demo - logout
       await logout();
     }
+  };
+
+  // Handle login from modal
+  const handleModalLogin = async (password) => {
+    const result = await login(password);
+    return result;
   };
 
   // Computed properties
@@ -179,6 +180,11 @@ export function AuthProvider({ children }) {
   return (
     <AuthContext.Provider value={value}>
       {children}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLogin={handleModalLogin}
+      />
     </AuthContext.Provider>
   );
 }

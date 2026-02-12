@@ -51,7 +51,11 @@ async def get_status(request: Request) -> AgentStatus:
             })
             total_capacity += max_count
 
+        # Get API port from config
+        from ..main import Config
+
         capabilities = {
+            "api_port": Config.api_port,  # Agent API port for controller communication
             "interfaces": interface_caps,
             "total_capacity": total_capacity,
             # Legacy fields for backward compatibility

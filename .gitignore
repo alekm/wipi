@@ -138,8 +138,9 @@ data/*.db-journal
 data/*.db-wal
 data/*.db-shm
 !data/.gitkeep
-scenarios/*.yaml
-!scenarios/example_*.yaml
+controller/scenarios/*.yaml
+!controller/scenarios/example_*.yaml
+!controller/scenarios/resident-sim.yaml
 *.pcap
 *.cap
 

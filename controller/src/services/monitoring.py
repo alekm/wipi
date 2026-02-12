@@ -81,6 +81,36 @@ class MonitoringService:
         """Get all latest statuses"""
         return self.latest_statuses.copy()
 
+    def _get_agent_url(self, db: Session, pi_id: str, ip_address: str) -> str:
+        """
+        Get agent URL with port from capabilities.
+
+        Args:
+            db: Database session
+            pi_id: Pi ID
+            ip_address: Pi IP address
+
+        Returns:
+            str: Agent URL (e.g., "http://172.16.254.147:8080")
+        """
+        import json
+
+        # Default port fallback
+        port = 8080
+
+        # Try to get port from Pi capabilities in database
+        try:
+            pi_info = self.pi_manager.get_pi(db, pi_id)
+            if pi_info and pi_info.capabilities:
+                # Capabilities is stored as JSON string in database
+                caps = json.loads(pi_info.capabilities) if isinstance(pi_info.capabilities, str) else pi_info.capabilities
+                port = caps.get("api_port", 8080)
+        except (json.JSONDecodeError, AttributeError, TypeError):
+            # Fall back to default if parsing fails or Pi not found
+            logger.debug(f"Could not get port from capabilities for {pi_id}, using default 8080")
+
+        return f"http://{ip_address}:{port}"
+
     def _handle_pi_failure(self, db: Session, pi_id: str):
         """
         Handle a failed poll attempt for a Pi.
@@ -153,7 +183,8 @@ class MonitoringService:
             ip_address: Pi IP address
         """
         try:
-            pi_url = f"http://{ip_address}:8080"
+            # Get agent URL with port from capabilities
+            pi_url = self._get_agent_url(db, pi_id, ip_address)
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(

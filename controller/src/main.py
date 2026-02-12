@@ -99,6 +99,28 @@ async def lifespan(app: FastAPI):
     Config.load_from_file()
 
     logger.info("Starting WiPi Controller")
+
+    # SECURITY WARNINGS for default credentials
+    if Config.agent_api_key == "387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e":
+        logger.warning("=" * 80)
+        logger.warning("SECURITY WARNING: Using default AGENT_API_KEY!")
+        logger.warning("Generate a new key with: openssl rand -hex 32")
+        logger.warning("Set AGENT_API_KEY in .env or docker-compose.yml")
+        logger.warning("=" * 80)
+
+    # Check admin password hash
+    admin_hash = os.environ.get(
+        "WIPI_ADMIN_PASSWORD_HASH",
+        "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84"
+    )
+    if admin_hash == "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84":
+        logger.warning("=" * 80)
+        logger.warning("SECURITY WARNING: Using default admin password!")
+        logger.warning("Default password is 'Ruckus123!' - change immediately!")
+        logger.warning("Generate new hash: echo -n 'YourPassword' | sha256sum")
+        logger.warning("Set WIPI_ADMIN_PASSWORD_HASH in .env or docker-compose.yml")
+        logger.warning("=" * 80)
+
     logger.info(f"Database URL: {Config.database_url}")
     logger.info(f"Scenario directory: {Config.scenario_dir}")
 
