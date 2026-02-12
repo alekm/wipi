@@ -66,8 +66,24 @@ if [ -z "$UPDATE_CONTROLLER_ONLY" ]; then
         ADMIN_PASSWORD="Ruckus123!"
         echo -e "${YELLOW}Using default password 'Ruckus123!'${NC}"
     fi
-    WIPI_ADMIN_PASSWORD_HASH=$(echo -n "$ADMIN_PASSWORD" | sha256sum | awk '{print $1}')
-    echo -e "${GREEN}✓ Admin password hash generated${NC}"
+    # Use bcrypt (passlib) for secure password hashing; fallback to SHA-256 if passlib not installed
+    WIPI_ADMIN_PASSWORD_HASH=$(python3 -c "
+import sys
+try:
+    from passlib.hash import bcrypt
+    print(bcrypt.hash(sys.argv[1]))
+except ImportError:
+    import hashlib
+    print(hashlib.sha256(sys.argv[1].encode()).hexdigest())
+" "$ADMIN_PASSWORD" 2>/dev/null)
+    if [ -z "$WIPI_ADMIN_PASSWORD_HASH" ]; then
+        WIPI_ADMIN_PASSWORD_HASH=$(echo -n "$ADMIN_PASSWORD" | sha256sum | awk '{print $1}')
+        echo -e "${YELLOW}Using SHA-256 (install passlib for bcrypt: pip install passlib[bcrypt])${NC}"
+    elif [[ "$WIPI_ADMIN_PASSWORD_HASH" =~ ^\$2[ab] ]]; then
+        echo -e "${GREEN}✓ Admin password hash generated (bcrypt)${NC}"
+    else
+        echo -e "${GREEN}✓ Admin password hash generated (SHA-256)${NC}"
+    fi
 fi
 
 # Optional: WIPI_ENCRYPTION_KEY

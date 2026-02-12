@@ -9,6 +9,26 @@ from typing import Dict, Optional, List
 
 logger = logging.getLogger(__name__)
 
+# Strict regex for interface names to prevent command injection via iw/ip arguments
+# Allows: wlan0, wlan0_1, wlx8c882b200231, etc.
+INTERFACE_NAME_RE = re.compile(r"^[a-zA-Z0-9_]+$")
+
+
+def _validate_interface_name(name: str) -> None:
+    """
+    Validate interface name to prevent command injection.
+
+    Args:
+        name: Interface name to validate
+
+    Raises:
+        ValueError: If name contains invalid characters
+    """
+    if not name or not INTERFACE_NAME_RE.match(name):
+        raise ValueError(
+            f"Invalid interface name '{name}': must match ^[a-zA-Z0-9_]+$"
+        )
+
 
 class InterfaceManager:
     """Manages virtual Wi-Fi interfaces using iw command"""
@@ -22,6 +42,7 @@ class InterfaceManager:
             mock_mode: If True, simulate commands without executing them
             config: Application config object (for enable_vif flag)
         """
+        _validate_interface_name(base_interface)
         self.base_interface = base_interface
         self.mock_mode = mock_mode
         self.config = config
@@ -43,6 +64,7 @@ class InterfaceManager:
         Returns:
             int: Maximum interfaces (1 if VIF disabled, hardware limit if enabled)
         """
+        _validate_interface_name(interface)
         # Check if VIF support is enabled via config
         enable_vif = False
         if self.config:
@@ -154,6 +176,7 @@ class InterfaceManager:
         Returns:
             True if successful, False otherwise
         """
+        _validate_interface_name(name)
         try:
             # Determine if this is a physical interface or VIF
             # Physical: wlan0, wlan1, etc. (no underscore)
@@ -263,6 +286,7 @@ class InterfaceManager:
         Returns:
             True if successful, False otherwise
         """
+        _validate_interface_name(name)
         try:
             if name not in self.interfaces:
                 logger.warning(f"Interface {name} not tracked, attempting to delete anyway")
@@ -364,6 +388,7 @@ class InterfaceManager:
         Returns:
             Signal strength in dBm or None
         """
+        _validate_interface_name(name)
         try:
             if self.mock_mode:
                 return float(random.randint(-70, -30))
@@ -463,6 +488,7 @@ class InterfaceManager:
 
     async def _interface_exists(self, name: str) -> bool:
         """Check if interface exists"""
+        _validate_interface_name(name)
         if self.mock_mode:
             return name == self.base_interface or name in self.interfaces
 
@@ -474,6 +500,7 @@ class InterfaceManager:
 
     async def _set_mac_address(self, name: str, mac_address: str) -> bool:
         """Set MAC address for interface"""
+        _validate_interface_name(name)
         try:
             # Interface must be down to change MAC
             await self._bring_interface_down(name)
@@ -500,6 +527,7 @@ class InterfaceManager:
 
     async def _bring_interface_up(self, name: str) -> bool:
         """Bring interface up"""
+        _validate_interface_name(name)
         try:
             if not self.mock_mode:
                 proc = await asyncio.create_subprocess_exec(
@@ -523,6 +551,7 @@ class InterfaceManager:
 
     async def _bring_interface_down(self, name: str) -> bool:
         """Bring interface down"""
+        _validate_interface_name(name)
         try:
             if not self.mock_mode:
                 proc = await asyncio.create_subprocess_exec(

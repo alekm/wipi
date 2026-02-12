@@ -22,6 +22,9 @@ python-multipart==0.0.9
 # Rate Limiting
 slowapi==0.1.9
 
+# Password hashing (bcrypt via passlib)
+passlib[bcrypt]==1.7.4
+
 # Encryption
 cryptography==44.0.0
 

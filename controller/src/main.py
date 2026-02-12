@@ -131,16 +131,13 @@ async def lifespan(app: FastAPI):
         logger.warning("=" * 80)
 
     # Check admin password hash
-    admin_hash = os.environ.get(
-        "WIPI_ADMIN_PASSWORD_HASH",
-        "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84"
-    )
-    if admin_hash == "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84":
+    from .api.auth import is_using_default_password
+    if is_using_default_password():
         logger.warning("=" * 80)
         logger.warning("SECURITY WARNING: Using default admin password!")
         logger.warning("Default password is 'Ruckus123!' - change immediately!")
-        logger.warning("Generate new hash: echo -n 'YourPassword' | sha256sum")
-        logger.warning("Set WIPI_ADMIN_PASSWORD_HASH in .env or docker-compose.yml")
+        logger.warning("Run: ./scripts/wipi-init  (regenerates credentials with bcrypt)")
+        logger.warning("Or set WIPI_ADMIN_PASSWORD_HASH in .env or docker-compose.yml")
         logger.warning("=" * 80)
 
     logger.info(f"Database URL: {Config.database_url}")

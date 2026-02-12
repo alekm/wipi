@@ -2,9 +2,13 @@
 Shared API contract models for WiPi system.
 Used by both controller and agent to ensure consistency.
 """
+import re
 from typing import Optional, List, Dict, Any, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
+
+# Strict regex for interface names to prevent command injection
+INTERFACE_NAME_RE = re.compile(r"^[a-zA-Z0-9_]+$")
 
 
 # Traffic Configuration Models
@@ -76,6 +80,16 @@ class InterfaceConfig(BaseModel):
         default=None,
         description="Optional DHCP personality hint (e.g., 'windows10', 'linux', 'xbox')"
     )
+
+    @field_validator("name")
+    @classmethod
+    def validate_interface_name(cls, v: str) -> str:
+        """Ensure interface name is safe (prevents command injection)."""
+        if not v or not INTERFACE_NAME_RE.match(v):
+            raise ValueError(
+                f"Interface name must match ^[a-zA-Z0-9_]+$ (got: {v!r})"
+            )
+        return v
 
 
 class AgentConfiguration(BaseModel):

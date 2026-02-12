@@ -10,6 +10,7 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Response, Cookie, Depends, Request
 from pydantic import BaseModel, Field
+from passlib.hash import bcrypt
 
 from ..limiter import limiter
 from ..services.session_manager import get_session_manager, SessionManager
@@ -19,10 +20,15 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 # Admin password hash from environment variable
+# Supports bcrypt ($2b$...) or legacy SHA-256 (64 hex chars)
 ADMIN_PASSWORD_HASH = os.environ.get(
     "WIPI_ADMIN_PASSWORD_HASH",
-    "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84"  # Default: Ruckus123!
+    "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84"  # Default: Ruckus123! (SHA-256)
 )
+
+# Default SHA-256 hash for startup warning
+DEFAULT_SHA256_HASH = "8f4179b458b4e4622c32089b025ff4e4b531137642dfdf5143b5f29af3c32e84"
+DEFAULT_PASSWORD = "Ruckus123!"
 
 
 class LoginRequest(BaseModel):
@@ -44,9 +50,16 @@ class MeResponse(BaseModel):
     mode: str  # "admin" or "demo"
 
 
+def _is_bcrypt_hash(h: str) -> bool:
+    """Check if hash is bcrypt format."""
+    return h.startswith("$2b$") or h.startswith("$2a$")
+
+
 def validate_password(password: str) -> bool:
     """
     Validate password against stored hash.
+
+    Supports bcrypt (secure) and legacy SHA-256 hashes for backward compatibility.
 
     Args:
         password: Plain text password
@@ -54,8 +67,26 @@ def validate_password(password: str) -> bool:
     Returns:
         True if password is correct, False otherwise
     """
+    stored = ADMIN_PASSWORD_HASH
+    if not stored:
+        return False
+
+    if _is_bcrypt_hash(stored):
+        return bcrypt.verify(password, stored)
+
+    # Legacy SHA-256
     password_hash = hashlib.sha256(password.encode()).hexdigest()
-    return password_hash == ADMIN_PASSWORD_HASH
+    return password_hash == stored
+
+
+def is_using_default_password() -> bool:
+    """Check if stored hash matches default password (for startup warning)."""
+    stored = ADMIN_PASSWORD_HASH
+    if not stored:
+        return False
+    if _is_bcrypt_hash(stored):
+        return bcrypt.verify(DEFAULT_PASSWORD, stored)
+    return stored == DEFAULT_SHA256_HASH
 
 
 @router.post("/login", response_model=LoginResponse)
