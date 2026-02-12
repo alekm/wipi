@@ -9,28 +9,30 @@ Get WiPi up and running in 15 minutes.
 - Raspberry Pis connected to the same network as the controller
 - Wi-Fi network to test against
 
-## Step 1: Start the Controller
+## Step 1: Initial Setup and Start the Controller
 
 On your controller machine:
 
 ```bash
 cd /opt/stacks/wipi
 
-# Create data directory
-mkdir -p data
+# One-time setup: generates AGENT_API_KEY, admin password, creates .env
+./scripts/wipi-init
 
-# Start controller with Docker Compose
-docker-compose up -d
+# Start controller with Docker Compose (reads .env)
+docker compose up -d --build
 
 # Verify controller is running
 curl http://localhost:8000/health
 # Should return: {"status":"healthy"}
 
 # View logs
-docker-compose logs -f controller
+docker compose logs -f controller
 ```
 
 Controller is now running at `http://localhost:8000`
+
+The `.env` file created by `wipi-init` is used by docker-compose and by the deploy scripts when you add Raspberry Pis.
 
 API documentation: `http://localhost:8000/docs`
 

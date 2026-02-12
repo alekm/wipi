@@ -19,7 +19,7 @@ from slowapi.middleware import SlowAPIMiddleware
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from controller.src.db import init_db, SessionLocal
+from controller.src.db import init_db, SessionLocal, engine
 from controller.src.services import (
     PiManager,
     ScenarioManager,
@@ -32,11 +32,24 @@ from controller.src.services import (
 from controller.src.api import pis, scenarios, orchestration, psk_sets, resident_simulation, ruckus_one, configuration, auth
 from controller.src.limiter import limiter
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# Configure logging (LOG_FORMAT=json for structured output)
+def _configure_logging():
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    if os.environ.get("LOG_FORMAT", "").lower() == "json":
+        try:
+            from pythonjsonlogger import jsonlogger
+            handler.setFormatter(jsonlogger.JsonFormatter())
+        except ImportError:
+            handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+    else:
+        handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+    if root.handlers:
+        root.handlers.clear()
+    root.addHandler(handler)
+
+_configure_logging()
 logger = logging.getLogger(__name__)
 
 # Enable DEBUG logging for monitoring service
@@ -88,6 +101,14 @@ class Config:
                         logger.info(f"Loaded configuration from {cls.config_file}")
         except Exception as e:
             logger.warning(f"Could not load config file: {e}")
+
+
+def _get_cors_origins() -> list:
+    """Parse CORS_ORIGINS env var. Default '*' allows all origins."""
+    raw = os.environ.get("CORS_ORIGINS", "*").strip()
+    if not raw or raw == "*":
+        return ["*"]
+    return [o.strip() for o in raw.split(",") if o.strip()]
 
 
 @asynccontextmanager
@@ -206,10 +227,10 @@ app.state.limiter = limiter
 # Add rate limit exceeded exception handler
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Add CORS middleware
+# Add CORS middleware (CORS_ORIGINS env: * = allow all, or comma-separated origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=_get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -241,10 +262,28 @@ async def root():
 
 @app.get("/health")
 async def health():
-    """Health check endpoint"""
-    return {
-        "status": "healthy"
-    }
+    """Health check endpoint - basic liveness."""
+    return {"status": "healthy"}
+
+
+@app.get("/health/ready")
+async def health_ready():
+    """
+    Readiness check - verifies DB connectivity.
+    Use for Docker/k8s health probes; returns 503 if DB unreachable.
+    """
+    from sqlalchemy import text
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return {"status": "ready", "database": "ok"}
+    except Exception as e:
+        logger.error(f"Readiness check failed: {e}")
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=503,
+            content={"status": "not_ready", "database": "error", "detail": str(e)}
+        )
 
 
 if __name__ == "__main__":

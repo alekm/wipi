@@ -17,6 +17,14 @@ AGENT_API_KEY="${AGENT_API_KEY:-387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
+# Load .env from project root if present (created by wipi-init)
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    set -a
+    # shellcheck source=/dev/null
+    . "$PROJECT_ROOT/.env"
+    set +a
+fi
+
 # Parse arguments
 if [ $# -lt 1 ]; then
     echo -e "${RED}Error: Pi IP address required${NC}"
@@ -24,10 +32,10 @@ if [ $# -lt 1 ]; then
     echo ""
     echo "Example: $0 172.16.254.147 wipi-01"
     echo ""
-    echo "Environment variables:"
+    echo "Environment variables (or set in .env via wipi-init):"
     echo "  PI_USER         - SSH user (default: admin)"
-    echo "  CONTROLLER_URL  - Controller URL (default: http://172.16.254.4:8000)"
-    echo "  AGENT_API_KEY   - Agent API key (default: 387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e)"
+    echo "  CONTROLLER_URL  - Controller URL"
+    echo "  AGENT_API_KEY   - Agent API key (must match controller)"
     exit 1
 fi
 

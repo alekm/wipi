@@ -13,8 +13,17 @@ NC='\033[0m' # No Color
 # Configuration
 DEPLOY_USER="${DEPLOY_USER:-${USER}}"
 CONTROLLER_URL="${CONTROLLER_URL:-http://172.16.254.4:8000}"
+AGENT_API_KEY="${AGENT_API_KEY:-387d5f76c069bc167dc3ba74b1adb2b25233e9874e369dfa436894c3906bad0e}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Load .env from project root if present (created by wipi-init)
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    set -a
+    # shellcheck source=/dev/null
+    . "$PROJECT_ROOT/.env"
+    set +a
+fi
 
 # Parse arguments
 if [ $# -lt 1 ]; then
@@ -23,9 +32,10 @@ if [ $# -lt 1 ]; then
     echo ""
     echo "Example: $0 192.168.1.100 wipi-debian-01"
     echo ""
-    echo "Environment variables:"
+    echo "Environment variables (or set in .env via wipi-init):"
     echo "  DEPLOY_USER     - SSH user (default: current user)"
-    echo "  CONTROLLER_URL  - Controller URL (default: http://172.16.254.4:8000)"
+    echo "  CONTROLLER_URL  - Controller URL"
+    echo "  AGENT_API_KEY   - Agent API key (must match controller)"
     exit 1
 fi
 
@@ -36,6 +46,7 @@ echo -e "${GREEN}=== WiPi Deployment (Generic Debian/Ubuntu) ===${NC}"
 echo "Target Host: $DEPLOY_USER@$HOST_IP"
 echo "Hostname: $HOSTNAME"
 echo "Controller: $CONTROLLER_URL"
+echo "Agent API Key: ${AGENT_API_KEY:0:16}... (${#AGENT_API_KEY} chars)"
 echo ""
 
 # Test SSH connection
@@ -72,9 +83,10 @@ scp -o StrictHostKeyChecking=accept-new -q wipi-agent.tar.gz "$DEPLOY_USER@$HOST
 echo -e "${GREEN}✓ Files uploaded${NC}"
 echo ""
 
-# Execute remote deployment script
+# Execute remote deployment script (pass vars so remote script can use them)
 echo -e "${YELLOW}Executing remote deployment...${NC}"
-ssh -o StrictHostKeyChecking=accept-new -T "$DEPLOY_USER@$HOST_IP" "sudo bash -s" <<'EOF'
+ssh -o StrictHostKeyChecking=accept-new -T "$DEPLOY_USER@$HOST_IP" \
+    "HOSTNAME='$HOSTNAME' CONTROLLER_URL='$CONTROLLER_URL' AGENT_API_KEY='$AGENT_API_KEY' sudo -E bash -s" <<'EOF'
 set -e
 
 echo "=== Starting System Configuration ==="
@@ -199,6 +211,7 @@ echo "Creating agent configuration..."
 cat > /etc/wipi/agent_config.yaml <<CONFIG_EOF
 agent_id: "$HOSTNAME"
 controller_url: "$CONTROLLER_URL"
+agent_api_key: "$AGENT_API_KEY"
 api_port: 8080
 max_interfaces: 8
 default_base_interface: "$WLAN_INTERFACE"
@@ -226,6 +239,7 @@ WorkingDirectory=$INSTALL_DIR
 Environment="PYTHONPATH=$INSTALL_DIR"
 Environment="AGENT_ID=$HOSTNAME"
 Environment="CONTROLLER_URL=$CONTROLLER_URL"
+Environment="AGENT_API_KEY=$AGENT_API_KEY"
 Environment="API_PORT=8080"
 Environment="BASE_INTERFACE=$WLAN_INTERFACE"
 Environment="DHCP_CLIENT=dhclient"

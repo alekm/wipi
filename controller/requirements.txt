@@ -25,6 +25,9 @@ slowapi==0.1.9
 # Encryption
 cryptography==44.0.0
 
+# Structured logging (optional, when LOG_FORMAT=json)
+python-json-logger==3.2.0
+
 # Optional Redis support (for distributed rate limiting)
 # redis==5.0.1
 

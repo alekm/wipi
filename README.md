@@ -43,13 +43,16 @@ WiPi creates realistic Wi-Fi network load by simulating hundreds of apartment re
 - **Network:** Controller and agents must be on the same network or routable
 - **Wi-Fi Infrastructure:** Access points with DPSK, DPSK3, or PSK authentication
 
-### 1. Clone and Start Controller
+### 1. Clone and Run Initial Setup
 
 ```bash
 git clone https://github.com/alekm/wipi.git
 cd wipi
 
-# Build and start controller and UI
+# One-time setup: generates credentials and creates .env
+./scripts/wipi-init
+
+# Build and start controller and UI (uses .env)
 docker compose up -d --build
 
 # Check status
@@ -62,6 +65,8 @@ docker compose logs -f controller
 
 ### 2. Deploy Agents to Raspberry Pis
 
+The deploy script reads `AGENT_API_KEY` and `CONTROLLER_URL` from `.env` (created by `wipi-init`):
+
 ```bash
 # Single Pi deployment
 ./scripts/deploy-to-pi.sh 192.168.1.100 wipi-01
@@ -69,7 +74,7 @@ docker compose logs -f controller
 # Multiple Pis (create pi-list.txt first)
 ./scripts/deploy-to-multiple-pis.sh pi-list.txt
 
-# Custom controller URL
+# Override controller URL if needed
 CONTROLLER_URL=http://192.168.1.50:8000 ./scripts/deploy-to-pi.sh 192.168.1.100 wipi-01
 ```
 

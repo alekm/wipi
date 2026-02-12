@@ -6,7 +6,20 @@ pis:
   interfaces:
   - name: wlan1
     ssid: Alangus
-    password: gPj26Kyc
+    password: ChNFY8AW
+    traffic:
+      type: bulk_transfer
+      config:
+        url: https://ash-speed.hetzner.com/100MB.bin
+        direction: download
+        repeat: true
+        max_bandwidth: 5mbps
+        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
+          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
+    dhcp_personality: iphone
+  - name: wlan0
+    ssid: Alangus
+    password: hnDUx9q8
     traffic:
       type: youtube
       config:
@@ -15,12 +28,14 @@ pis:
         watch_duration_max: 1800
         pause_between_min: 5
         pause_between_max: 30
-        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
-          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
-    dhcp_personality: iphone
-  - name: wlan0
+        user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
+          Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
+    dhcp_personality: android
+- pi_id: wipi-02
+  interfaces:
+  - name: wlan2
     ssid: Alangus
-    password: JutEMKPB
+    password: SmUWrhCP
     traffic:
       type: http_browser
       config:
@@ -37,56 +52,14 @@ pis:
         - https://www.twitter.com
         - https://www.github.com
         - https://www.stackoverflow.com
-        interval: 66
+        interval: 89
         timeout: 10
-        user_agent: Mozilla/5.0 (iPad; CPU OS 18_2 like Mac OS X) AppleWebKit/605.1.15
-          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
-    dhcp_personality: ipad
-- pi_id: wipi-02
-  interfaces:
-  - name: wlan2
-    ssid: Alangus
-    password: Nhv29vDz
-    traffic:
-      type: youtube
-      config:
-        quality: 480p
-        watch_duration_min: 600
-        watch_duration_max: 1800
-        pause_between_min: 5
-        pause_between_max: 30
         user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
           Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
     dhcp_personality: android
   - name: wlan0
     ssid: Alangus
-    password: Eqt3uQwb
-    traffic:
-      type: api_polling
-      config:
-        poll_interval_min: 15
-        poll_interval_max: 60
-        burst_mode: true
-        timeout: 10
-    dhcp_personality: ipad
-  - name: wlan1
-    ssid: Alangus
-    password: xKMKbuCz
-    traffic:
-      type: bulk_transfer
-      config:
-        url: https://ash-speed.hetzner.com/100MB.bin
-        direction: download
-        repeat: true
-        max_bandwidth: 5mbps
-        user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
-          Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-    dhcp_personality: android
-- pi_id: wipi-01
-  interfaces:
-  - name: wlan2
-    ssid: Alangus
-    password: hvFdPPGd
+    password: nu6u34S6
     traffic:
       type: streaming_audio
       config:
@@ -95,119 +68,10 @@ pis:
         session_duration_max: 3600
         pause_between_min: 10
         pause_between_max: 120
-    dhcp_personality: ipad
-  - name: wlan0
-    ssid: Alangus
-    password: Cc5rEJfy
-    traffic:
-      type: http_browser
-      config:
-        urls:
-        - https://www.youtube.com
-        - https://www.reddit.com
-        - https://news.ycombinator.com
-        - https://www.wikipedia.org
-        - https://www.amazon.com
-        - https://www.netflix.com
-        - https://www.spotify.com
-        - https://www.facebook.com
-        - https://www.instagram.com
-        - https://www.twitter.com
-        - https://www.github.com
-        - https://www.stackoverflow.com
-        interval: 50
-        timeout: 10
-        user_agent: Mozilla/5.0 (iPad; CPU OS 18_2 like Mac OS X) AppleWebKit/605.1.15
-          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
-    dhcp_personality: ipad
-  - name: wlan1
-    ssid: Alangus
-    password: kGzQMjdb
-    traffic:
-      type: youtube
-      config:
-        quality: 480p
-        watch_duration_min: 600
-        watch_duration_max: 1800
-        pause_between_min: 5
-        pause_between_max: 30
-        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
-          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
     dhcp_personality: iphone
-- pi_id: wipi-04
-  interfaces:
   - name: wlan1
     ssid: Alangus
-    password: 6F8KfdVE
-    traffic:
-      type: youtube
-      config:
-        quality: 480p
-        watch_duration_min: 600
-        watch_duration_max: 1800
-        pause_between_min: 5
-        pause_between_max: 30
-        user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
-          Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-    dhcp_personality: android
-  - name: wlan0
-    ssid: Alangus
-    password: BGCYnsKS
-    traffic:
-      type: bulk_transfer
-      config:
-        url: https://ash-speed.hetzner.com/100MB.bin
-        direction: download
-        repeat: true
-        max_bandwidth: 5mbps
-        user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
-          Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-    dhcp_personality: android
-- pi_id: wipi-05
-  interfaces:
-  - name: wlan1
-    ssid: Alangus
-    password: V6WvdyaR
-    traffic:
-      type: youtube
-      config:
-        quality: 480p
-        watch_duration_min: 600
-        watch_duration_max: 1800
-        pause_between_min: 5
-        pause_between_max: 30
-        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
-          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
-    dhcp_personality: iphone
-  - name: wlan0
-    ssid: Alangus
-    password: AYKGkjWX
-    traffic:
-      type: http_browser
-      config:
-        urls:
-        - https://www.youtube.com
-        - https://www.reddit.com
-        - https://news.ycombinator.com
-        - https://www.wikipedia.org
-        - https://www.amazon.com
-        - https://www.netflix.com
-        - https://www.spotify.com
-        - https://www.facebook.com
-        - https://www.instagram.com
-        - https://www.twitter.com
-        - https://www.github.com
-        - https://www.stackoverflow.com
-        interval: 74
-        timeout: 10
-        user_agent: Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like
-          Gecko) Chrome/120.0.0.0 Mobile Safari/537.36
-    dhcp_personality: android
-- pi_id: wipi-07
-  interfaces:
-  - name: wlan0
-    ssid: Alangus
-    password: wW5qE3W5
+    password: Mh8mZV8f
     traffic:
       type: api_polling
       config:
@@ -215,12 +79,142 @@ pis:
         poll_interval_max: 60
         burst_mode: true
         timeout: 10
+    dhcp_personality: macos
+- pi_id: wipi-01
+  interfaces:
+  - name: wlan0
+    ssid: Alangus
+    password: 3qpVzM2E
+    traffic:
+      type: youtube
+      config:
+        quality: 480p
+        watch_duration_min: 600
+        watch_duration_max: 1800
+        pause_between_min: 5
+        pause_between_max: 30
+        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
+          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
+    dhcp_personality: iphone
+  - name: wlan0_1
+    ssid: Alangus
+    password: Cc5rEJfy
+    traffic:
+      type: streaming_audio
+      config:
+        quality: normal
+        session_duration_min: 1800
+        session_duration_max: 3600
+        pause_between_min: 10
+        pause_between_max: 120
     dhcp_personality: android
+  - name: wlan0_2
+    ssid: Alangus
+    password: jzTvFm32
+    traffic:
+      type: http_browser
+      config:
+        urls:
+        - https://www.youtube.com
+        - https://www.reddit.com
+        - https://news.ycombinator.com
+        - https://www.wikipedia.org
+        - https://www.amazon.com
+        - https://www.netflix.com
+        - https://www.spotify.com
+        - https://www.facebook.com
+        - https://www.instagram.com
+        - https://www.twitter.com
+        - https://www.github.com
+        - https://www.stackoverflow.com
+        interval: 70
+        timeout: 10
+        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
+          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
+    dhcp_personality: iphone
+- pi_id: wipi-04
+  interfaces:
+  - name: wlan1
+    ssid: Alangus
+    password: JZeasWdQ
+    traffic:
+      type: api_polling
+      config:
+        poll_interval_min: 15
+        poll_interval_max: 60
+        burst_mode: true
+        timeout: 10
+    dhcp_personality: iphone
+  - name: wlan0
+    ssid: Alangus
+    password: Z77xycBn
+    traffic:
+      type: streaming_audio
+      config:
+        quality: normal
+        session_duration_min: 1800
+        session_duration_max: 3600
+        pause_between_min: 10
+        pause_between_max: 120
+    dhcp_personality: android
+- pi_id: wipi-05
+  interfaces:
+  - name: wlan1
+    ssid: Alangus
+    password: EmGC255d
+    traffic:
+      type: streaming_audio
+      config:
+        quality: normal
+        session_duration_min: 1800
+        session_duration_max: 3600
+        pause_between_min: 10
+        pause_between_max: 120
+    dhcp_personality: android
+  - name: wlan0
+    ssid: Alangus
+    password: STvPTnwx
+    traffic:
+      type: bulk_transfer
+      config:
+        url: https://ash-speed.hetzner.com/100MB.bin
+        direction: download
+        repeat: true
+        max_bandwidth: 5mbps
+        user_agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15
+          (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1
+    dhcp_personality: iphone
+- pi_id: wipi-07
+  interfaces:
+  - name: wlan0
+    ssid: Alangus
+    password: PUPGudez
+    traffic:
+      type: http_browser
+      config:
+        urls:
+        - https://www.youtube.com
+        - https://www.reddit.com
+        - https://news.ycombinator.com
+        - https://www.wikipedia.org
+        - https://www.amazon.com
+        - https://www.netflix.com
+        - https://www.spotify.com
+        - https://www.facebook.com
+        - https://www.instagram.com
+        - https://www.twitter.com
+        - https://www.github.com
+        - https://www.stackoverflow.com
+        interval: 77
+        timeout: 10
+        user_agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15
+          (KHTML, like Gecko) Version/18.0 Safari/605.1.15
+    dhcp_personality: macos
 - pi_id: wipi-06
   interfaces:
   - name: wlan0
     ssid: Alangus
-    password: 72Zn7QaS
+    password: WSZveKDu
     traffic:
       type: youtube
       config:
