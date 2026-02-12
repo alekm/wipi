@@ -345,7 +345,6 @@ class ResidentSimulator:
             break
 
           psk_index = remaining.pop()
-          psk = psk_set.psks[psk_index]
 
           # Generate interface name
           if idx == 0:
@@ -361,11 +360,13 @@ class ResidentSimulator:
           # Generate traffic config with matching user agent
           traffic_cfg = self._make_traffic_config(now, personality)
 
+          # Use psk_set_id + psk_index (no plaintext password); orchestrator resolves at apply time
           interfaces.append(
             PiInterfaceAssignment(
               name=assigned_name,
               ssid=psk_set.ssid or "",
-              password=psk,
+              psk_set_id=psk_set.id,
+              psk_index=psk_index,
               mac_address=None,
               dhcp_personality=personality,
               traffic=traffic_cfg,
