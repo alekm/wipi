@@ -3,7 +3,7 @@ Database setup and session management.
 """
 import os
 import logging
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -70,7 +70,7 @@ def _migrate_add_encrypted_columns():
             if "client_secret_encrypted" not in columns:
                 logger.info("Adding client_secret_encrypted column to ruckus_one_config table")
                 with engine.connect() as conn:
-                    conn.execute("ALTER TABLE ruckus_one_config ADD COLUMN client_secret_encrypted TEXT")
+                    conn.execute(text("ALTER TABLE ruckus_one_config ADD COLUMN client_secret_encrypted TEXT"))
                     conn.commit()
                 logger.info("✓ Added client_secret_encrypted column")
 
@@ -83,9 +83,47 @@ def _migrate_add_encrypted_columns():
             if "psk_list_encrypted" not in columns:
                 logger.info("Adding psk_list_encrypted column to psk_sets table")
                 with engine.connect() as conn:
-                    conn.execute("ALTER TABLE psk_sets ADD COLUMN psk_list_encrypted TEXT")
+                    conn.execute(text("ALTER TABLE psk_sets ADD COLUMN psk_list_encrypted TEXT"))
                     conn.commit()
                 logger.info("✓ Added psk_list_encrypted column")
+
+            if "psk_count" not in columns:
+                logger.info("Adding psk_count column to psk_sets table")
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE psk_sets ADD COLUMN psk_count INTEGER DEFAULT 0 NOT NULL"))
+                    conn.commit()
+                logger.info("✓ Added psk_count column")
+
+            # Backfill psk_count for existing records where it's 0
+            from sqlalchemy.orm import Session as SQLASession
+            from ..services.psk_manager import PskSetModel
+            from ..services.encryption import get_encryption_service
+            import json
+
+            session = SQLASession(bind=engine)
+            try:
+                psk_sets = session.query(PskSetModel).filter(PskSetModel.psk_count == 0).all()
+                if psk_sets:
+                    logger.info(f"Backfilling psk_count for {len(psk_sets)} PSK sets...")
+                    encryption_service = get_encryption_service()
+
+                    for psk_set in psk_sets:
+                        try:
+                            # Get decrypted PSK list
+                            psk_list_json = psk_set.get_psk_list_json(encryption_service)
+                            psks = json.loads(psk_list_json) if psk_list_json else []
+                            count = len(psks)
+
+                            # Update count
+                            psk_set.psk_count = count
+                            logger.info(f"  {psk_set.psk_set_id}: {count} PSKs")
+                        except Exception as e:
+                            logger.warning(f"  Error backfilling {psk_set.psk_set_id}: {e}")
+
+                    session.commit()
+                    logger.info("✓ Backfilled psk_count")
+            finally:
+                session.close()
 
     except Exception as e:
         logger.warning(f"Migration warning (may be safe to ignore): {e}")

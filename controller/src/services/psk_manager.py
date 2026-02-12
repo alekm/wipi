@@ -26,6 +26,7 @@ class PskSetModel(Base):
     description = Column(Text, default="")
     psk_list = Column(Text, nullable=True)  # Legacy plaintext JSON field (deprecated)
     psk_list_encrypted = Column(Text, nullable=True)  # Encrypted JSON list of PSKs (preferred)
+    psk_count = Column(Integer, default=0, nullable=False)  # Stored count for list view (no decrypt needed)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
@@ -55,14 +56,20 @@ class PskSetModel(Base):
             psk_list_json: JSON string of PSK list
             encryption_service: EncryptionService instance
         """
+        psks = json.loads(psk_list_json) if psk_list_json else []
+        count = len(psks)
+
         if encryption_service.is_enabled():
             # Encrypt and store in encrypted field
             self.psk_list_encrypted = encryption_service.encrypt(psk_list_json)
-            self.psk_list = None  # Clear legacy field
+            # Use empty JSON array placeholder (older DB schemas may have psk_list NOT NULL)
+            self.psk_list = "[]"
         else:
             # Store in plaintext (encryption disabled)
             self.psk_list = psk_list_json
             self.psk_list_encrypted = None
+
+        self.psk_count = count
 
 
 class PskSet:
@@ -77,6 +84,7 @@ class PskSet:
         psks: List[str],
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None,
+        psk_count: Optional[int] = None,
     ):
         self.id = psk_set_id
         self.name = name
@@ -85,6 +93,7 @@ class PskSet:
         self.psks = psks
         self.created_at = created_at
         self.updated_at = updated_at
+        self.psk_count = psk_count if psk_count is not None else len(psks)
 
 
 class PskManager:
@@ -232,5 +241,6 @@ class PskManager:
             psks=psks,
             created_at=model.created_at,
             updated_at=model.updated_at,
+            psk_count=model.psk_count,
         )
 

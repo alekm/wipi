@@ -64,7 +64,7 @@ def _to_summary(psk_set) -> PskSetSummary:
         name=psk_set.name,
         ssid=psk_set.ssid,
         description=psk_set.description or "",
-        psk_count=len(psk_set.psks),
+        psk_count=psk_set.psk_count,
     )
 
 

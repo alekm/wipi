@@ -290,7 +290,7 @@ function Scenarios() {
                   <td style={{ fontWeight: '500' }}>{set.id}</td>
                   <td>{set.name}</td>
                   <td>{set.ssid}</td>
-                  <td>{set.psks?.length ?? 0}</td>
+                  <td>{set.psk_count ?? 0}</td>
                 </tr>
               ))}
             </tbody>
@@ -381,7 +381,7 @@ function ResidentSimulationPanel({ status, loading, onReload, setActionMessage, 
           {pskSets &&
             pskSets.map((set) => (
               <option key={set.id} value={set.id}>
-                {set.id} ({set.ssid}) – {set.psks?.length ?? 0} PSKs
+                {set.id} ({set.ssid}) – {set.psk_count ?? 0} PSKs
               </option>
             ))}
         </select>
