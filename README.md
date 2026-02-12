@@ -182,28 +182,25 @@ Set `AGENT_API_KEY` in `.env` and restart the controller. Update `/etc/wipi/agen
 
 ## 📊 Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Controller (Docker)                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────────────┐     │
-│  │   FastAPI    │  │   SQLite     │  │  Resident         │     │
-│  │   Backend    │  │   Database   │  │  Simulator        │     │
-│  └──────────────┘  └──────────────┘  └───────────────────┘     │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-        ┌────────────────────┼────────────────────┐
-        ▼                    ▼                    ▼
-┌───────────────┐    ┌───────────────┐    ┌───────────────┐
-│  Pi Agent 1   │    │  Pi Agent 2   │    │  Pi Agent 3   │
-│  wlan0        │    │  wlan0        │    │  wlan0        │
-│  wlan0_1      │    │  wlan0_1      │    │  wlan0_1      │
-└───────────────┘    └───────────────┘    └───────────────┘
-        │                    │                    │
-        └────────────────────┴────────────────────┘
-                             ▼
-                    ┌─────────────────┐
-                    │   Access Point   │
-                    └─────────────────┘
+```mermaid
+flowchart TB
+    subgraph Controller["Controller (Docker)"]
+        FastAPI[FastAPI Backend]
+        SQLite[(SQLite)]
+        Simulator[Resident Simulator]
+    end
+
+    Controller --> Agent1
+    Controller --> Agent2
+    Controller --> Agent3
+
+    subgraph Agents["Pi Fleet"]
+        Agent1["Pi Agent 1<br/>wlan0, wlan0_1"]
+        Agent2["Pi Agent 2<br/>wlan0, wlan0_1"]
+        Agent3["Pi Agent 3<br/>wlan0, wlan0_1"]
+    end
+
+    Agents --> AP["Access Point"]
 ```
 
 ---
