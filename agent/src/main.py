@@ -346,6 +346,7 @@ async def _register_with_controller_once() -> None:
         capabilities={
             "max_interfaces": Config.max_interfaces,
             "base_interface": Config.base_interface,
+            "api_port": Config.api_port,
         },
         version="1.0.0",
     )
