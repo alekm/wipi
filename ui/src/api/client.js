@@ -130,6 +130,7 @@ export const residentSimApi = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
+  stop: () => request('/resident_simulation/stop', { method: 'POST' }),
 };
 
 // Ruckus One Integration

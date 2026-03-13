@@ -308,6 +308,7 @@ function ResidentSimulationPanel({ status, loading, onReload, setActionMessage, 
   const [rotationHours, setRotationHours] = useState(6);
   const [maxInterfacesPerPi, setMaxInterfacesPerPi] = useState(8);
   const [submitting, setSubmitting] = useState(false);
+  const [stopping, setStopping] = useState(false);
 
   useEffect(() => {
     if (status) {
@@ -437,10 +438,32 @@ function ResidentSimulationPanel({ status, loading, onReload, setActionMessage, 
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={submitting || loading}
+          disabled={submitting || stopping || loading}
         >
           {submitting ? 'Updating...' : 'Update Simulation'}
         </button>
+        {status && status.enabled && (
+          <button
+            type="button"
+            className="btn btn-danger"
+            disabled={submitting || stopping || loading}
+            onClick={async () => {
+              setStopping(true);
+              setActionMessage(null);
+              try {
+                await residentSimApi.stop();
+                setActionMessage({ type: 'success', text: 'Simulation stopped and all Pi configurations cleared.' });
+                await onReload();
+              } catch (err) {
+                setActionMessage({ type: 'error', text: `Failed to stop simulation: ${err.message}` });
+              } finally {
+                setStopping(false);
+              }
+            }}
+          >
+            {stopping ? 'Stopping...' : 'Stop Simulation'}
+          </button>
+        )}
       </div>
     </form>
   );
