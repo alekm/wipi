@@ -37,6 +37,7 @@ WiPi simulates apartment residents connecting to access points, generating traff
 - 🖥️ **Web Dashboard** - React-based UI for complete system control
 - 📈 **Real-Time Status** - Monitor all interfaces, traffic, and Pi health
 - 🔍 **RUCKUS One Integration** - Track device fingerprinting accuracy
+- 🌐 **Orb Network Quality** - Per-Pi internet quality (score, throughput, latency) from [Orb](https://orb.net) sensors
 - 📝 **Audit Logging** - Complete trail of all administrative actions
 
 ### Security

@@ -63,6 +63,21 @@ This directory contains comprehensive guides for deploying, securing, and operat
 
 ---
 
+### [Orb Network Quality Monitoring](orb-integration.md)
+**Per-Pi internet experience metrics measured by [Orb](https://orb.net) sensors.**
+
+**Topics Covered:**
+- How metrics flow from sensor → agent → controller → UI
+- Local `orb summary` collection (no Orb Cloud account, no sensor cap)
+- Installing the Orb sensor on a Pi
+- Metrics reported and configuration
+
+**Use Cases:**
+- **"What's the connection quality on each Pi?"** → Pi Fleet → select a Pi → "Network Quality (Orb)"
+- **"Is this measuring Wi-Fi or the wired uplink?"** → See the `measured_interface` field
+
+---
+
 ## Quick Start Guides
 
 ### For Security Hardening
