@@ -4,10 +4,14 @@ Orb (orb.net) network-quality collector.
 Runs the locally-installed Orb sensor's `orb summary` command and extracts a
 compact set of metrics for inclusion in the agent status payload.
 
-No Orb Cloud account is required: `orb summary` connects to the local sensor
-service and returns JSON directly, so this works on any number of Pis without
-the free-plan 5-sensor cloud cap. Orb measures over the Pi's default route,
-which on WiPi Pis is the DPSK WiFi client interface (wlan0).
+Licensing gate: metrics are collected ONLY when an Orb deployment token is
+configured (i.e. the sensor has been linked to an Orb account). `orb summary`
+reads local sensor data and would technically work on an unlinked sensor, which
+makes it possible to run sensors at scale and bypass Orb's per-device plan cap.
+We deliberately do NOT do that — out of respect for Orb's plan-based licensing,
+the integration stays dormant until a token is present. The gate is easy to
+side-step; it is a good-faith default, not DRM. Orb measures over the Pi's
+default route, which on WiPi Pis is the DPSK WiFi client interface (wlan0).
 """
 import os
 import json
@@ -23,10 +27,34 @@ ORB_BIN = os.environ.get("ORB_BIN", "/usr/bin/orb")
 ORB_HOME = os.environ.get("ORB_HOME", "/home/orb")  # where the sensor's config/cert live
 ORB_TIMEOUT = float(os.environ.get("ORB_SUMMARY_TIMEOUT", "10"))
 ORB_CACHE_TTL = float(os.environ.get("ORB_CACHE_TTL", "30"))  # avoid spawning on every poll
+# Where the Orb sensor's deployment token lives (orb.service EnvironmentFile).
+ORB_ENV_FILE = os.environ.get("ORB_ENV_FILE", "/etc/default/orb")
 
 # Module-level cache: (timestamp, value). value None means "collected, no data".
 _cache: tuple[float, Optional[Dict[str, Any]]] = (0.0, None)
 _unavailable: bool = False  # set once if the orb binary is missing
+_unlicensed_logged: bool = False  # log the "no token" notice only once
+
+
+def _deployment_token_present() -> bool:
+    """True if an Orb deployment token is configured (env or ORB_ENV_FILE).
+
+    Presence of a deployment token means the operator has linked these sensors
+    to their own (licensed) Orb account. We use it as the consent/licensing
+    signal for enabling the integration. Checked every cycle so adding a token
+    later enables collection without restarting the agent.
+    """
+    if os.environ.get("ORB_DEPLOYMENT_TOKEN", "").strip():
+        return True
+    try:
+        with open(ORB_ENV_FILE) as f:
+            for line in f:
+                stripped = line.strip()
+                if stripped.startswith("ORB_DEPLOYMENT_TOKEN=") and stripped.split("=", 1)[1].strip():
+                    return True
+    except (FileNotFoundError, PermissionError, OSError):
+        pass
+    return False
 
 
 def _extract(summary: Dict[str, Any]) -> Dict[str, Any]:
@@ -67,14 +95,25 @@ def _extract(summary: Dict[str, Any]) -> Dict[str, Any]:
 
 
 async def get_orb_summary() -> Optional[Dict[str, Any]]:
-    """Return compact Orb metrics, or None if Orb is unavailable.
+    """Return compact Orb metrics, or None if Orb is unavailable or unlicensed.
 
-    Cached for ORB_CACHE_TTL seconds so frequent status polls don't spawn a
-    process each time. Never raises — failures degrade to None.
+    Returns None unless an Orb deployment token is configured (see module
+    docstring). Cached for ORB_CACHE_TTL seconds so frequent status polls don't
+    spawn a process each time. Never raises — failures degrade to None.
     """
-    global _cache, _unavailable
+    global _cache, _unavailable, _unlicensed_logged
 
     if _unavailable:
+        return None
+
+    # Licensing gate: stay dormant unless the sensor is linked (token present).
+    if not _deployment_token_present():
+        if not _unlicensed_logged:
+            logger.info(
+                "Orb deployment token not configured (%s); Orb metrics disabled. "
+                "Link the sensor with ORB_DEPLOYMENT_TOKEN to enable.", ORB_ENV_FILE
+            )
+            _unlicensed_logged = True
         return None
 
     now = time.monotonic()

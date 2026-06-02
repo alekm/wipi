@@ -20,35 +20,55 @@ orb sensor (per Pi) ──`orb summary`──> agent ──AgentStatus.orb──
    `GET /api/pis/{pi_id}/status`.
 4. **UI** renders a "Network Quality (Orb)" section in the Pi Fleet details panel.
 
-### No Orb Cloud account required
+### Licensing & consent gate
 
-`orb summary` reads the **local** sensor directly over its on-device API, so:
+`orb summary` reads the **local** sensor and would technically work on an *unlinked*
+sensor — which means it could be used to run sensors at scale and bypass Orb's
+per-device plan cap. **WiPi deliberately does not do that.** Out of respect for Orb's
+plan-based licensing, the agent collects and reports Orb metrics **only when a
+deployment token is configured** (i.e. the sensor has been linked to your own Orb
+account). With no token, the integration stays dormant and `AgentStatus.orb` is `null`.
 
-- **No cloud account or sensor linking is needed.** This sidesteps the Orb free-plan
-  5-sensor *cloud* cap entirely — WiPi runs Orb on every Pi regardless of fleet size.
-- No data is required to leave the device.
+The agent looks for `ORB_DEPLOYMENT_TOKEN` in its environment or in `ORB_ENV_FILE`
+(default `/etc/default/orb`). The check runs every cycle, so adding a token enables
+collection without restarting the agent.
+
+> This gate is trivially bypassable — it's a good-faith default, not DRM. Please
+> license your sensors: the [Orb free plan](https://orb.net/plans) covers 5 devices,
+> paid plans cover more.
 
 > Orb measures whatever interface holds the Pi's **default route**. On WiPi Pis this is
 > normally the DPSK Wi-Fi client (`wlan0`/`wlan1`); on a Pi whose default route is the
 > wired uplink it will measure `eth0` instead. The `measured_interface`/`measured_ssid`
 > fields report which.
 
-## Installing the Orb sensor on a Pi
+## Installing & linking the Orb sensor on a Pi
 
 ```bash
 # On the Pi (Raspberry Pi OS / Debian / Ubuntu, etc.)
 curl -fsSL https://pkgs.orb.net/install.sh | sh
 ```
 
-This installs the `orb` package (binary at `/usr/bin/orb`), runs the sensor as the
-`orb` system user, and starts measuring immediately. Verify:
+This installs the `orb` package (binary at `/usr/bin/orb`) and runs the sensor as the
+`orb` system user. Then **link the sensor to your Orb account** — this both keeps you
+compliant with Orb's licensing and activates the WiPi integration (see the licensing
+gate above). Create a deployment token in Orb Cloud (Orchestration → API Keys) and add
+it to the sensor's environment file:
 
 ```bash
-sudo -u orb orb summary | jq .orb_score.display   # 0-100 score once a window completes
+# /etc/default/orb  (root-owned, chmod 600 — this is a secret, never commit it)
+ORB_DEPLOYMENT_TOKEN=orb-dt1-xxxxxxxxxxxxxxxx
+ORB_EPHEMERAL_MODE=1            # recommended on SD-card Pis to reduce flash wear
 ```
 
-No further configuration is needed. The agent (running as root) reads the sensor via
-`orb summary` with `HOME=/home/orb` so it can use the sensor's local credentials.
+```bash
+sudo systemctl restart orb
+sudo journalctl -u orb | grep "deployment token applied successfully"   # confirm link
+sudo -u orb orb summary | jq .orb_score.display                          # 0-100 once warmed up
+```
+
+The agent (running as root) reads the sensor via `orb summary` with `HOME=/home/orb`,
+and reports metrics only once the deployment token is present.
 
 ## Metrics reported
 
@@ -77,8 +97,10 @@ No further configuration is needed. The agent (running as root) reads the sensor
 - **Cached for 30s** (`ORB_CACHE_TTL`) so frequent status polls don't spawn a process
   each time. Collection **fails safe to `None`** — a missing binary, timeout, or parse
   error never breaks the status endpoint, and a missing binary disables further attempts.
+- **Licensing gate** (see above): collection is skipped entirely unless an
+  `ORB_DEPLOYMENT_TOKEN` is found in the agent env or `ORB_ENV_FILE`.
 - **Configurable via env:** `ORB_BIN` (`/usr/bin/orb`), `ORB_HOME` (`/home/orb`),
-  `ORB_SUMMARY_TIMEOUT` (10s), `ORB_CACHE_TTL` (30s).
+  `ORB_SUMMARY_TIMEOUT` (10s), `ORB_CACHE_TTL` (30s), `ORB_ENV_FILE` (`/etc/default/orb`).
 
 ## Viewing in the UI
 
