@@ -178,6 +178,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
     python3-venv \
     wpasupplicant \
     iw \
+    rfkill \
     net-tools \
     isc-dhcp-client \
     curl \
