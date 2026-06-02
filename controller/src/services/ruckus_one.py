@@ -154,6 +154,8 @@ class RuckusOneMonitor:
                     detection_stats["by_personality"][expected_personality] = {
                         "total": 0,
                         "detected_correctly": 0,
+                        "detected_incorrectly": 0,
+                        "not_detected": 0,
                         "detected_as": {}
                     }
 
@@ -164,7 +166,7 @@ class RuckusOneMonitor:
                 r1_client = r1_by_mac.get(mac)
 
                 if r1_client:
-                    detected_os = r1_client.get("osType", "Unknown")
+                    detected_os = r1_client.get("osType") or "Unknown"
 
                     # Track what this personality was detected as
                     if detected_os not in personality_stats["detected_as"]:
@@ -181,6 +183,7 @@ class RuckusOneMonitor:
                         personality_stats["detected_correctly"] += 1
                     else:
                         detection_stats["detected_incorrectly"] += 1
+                        personality_stats["detected_incorrectly"] += 1
 
                     correlations.append({
                         "pi_id": iface.get("pi_id"),
@@ -199,6 +202,7 @@ class RuckusOneMonitor:
                     })
                 else:
                     detection_stats["not_detected"] += 1
+                    personality_stats["not_detected"] += 1
                     correlations.append({
                         "pi_id": iface.get("pi_id"),
                         "interface": iface.get("name"),
@@ -226,19 +230,39 @@ class RuckusOneMonitor:
             raise
 
     def _check_detection_match(self, personality: str, detected_os: str) -> bool:
-        """Check if detected OS matches expected personality"""
+        """Check if detected OS matches expected personality.
+
+        Acceptable detections are matched as case-insensitive substrings of the
+        osType string Ruckus One reports. Confirmed real R1 osType values are
+        noted inline; the rest are plausible variants R1 may emit.
+        """
+        if not personality or not detected_os:
+            return False
+
         personality = personality.lower()
         detected_os = detected_os.lower()
 
-        # Mapping of personalities to acceptable OS detections
+        # Every personality the simulator/profiles can assign must appear here,
+        # otherwise it can never be counted as correctly detected.
         matches = {
-            "iphone": ["ios"],
-            "ipad": ["ios"],
-            "android": ["android"],
-            "samsung": ["android"],  # Samsung should be detected as Android
+            "iphone": ["ios", "iphone"],                 # confirmed R1: "iOS"
+            "ipad": ["ios", "ipados", "ipad"],           # R1 may report "iPadOS"
+            "android": ["android"],                      # confirmed R1: "Android"
+            "samsung": ["android", "samsung"],           # Samsung -> Android
+            "pixel": ["android", "pixel"],               # Pixel -> Android
+            "macos": ["macos", "mac os", "os x", "osx"],
+            "macbook": ["macos", "mac os", "os x", "osx"],
             "windows10": ["windows"],
-            "macos": ["macos", "mac os"],
-            "macbook": ["macos", "mac os"],
+            "windows11": ["windows"],
+            "xbox": ["xbox", "windows"],
+            "playstation": ["playstation", "sony"],
+            "linux": ["linux"],
+            "chromecast": ["chromecast", "android", "google"],
+            "roku": ["roku"],
+            "echo": ["amazon", "echo", "fire"],
+            "echo-dot": ["amazon", "echo", "fire"],
+            "smart-tv-samsung": ["tizen", "samsung", "smart"],
+            "smart-tv-lg": ["webos", "lg", "smart"],
         }
 
         acceptable = matches.get(personality, [])

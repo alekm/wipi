@@ -114,6 +114,25 @@ class DesiredConfigurationModel(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
 
+class DetectionSnapshotModel(Base):
+    """Time-series snapshot of Ruckus One detection accuracy.
+
+    One row per personality per sample, plus a "__overall__" row for the fleet
+    total. Lets us distinguish R1 cloud lag (transient not_detected) from genuine
+    mis-fingerprinting (sustained detected_incorrectly) over time.
+    """
+    __tablename__ = "detection_snapshots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    personality = Column(String, nullable=False, index=True)  # "__overall__" = fleet total
+    total = Column(Integer, default=0, nullable=False)
+    detected_correctly = Column(Integer, default=0, nullable=False)
+    detected_incorrectly = Column(Integer, default=0, nullable=False)
+    not_detected = Column(Integer, default=0, nullable=False)
+    detected_as = Column(Text, default="{}")  # JSON {osType: count}
+
+
 class ResidentSimulationConfigModel(Base):
     """Persist resident simulation configuration"""
     __tablename__ = "resident_simulation_config"

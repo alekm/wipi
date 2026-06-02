@@ -192,6 +192,21 @@ async def lifespan(app: FastAPI):
     logger.info("Starting monitoring service")
     await monitoring.start(SessionLocal)
 
+    # Start Ruckus One detection-accuracy sampler (persists time-series snapshots)
+    from .services.detection_history import detection_sampler_loop
+    from .api.ruckus_one import get_r1_monitor
+
+    def _get_monitor():
+        db = SessionLocal()
+        try:
+            return get_r1_monitor(db)
+        finally:
+            db.close()
+
+    app.state.detection_sampler_task = asyncio.create_task(
+        detection_sampler_loop(app, _get_monitor)
+    )
+
     # Start resident simulator if it was enabled (auto-recover after restart)
     if resident_simulator.config.enabled:
         logger.info("Auto-starting resident simulator (config enabled)")
@@ -203,6 +218,15 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     logger.info("Shutting down WiPi Controller")
+
+    # Stop detection sampler
+    task = getattr(app.state, "detection_sampler_task", None)
+    if task:
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
 
     # Stop monitoring service
     await monitoring.stop()

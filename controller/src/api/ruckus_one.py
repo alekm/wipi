@@ -212,6 +212,51 @@ async def get_ruckus_one_status(request: Request, db: Session = Depends(get_db))
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@router.get("/history")
+async def get_detection_history(hours: int = 24, db: Session = Depends(get_db)):
+    """Aggregated detection-accuracy time series from persisted snapshots.
+
+    Returns per-personality and overall accuracy averaged over the window, so
+    transient R1 cloud lag can be separated from sustained mis-detection.
+    """
+    from datetime import datetime, timedelta
+    from ..models.db_models import DetectionSnapshotModel
+
+    cutoff = datetime.utcnow() - timedelta(hours=hours)
+    rows = (
+        db.query(DetectionSnapshotModel)
+        .filter(DetectionSnapshotModel.timestamp >= cutoff)
+        .order_by(DetectionSnapshotModel.timestamp.asc())
+        .all()
+    )
+
+    by_personality: dict = {}
+    samples = 0
+    seen_ts = set()
+    for r in rows:
+        seen_ts.add(r.timestamp)
+        agg = by_personality.setdefault(r.personality, {
+            "total": 0, "detected_correctly": 0,
+            "detected_incorrectly": 0, "not_detected": 0,
+        })
+        agg["total"] += r.total
+        agg["detected_correctly"] += r.detected_correctly
+        agg["detected_incorrectly"] += r.detected_incorrectly
+        agg["not_detected"] += r.not_detected
+
+    for agg in by_personality.values():
+        t = agg["total"] or 1
+        agg["accuracy"] = round(agg["detected_correctly"] / t, 3)
+        agg["detection_rate"] = round((t - agg["not_detected"]) / t, 3)
+
+    return {
+        "window_hours": hours,
+        "samples": len(seen_ts),
+        "overall": by_personality.get("__overall__", {}),
+        "by_personality": {k: v for k, v in by_personality.items() if k != "__overall__"},
+    }
+
+
 @router.get("/clients")
 async def get_ruckus_one_clients(db: Session = Depends(get_db)):
     """Get raw client list from Ruckus One API"""
