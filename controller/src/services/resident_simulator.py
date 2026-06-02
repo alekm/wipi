@@ -272,12 +272,14 @@ class ResidentSimulator:
     "iphone",      # 25% - iOS devices (working)
     "iphone",
     "iphone",
-    "android",     # 50% - Android devices (working, includes former Samsung)
+    # Android family split 3 ways (A/B/C experiment): each has a distinct DHCP
+    # fingerprint, all score as "Android". /history reveals which Ruckus detects best.
+    "android",     # generic Android, option-55 1,121,33,3,6,28,51,58,59
     "android",
-    "android",
-    "android",
-    "android",
-    "android",
+    "samsung",     # Samsung variant, option-55 1,3,6,15,28,33,51,58,59,121 (docs: most validated)
+    "samsung",
+    "pixel",       # Pixel variant, option-55 1,3,6,15,26,28,51,58,59
+    "pixel",
     "ipad",        # 15% - iPads (working)
     "ipad",
     "macos",       # 10% - macOS laptops
