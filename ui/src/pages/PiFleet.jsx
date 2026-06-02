@@ -202,7 +202,15 @@ function PiFleet() {
             {piStatus.orb && (
               <div style={{ marginBottom: '1.5rem' }}>
                 <h4 style={{ fontSize: '1rem', marginBottom: '0.8rem' }}>
-                  Network Quality (Orb)
+                  Network Quality{' '}
+                  <a
+                    href="https://orb.net"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--primary, #00e5ff)' }}
+                  >
+                    (Orb)
+                  </a>
                   {piStatus.orb.measured_interface && (
                     <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'var(--text-secondary)', marginLeft: '0.5rem' }}>
                       via {piStatus.orb.measured_interface}
