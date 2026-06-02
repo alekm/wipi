@@ -81,6 +81,13 @@ function PiFleet() {
     return `${hours}h ${minutes}m`;
   }
 
+  function scoreColor(score) {
+    if (score == null) return 'var(--text-secondary)';
+    if (score >= 80) return 'var(--success, #4caf50)';
+    if (score >= 50) return 'var(--warning, #ffb300)';
+    return 'var(--danger, #f44336)';
+  }
+
   if (loading) {
     return <div className="loading">Loading Pi fleet...</div>;
   }
@@ -191,6 +198,57 @@ function PiFleet() {
                 </div>
               </div>
             </div>
+
+            {piStatus.orb && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '1rem', marginBottom: '0.8rem' }}>
+                  Network Quality (Orb)
+                  {piStatus.orb.measured_interface && (
+                    <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'var(--text-secondary)', marginLeft: '0.5rem' }}>
+                      via {piStatus.orb.measured_interface}
+                      {piStatus.orb.measured_ssid ? ` • ${piStatus.orb.measured_ssid}` : ''}
+                    </span>
+                  )}
+                </h4>
+
+                {piStatus.orb.orb_score == null ? (
+                  <div className="empty-state" style={{ padding: '0.5rem' }}>Orb is measuring…</div>
+                ) : (
+                  <>
+                    <div className="stats">
+                      <div className="stat">
+                        <div className="stat-value" style={{ color: scoreColor(piStatus.orb.orb_score) }}>
+                          {piStatus.orb.orb_score}
+                        </div>
+                        <div className="stat-label">Orb Score</div>
+                      </div>
+                      <div className="stat">
+                        <div className="stat-value">
+                          {piStatus.orb.download_mbps ?? '—'}<span style={{ fontSize: '0.7rem' }}> Mbps</span>
+                        </div>
+                        <div className="stat-label">Download</div>
+                      </div>
+                      <div className="stat">
+                        <div className="stat-value">
+                          {piStatus.orb.upload_mbps ?? '—'}<span style={{ fontSize: '0.7rem' }}> Mbps</span>
+                        </div>
+                        <div className="stat-label">Upload</div>
+                      </div>
+                      <div className="stat">
+                        <div className="stat-value">
+                          {piStatus.orb.lag_ms ?? '—'}<span style={{ fontSize: '0.7rem' }}> ms</span>
+                        </div>
+                        <div className="stat-label">Latency</div>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+                      Reliability {piStatus.orb.reliability_score ?? '—'} • Responsiveness {piStatus.orb.responsiveness_score ?? '—'}
+                      {piStatus.orb.isp ? ` • ${piStatus.orb.isp}` : ''}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
 
             <div>
               <h4 style={{ fontSize: '1rem', marginBottom: '0.8rem' }}>
