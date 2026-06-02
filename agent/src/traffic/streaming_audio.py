@@ -25,6 +25,12 @@ class StreamingAudioTrafficGenerator(TrafficGenerator):
         self.pause_between_min: int = config.get("pause_between_min", 30)
         self.pause_between_max: int = config.get("pause_between_max", 300)
 
+        # User-Agent for HTTP fingerprinting - must match DHCP personality
+        self.user_agent: str = config.get(
+            "user_agent",
+            "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+        )
+
         # Get timeout from app_config
         if app_config:
             self.timeout = app_config.bulk_transfer_timeout
@@ -124,9 +130,10 @@ class StreamingAudioTrafficGenerator(TrafficGenerator):
             # Select random stream URL
             stream_url = random.choice(self.stream_urls)
 
-            # Stream audio data
+            # Stream audio data (User-Agent for AP fingerprinting)
             timeout = aiohttp.ClientTimeout(total=None, sock_read=self.timeout)
-            async with session.get(stream_url, timeout=timeout) as response:
+            headers = {"User-Agent": self.user_agent}
+            async with session.get(stream_url, headers=headers, timeout=timeout) as response:
                 bytes_downloaded = 0
                 chunk_count = 0
 

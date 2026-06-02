@@ -47,6 +47,31 @@ class DHCPProfile:
             f'send host-name "{hostname}";',
         ]
 
+        # Option 121 definition must come before request (required for Android fingerprint)
+        if 121 in (self.request_options or []):
+            config_lines.extend([
+                "",
+                "# Option 121: Classless Static Routes (RFC 3442)",
+                "option rfc3442-classless-static-routes code 121 = array of unsigned integer 8;",
+                "",
+            ])
+
+        # Apple-specific options (78, 79, 95, 252) - required for iOS/macOS fingerprint
+        apple_options = {78, 79, 95, 252}
+        if apple_options & set(self.request_options or []):
+            config_lines.extend([
+                "",
+                "# Option 78: SLP Directory Agent (RFC 2610)",
+                "option slp-directory-agents code 78 = array of unsigned integer 8;",
+                "# Option 79: SLP Service Scope (RFC 2610)",
+                "option slp-service-scope code 79 = array of unsigned integer 8;",
+                "# Option 95: LDAP",
+                "option ldap code 95 = array of unsigned integer 8;",
+                "# Option 252: WPAD (Web Proxy Auto-Discovery)",
+                "option wpad code 252 = text;",
+                "",
+            ])
+
         # Only add FQDN options for Apple devices
         if self.name in ["Apple iPhone", "Apple iPad", "macOS (MacBook/iMac)", "MacBook"]:
             config_lines.extend([
@@ -63,7 +88,7 @@ class DHCPProfile:
         # Add request parameters in specific order
         if self.request_options:
             # Map DHCP option numbers to dhclient parameter names
-            # Only including options that dhclient knows natively (no custom definitions needed)
+            # Option 121 (classless static routes) requires custom definition for Android fingerprint
             option_names = {
                 1: "subnet-mask",
                 3: "routers",
@@ -82,7 +107,12 @@ class DHCPProfile:
                 58: "dhcp-renewal-time",
                 59: "dhcp-rebinding-time",
                 119: "domain-search",
-                # Removed: 78, 79, 95, 121, 249, 252 (require custom definitions)
+                121: "rfc3442-classless-static-routes",
+                78: "slp-directory-agents",
+                79: "slp-service-scope",
+                95: "ldap",
+                252: "wpad",
+                # Still excluded: 249 (Microsoft-specific, requires custom definition)
             }
 
             # Build request list
@@ -141,7 +171,7 @@ DHCP_PROFILES: Dict[str, DHCPProfile] = {
         name="Apple iPhone",
         hostname_pattern="iPhone-{random}",
         vendor_class=None,  # iOS typically doesn't send vendor class in DHCP
-        request_options=[1, 3, 6, 12, 15, 119, 78, 79, 95, 252],  # iOS with option 12 (hostname)
+        request_options=[1, 3, 6, 15, 119, 78, 79, 95, 252],  # Fingerbank iOS 1102 (no option 12)
         user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 18_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
         description="Apple iPhone"
     ),
@@ -150,7 +180,7 @@ DHCP_PROFILES: Dict[str, DHCPProfile] = {
         name="Apple iPad",
         hostname_pattern="iPad-{random}",
         vendor_class=None,  # iOS typically doesn't send vendor class in DHCP
-        request_options=[1, 3, 6, 12, 15, 119, 78, 79, 95, 252],  # iOS with option 12 (hostname)
+        request_options=[1, 3, 6, 15, 119, 78, 79, 95, 252],  # Fingerbank iOS 1102 (no option 12)
         user_agent="Mozilla/5.0 (iPad; CPU OS 18_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
         description="Apple iPad tablet"
     ),

@@ -538,6 +538,7 @@ class ResidentSimulator:
           "session_duration_max": session_max,
           "pause_between_min": 10,
           "pause_between_max": 120,
+          "user_agent": user_agent,
         },
       )
 
@@ -560,6 +561,7 @@ class ResidentSimulator:
           "poll_interval_max": poll_max,
           "burst_mode": True,   # Enable burst polling
           "timeout": 10,
+          "user_agent": user_agent,
         },
       )
 

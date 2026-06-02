@@ -275,14 +275,15 @@ class WPAManager:
             # Generate PSK using wpa_passphrase
             # For simplicity, we'll create a basic config
             # In production, you might want to use wpa_passphrase for proper PSK
-            config_content = f"""
-ctrl_interface=/var/run/wpa_supplicant
+            config_content = f"""ctrl_interface=/var/run/wpa_supplicant
 update_config=1
 
 network={{
     ssid="{ssid}"
     psk="{password}"
-    key_mgmt=WPA-PSK
+    key_mgmt=WPA-PSK WPA-PSK-SHA256
+    proto=RSN
+    ieee80211w=1
     scan_ssid=1
 }}
 """

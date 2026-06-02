@@ -23,6 +23,11 @@ class ApiPollingTrafficGenerator(TrafficGenerator):
         self.poll_interval_max: int = config.get("poll_interval_max", 30)  # seconds
         self.burst_mode: bool = config.get("burst_mode", True)  # Occasional bursts of activity
         self.timeout: int = config.get("timeout", 10)
+        # User-Agent for HTTP fingerprinting - must match DHCP personality
+        self.user_agent: str = config.get(
+            "user_agent",
+            "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+        )
 
         # API endpoints that return JSON (simulating social media feeds, notifications, etc.)
         # Using public APIs that return JSON responses
@@ -147,7 +152,7 @@ class ApiPollingTrafficGenerator(TrafficGenerator):
                 return
 
             headers = {
-                "User-Agent": "WiPi-Agent/1.0",
+                "User-Agent": self.user_agent,
                 "Accept": "application/json"
             }
 

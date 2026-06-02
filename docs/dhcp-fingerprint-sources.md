@@ -22,14 +22,17 @@ This document tracks the sources for DHCP fingerprints used in WiPi device spoof
 **Option 55:** `1,3,6,15,119,78,79,95,252`
 **Vendor Class:** None (iOS doesn't send vendor class in DHCP)
 **Source:** Fingerbank database (OS ID 1102)
-**Status:** ✅ Updated based on real device captures
+**Status:** ✅ Matches Fingerbank exactly
+
+**Fingerbank iOS 1102 fingerprints:**
+- `1,3,6,15,119,78,79,95,252` (primary - we use this)
+- `1,3,6,15,119,252` (simpler variant)
+- Note: Fingerbank does NOT include option 12 - hostname is sent via send directive, not request list
 
 **Changes Made:**
-- **OLD:** `1,3,6,15,119,252,95,44,46` + vendor class "AAPLBM"
+- **OLD:** `1,3,6,12,15,119,78,79,95,252` (option 12 caused "unknown" on Ruckus AP)
 - **NEW:** `1,3,6,15,119,78,79,95,252` + no vendor class
-- Added options 78 (SLP Directory Agent), 79 (SLP Service Scope)
-- Removed options 44, 46 (NetBIOS - Windows-specific)
-- Removed "AAPLBM" vendor class (not used in modern iOS DHCP)
+- Removed option 12 from request list (Fingerbank iOS 1102 does not have it)
 
 ### Windows 10/11
 
@@ -68,6 +71,15 @@ This document tracks the sources for DHCP fingerprints used in WiPi device spoof
 - **Confirmed working** - Ruckus One correctly identifies as Android
 - This is the most validated fingerprint we have
 - Samsung puts option 121 at the end, generic Android at the beginning
+
+## Fingerbank Verification (PacketFence/inverse-inc)
+
+| WiPi Profile | Our Option 55 | Fingerbank OS | Fingerbank Fingerprint | Match |
+|--------------|---------------|---------------|------------------------|-------|
+| iphone/ipad | `1,3,6,15,119,78,79,95,252` | 1102 (iOS) | `1,3,6,15,119,78,79,95,252` | ✅ Exact |
+| android | `1,121,33,3,6,28,51,58,59` | 1111 (Generic Android) | `1,121,33,3,6,28,51,58,59` | ✅ Exact |
+| samsung | `1,3,6,15,28,33,51,58,59,121` | 1112 (Samsung Android) | `1,3,6,15,28,33,51,58,59,121` | ✅ Exact |
+| macos/macbook | `1,3,6,15,119,252` | 200 (Mac OS X), 202 (Lion) | `1,3,6,15,119,95,252` (Lion) | ⚠️ Partial (we have 252, missing 95 for Lion) |
 
 ## Testing Results
 
