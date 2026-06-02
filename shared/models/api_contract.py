@@ -148,6 +148,10 @@ class AgentStatus(BaseModel):
         default_factory=dict,
         description="Agent capabilities including all wireless interfaces and total capacity"
     )
+    orb: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="Orb (orb.net) network-quality metrics from the local sensor, if installed"
+    )
 
 
 # Pi Registration Models

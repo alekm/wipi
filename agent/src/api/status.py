@@ -7,6 +7,7 @@ from datetime import datetime
 from fastapi import APIRouter, Request
 from shared.models import AgentStatus, InterfaceStatus, SystemStatus, TrafficStatus
 from . import configure
+from ..core.orb_collector import get_orb_summary
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +91,9 @@ async def get_status(request: Request) -> AgentStatus:
                     error_message=str(e)
                 ))
 
+        # Collect Orb network-quality metrics (None if Orb not installed)
+        orb_metrics = await get_orb_summary()
+
         # Build agent status
         agent_status = AgentStatus(
             agent_id=agent_id,
@@ -97,7 +101,8 @@ async def get_status(request: Request) -> AgentStatus:
             timestamp=datetime.utcnow(),
             interfaces=interface_statuses,
             system=system_status,
-            capabilities=capabilities
+            capabilities=capabilities,
+            orb=orb_metrics
         )
 
         return agent_status
