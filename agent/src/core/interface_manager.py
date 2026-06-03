@@ -204,7 +204,10 @@ class InterfaceManager:
                 if not await self._bring_interface_up(name):
                     logger.error(f"Failed to bring up physical interface {name}")
                     return False
-                self.interfaces[name] = {"mac": mac_address, "state": "up"}
+                actual_mac = await self._read_mac_address(name)
+                if actual_mac and actual_mac != mac_address:
+                    logger.warning(f"{name}: attempted MAC {mac_address}, driver using {actual_mac}")
+                self.interfaces[name] = {"mac": actual_mac or mac_address, "state": "up"}
                 return True
 
             # Creating a VIF - extract base interface name
@@ -264,8 +267,11 @@ class InterfaceManager:
                 await self.destroy_interface(name)
                 return False
 
+            actual_mac = await self._read_mac_address(name)
+            if actual_mac and actual_mac != mac_address:
+                logger.warning(f"{name}: attempted MAC {mac_address}, driver using {actual_mac}")
             self.interfaces[name] = {
-                "mac": mac_address,
+                "mac": actual_mac or mac_address,
                 "state": "up"
             }
 
@@ -497,6 +503,14 @@ class InterfaceManager:
                 return True
         except FileNotFoundError:
             return False
+
+    async def _read_mac_address(self, name: str) -> Optional[str]:
+        """Read the MAC address the kernel is actually using for this interface."""
+        try:
+            with open(f"/sys/class/net/{name}/address", "r") as f:
+                return f.read().strip()
+        except Exception:
+            return None
 
     async def _set_mac_address(self, name: str, mac_address: str) -> bool:
         """Set MAC address for interface"""
