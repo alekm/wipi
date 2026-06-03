@@ -15,6 +15,13 @@ logger = logging.getLogger(__name__)
 class VideoStreamTrafficGenerator(TrafficGenerator):
     """Simulates video streaming traffic with sustained bandwidth"""
 
+    # Public HTTP sinks for synthetic traffic — no auth, no rate limits
+    SYNTHETIC_URLS = [
+        "http://ipv4.download.thinkbroadband.com/5MB.zip",
+        "http://speedtest.tele2.net/1MB.zip",
+        "http://ipv4.download.thinkbroadband.com/1MB.zip",
+    ]
+
     def __init__(self, interface: str, config: Dict[str, Any], mock_mode: bool = False):
         super().__init__(interface, config, mock_mode)
 
@@ -41,7 +48,6 @@ class VideoStreamTrafficGenerator(TrafficGenerator):
         """Parse bandwidth string (e.g., '5mbps') to bytes per second"""
         bandwidth_str = bandwidth_str.lower().strip()
 
-        # Extract number
         import re
         match = re.match(r'(\d+(?:\.\d+)?)\s*(mbps|kbps|gbps)?', bandwidth_str)
         if not match:
@@ -52,7 +58,7 @@ class VideoStreamTrafficGenerator(TrafficGenerator):
         unit = match.group(2) or 'mbps'
 
         if unit == 'mbps':
-            return int(value * 1024 * 1024 // 8)  # Convert Mbps to bytes/sec
+            return int(value * 1024 * 1024 // 8)
         elif unit == 'kbps':
             return int(value * 1024 // 8)
         elif unit == 'gbps':
@@ -89,13 +95,11 @@ class VideoStreamTrafficGenerator(TrafficGenerator):
                         elapsed = asyncio.get_event_loop().time() - start_time
                         self.stats["seconds_streamed"] = int(elapsed)
 
-                        # Update average bitrate
                         if elapsed > 0:
                             self.stats["average_bitrate"] = (
                                 self.stats["bytes_streamed"] * 8 / elapsed / 1024 / 1024
                             )
 
-                        # Check duration
                         if self.duration and elapsed >= self.duration:
                             break
 
@@ -104,62 +108,59 @@ class VideoStreamTrafficGenerator(TrafficGenerator):
                 self.stats["stalls"] += 1
 
     async def _stream_synthetic(self) -> None:
-        """Generate synthetic streaming traffic"""
-        start_time = asyncio.get_event_loop().time()
-        chunk_size = 8192  # 8 KB chunks
-        chunks_per_second = self.bytes_per_second / chunk_size
-
-        logger.info(f"Generating synthetic stream at {chunks_per_second:.1f} chunks/sec")
-
-        chunk_count = 0
+        """Generate synthetic streaming traffic by downloading from public sinks"""
+        logger.info(f"Generating synthetic stream at {self.bandwidth} on {self.interface}")
 
         while self.active:
             try:
-                if self.mock_mode:
-                    # Simulate bandwidth
-                    await asyncio.sleep(1.0 / chunks_per_second)
-                    self.stats["bytes_streamed"] += chunk_size
-                else:
-                    # Generate actual data to simulate memory/CPU load
-                    # In production, you might send this to a sink endpoint
-                    data = bytes(random.getrandbits(8) for _ in range(chunk_size))
-
-                    # Rate limiting
-                    await asyncio.sleep(1.0 / chunks_per_second)
-
-                    self.stats["bytes_streamed"] += len(data)
-
-                chunk_count += 1
-
-                # Update stats every second
-                if chunk_count % int(chunks_per_second) == 0:
-                    elapsed = asyncio.get_event_loop().time() - start_time
-                    self.stats["seconds_streamed"] = int(elapsed)
-
-                    if elapsed > 0:
-                        self.stats["average_bitrate"] = (
-                            self.stats["bytes_streamed"] * 8 / elapsed / 1024 / 1024
-                        )
-
-                    logger.debug(
-                        f"Streaming on {self.interface}: "
-                        f"{self.stats['bytes_streamed'] / 1024 / 1024:.1f} MB, "
-                        f"{self.stats['average_bitrate']:.2f} Mbps"
-                    )
-
-                # Check duration
-                if self.duration:
-                    elapsed = asyncio.get_event_loop().time() - start_time
-                    if elapsed >= self.duration:
-                        logger.info(f"Stream duration ({self.duration}s) reached")
-                        break
-
+                url = random.choice(self.SYNTHETIC_URLS)
+                await self._stream_from_sink(url)
             except asyncio.CancelledError:
                 raise
             except Exception as e:
-                logger.error(f"Error in video stream loop for {self.interface}: {e}")
+                logger.error(f"Error in synthetic stream loop for {self.interface}: {e}")
                 self.stats["stalls"] += 1
-                await asyncio.sleep(1)
+                await asyncio.sleep(5)
+
+    async def _stream_from_sink(self, url: str) -> None:
+        """Download from a public sink URL with rate limiting to match target bandwidth"""
+        start_time = asyncio.get_event_loop().time()
+        bytes_downloaded = 0
+
+        connector = await SourceIPBoundConnector.create_for_interface(self.interface)
+
+        try:
+            async with aiohttp.ClientSession(connector=connector) as session:
+                async with session.get(url, timeout=aiohttp.ClientTimeout(total=60)) as response:
+                    async for chunk in response.content.iter_chunked(8192):
+                        if not self.active:
+                            break
+
+                        bytes_downloaded += len(chunk)
+                        elapsed = asyncio.get_event_loop().time() - start_time
+
+                        # Rate-limit to target bandwidth
+                        if self.bytes_per_second > 0 and elapsed > 0:
+                            expected_time = bytes_downloaded / self.bytes_per_second
+                            if expected_time > elapsed:
+                                await asyncio.sleep(expected_time - elapsed)
+
+                        self.stats["bytes_streamed"] += len(chunk)
+                        self.stats["seconds_streamed"] = int(elapsed)
+
+                        if elapsed > 0:
+                            self.stats["average_bitrate"] = (
+                                self.stats["bytes_streamed"] * 8 / elapsed / 1024 / 1024
+                            )
+
+                        if self.duration and elapsed >= self.duration:
+                            break
+
+        except asyncio.CancelledError:
+            raise
+        except Exception as e:
+            logger.error(f"Error downloading sink {url} on {self.interface}: {e}")
+            self.stats["stalls"] += 1
 
     def get_stats(self) -> Dict[str, Any]:
         """Get current traffic statistics"""

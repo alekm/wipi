@@ -8,6 +8,7 @@ import time
 from typing import Dict, Any
 import aiohttp
 from .base import TrafficGenerator
+from .interface_binding import SourceIPBoundConnector
 
 logger = logging.getLogger(__name__)
 
@@ -106,11 +107,7 @@ class SpeedTestTrafficGenerator(TrafficGenerator):
             start_time = time.time()
             bytes_downloaded = 0
 
-            # Create connector bound to interface
-            connector = aiohttp.TCPConnector(
-                force_close=True,
-                enable_cleanup_closed=True,
-            )
+            connector = await SourceIPBoundConnector.create_for_interface(self.interface)
 
             async with aiohttp.ClientSession(connector=connector) as session:
                 # Download from fast.com for specified duration
@@ -188,10 +185,7 @@ class SpeedTestTrafficGenerator(TrafficGenerator):
             start_time = time.time()
             bytes_downloaded = 0
 
-            connector = aiohttp.TCPConnector(
-                force_close=True,
-                enable_cleanup_closed=True,
-            )
+            connector = await SourceIPBoundConnector.create_for_interface(self.interface)
 
             async with aiohttp.ClientSession(connector=connector) as session:
                 # Download from Speedtest.net
